@@ -1,7 +1,8 @@
+import Footer from '@/component/UI/footer';
 import React from 'react';
 
 const page = () => {
-    return (<>
+    return (<div className='mb-8'>
     {/* contact us section 1  */}
         <section className="bg-white dark:bg-gray-900">
   <div className="container px-6 py-12 mx-auto">
@@ -25,7 +26,7 @@ const page = () => {
 </section>
 
 {/* contact us section 2  */}
-<section className="bg-white dark:bg-gray-900">
+<section className="bg-white mb-6 dark:bg-gray-900">
   <div className="container px-6 py-12 mx-auto">
     <div>
       <p className="font-medium text-blue-500 dark:text-blue-400">Contact us</p>
@@ -210,7 +211,8 @@ const page = () => {
     </div>
   </div>
 </section>
-    </>
+<Footer />
+    </div>
        
       
     );
