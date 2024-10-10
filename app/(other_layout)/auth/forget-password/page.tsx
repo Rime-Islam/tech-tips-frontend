@@ -3,8 +3,8 @@ import React from 'react';
 
 const page = () => {
     return (
-        <section className="bg-white dark:bg-gray-900">
-        <div className="  mt-[15vh]">
+        <div className='flex justify-center mt-[15vh]'> <section className="bg-white  w-full max-w-xl rounded shadow-xl py-12 dark:bg-gray-900">
+        <div className="  ">
           <div className="flex justify-center mx-auto">
           <img
               className="w-28 "
@@ -46,7 +46,7 @@ const page = () => {
             </form>
           </div>
         </div>
-      </section>
+      </section></div>
     );
 };
 
