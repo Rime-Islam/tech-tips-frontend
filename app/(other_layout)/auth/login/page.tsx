@@ -16,7 +16,7 @@ const Login = () => {
             Welcome Back
           </h3>
           <p className="mt-1 text-center text-gray-500 dark:text-gray-400">
-            Login to Groot
+            Login to GrootHub
           </p>
           <form>
             <div className="w-full mt-4">
