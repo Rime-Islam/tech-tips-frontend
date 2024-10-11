@@ -1,4 +1,4 @@
-import Footer from "@/component/UI/footer";
+
 
 
 const page = () => {
@@ -498,7 +498,7 @@ const page = () => {
             </div>
         </div>
         </section>
-        <Footer />
+    
         </div>
     );
 };

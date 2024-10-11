@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navber from "@/component/UI/navber";
+import Footer from "@/component/UI/footer";
 import { Providers } from "@/lib/Providers";
 
 
@@ -37,6 +38,7 @@ export default function RootLayout({
         <Providers>
         <Navber />
         {children}
+        <Footer />
         </Providers>
         </main>
       </body>

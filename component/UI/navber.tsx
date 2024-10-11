@@ -5,13 +5,23 @@ import React, { useState, useEffect } from 'react';
 import { TfiWrite } from "react-icons/tfi";
 import { IoIosMoon } from "react-icons/io";
 import { MdSunny } from "react-icons/md";
+import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 
 
 
 const Navber = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(useCurrentUser);
+
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = async () => {
+    dispatch(logout());
   };
 
    const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 
@@ -97,25 +107,24 @@ const Navber = () => {
           </>
         )}
       </button>
-       <Link href="/create">
-       <div className='mt-2'><TfiWrite className='w-12 h-6'/></div>
-       </Link>
-<Link href="/auth/login">        <button className="px-4 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 ">Log in</button></Link>
+   
+    {
+      user ? ( 
+    <> 
+     <Link href="/create">
+     <div className='mt-4'><TfiWrite className='w-12 h-6'/></div>
+     </Link>
 
-   {/* for login user  */}
-    <div className="relative inline-block">
+        <div className="relative inline-block">
       {/* Dropdown toggle button */}
       <button
         onClick={toggleDropdown}
-        className="relative z-10 p-2  rounded-md   "
+        className="relative z-10 p-2 mx-2 rounded-md   "
       >
-          <Image
-    className="w-16 rounded-full"
-    src="https://i.ibb.co/FBBRt37/Google-Photos-Logo-2015.png"
+          <img
+    className="w-12 rounded-full"
+    src="https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"
     alt="logo"
-    width={64} 
-    height={64} 
-    priority 
   />   
       </button>
 
@@ -132,7 +141,7 @@ const Navber = () => {
             Profile & Analytic
           </Link>
         
-          <button
+          <button onClick={handleLogout}
             className="px-6 mx-2 py-2  font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 "
           >
             LogOut
@@ -141,7 +150,11 @@ const Navber = () => {
         </div>
       )}
     </div>
-    
+    </>
+      ) : (
+<Link href="/auth/login"><button className="px-4 mt-2 mx-2 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 ">Log in</button></Link>
+      )
+    }
       </div>
      
     </div>

@@ -1,4 +1,4 @@
-import Footer from '@/component/UI/footer';
+
 import React from 'react';
 
 const page = () => {
@@ -211,7 +211,7 @@ const page = () => {
     </div>
   </div>
 </section>
-<Footer />
+
     </div>
        
       
