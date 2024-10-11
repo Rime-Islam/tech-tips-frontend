@@ -44,7 +44,7 @@ const Navber = () => {
 
 
   return (
-    <footer className="bg-white py-3 rounded shadow-xl dark:bg-gray-900">
+    <div className="bg-white py-3 rounded shadow-xl dark:bg-gray-900">
     <div className="container font-semibold flex  items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
       <Link href="/">
    <div className='flex'>
@@ -145,7 +145,7 @@ const Navber = () => {
       </div>
      
     </div>
-  </footer>
+  </div>
   );
 };
 

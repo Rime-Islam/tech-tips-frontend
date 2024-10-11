@@ -1,14 +1,51 @@
 "use client"
+import Loader from '@/component/UI/Loader';
+import { useRegisterUserMutation } from '@/redux/app/feature/api/auth/authApi';
+import { IUser } from '@/types/types';
 import Link from 'next/link';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { useRouter } from "next/navigation";
+
+
+
+
 
 const page = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<IUser>();
+  const [ registerUser, { isLoading }] = useRegisterUserMutation();
+  const route = useRouter();
+ 
+
+  const onSubmit: SubmitHandler<IUser> = async(data) => {
+    if (data.password !== data.confirmPassword) {
+      toast.error('Password should match with confirm password')
+      return;
+    }
+   const name = data.name;
+   const email = data.email;
+   const password = data.password;
+
+    try {
+      const res = await registerUser({ name, email, password }).unwrap();
+      if (res?.success) {
+        toast.success(res?.message);
+        route.push("/auth/login")
+      }
+    } catch ( error: any ) {
+      toast.error(error.data.message)
+    }
+   
+};
+
     return (
         <div className="bg-white py-6 rounded shadow-xl mt-[12vh]  max-w-xl mx-auto dark:bg-gray-900">
   <div className="flex justify-center mx-auto ">
-    <form className="w-full max-w-md">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
       <div className="flex justify-center mx-auto">
   <div >
+   
   <img
               className="w-28 ml-20"
               src="https://i.ibb.co.com/FBBRt37/Google-Photos-Logo-2015.png"
@@ -43,7 +80,12 @@ const page = () => {
           type="text"
           className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="User Name"
+          {...register("name", { required: "Name is required" })}
+        required
         />
+        {errors.name && (
+          <p className="text-red-600">{errors.name.message}</p>
+        )}
       </div>
      
       <div className="relative flex items-center mt-6">
@@ -67,7 +109,12 @@ const page = () => {
           type="email"
           className="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="Email address"
-        />
+          {...register("email", { required: "Email is required" })}
+          required
+          />
+          {errors.email && (
+            <p className="text-red-600">{errors.email.message}</p>
+          )}
       </div>
       <div className="relative flex items-center mt-4">
         <span className="absolute">
@@ -90,7 +137,12 @@ const page = () => {
           type="password"
           className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="Password"
-        />
+          {...register("password", { required: "Password is required" })}
+          required
+          />
+          {errors.password && (
+            <p className="text-red-600">{errors.password.message}</p>
+          )}
       </div>
       <div className="relative flex items-center mt-4">
         <span className="absolute">
@@ -113,11 +165,16 @@ const page = () => {
           type="password"
           className="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
           placeholder="Confirm Password"
-        />
+          {...register("confirmPassword", { required: "Confirm Password is required" })}
+          required
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-600">{errors.confirmPassword.message}</p>
+          )}
       </div>
       <div className="mt-6">
         <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-          Sign Up
+     {isLoading ? <Loader /> : "Sign Up" }
         </button>
         <div className="mt-6 text-center ">
           <Link href="/auth/login"
