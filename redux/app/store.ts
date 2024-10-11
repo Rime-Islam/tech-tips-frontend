@@ -12,6 +12,7 @@ import {
   import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from './feature/api/baseApi/baseApi';
 import authReducer from './feature/api/auth/authSlice'
+import counterReducer from './feature/api/user/useSlice'
 
   const persistConfig = {
     key: 'root',
@@ -23,6 +24,7 @@ export const store = configureStore({
     reducer: {
         [baseApi.reducerPath]: baseApi.reducer,
         auth: persistedAuthReducer,
+        counter: counterReducer,
      
     },
 
