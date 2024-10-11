@@ -1,4 +1,5 @@
 import { RootState } from "@/redux/app/store";
+import { IUser } from "@/types/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 

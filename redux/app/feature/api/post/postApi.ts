@@ -10,37 +10,82 @@ const postApi = baseApi.injectEndpoints({
                     url: "/post/create",
                     method: "POST",
                     body: data,
-                }
+                };
             },
             invalidatesTags: ["posts"],
         }),
-        getMyPost: builder.mutation({
-            query: (body) => ({
-                url: "/auth/signup",
-                method: "POST",
-                body,
-            }),
+        updatePost: builder.mutation({
+            query: ({ postId, postData }) => {
+                return {
+                    url: `/post/update-post/${postId}`,
+                    method: "PATCH",
+                    body: postData,
+                };
+            },
+            invalidatesTags: ["posts"],
         }),
-        forgetPassword: builder.mutation({
-            query: (body) => ({
-                url: "/auth/forget_password",
-                method: "POST",
-                body,
+        getMyPost: builder.query({
+            query: () => ({
+                url: "/post/mypost",
+                method: "GET",
             }),
+            providesTags: ["posts"],
         }),
-        resetPassword: builder.mutation({
-            query: (body) => ({
-                url: "/auth/reset_password",
-                method: "POST",
-                body,
+        getAllPosts: builder.query({
+            query: () => ({
+                url: "/post",
+                method: "GET",
             }),
+            providesTags: ["posts"],
+        }),
+        createComment: builder.mutation({
+            query: ({ postId, commentText }) => {
+                return {
+                    url: `/post/comments/${postId}`,
+                    method: "POST",
+                    body: commentText,
+                };
+            },
+            invalidatesTags: ["posts"],
+        }),
+        updateComment: builder.mutation({
+            query: ({ postId, commentId, commentText }) => {
+                return {
+                    url: `/post/update-comments/${postId}`,
+                    method: "PATCH",
+                    body: { commentText, commentId },
+                };
+            },
+            invalidatesTags: ["posts"],
+        }),
+        votePost: builder.mutation({
+            query: ({ postId }) => {
+                return {
+                    url: `/post/vote/${postId}`,
+                    method: "PATCH",
+                };
+            },
+            invalidatesTags: ["posts"],
+        }),
+        deleteComment: builder.mutation({
+            query: ({ postId }) => {
+                return {
+                    url: `/post/delete/${postId}`,
+                    method: "DELETE",
+                };
+            },
+            invalidatesTags: ["posts"],
         }),
     }),
 });
 
 export const { 
-    useForgetPasswordMutation,
-    useLoginUserMutation,
-    useRegisterUserMutation,
-    useResetPasswordMutation
+    useCreateCommentMutation,
+    useCreatePostMutation,
+    useGetAllPostsQuery,
+    useGetMyPostQuery,
+    useUpdatePostMutation,
+    useUpdateCommentMutation,
+    useDeleteCommentMutation,
+
 } = postApi;
