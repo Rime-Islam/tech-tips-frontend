@@ -14,21 +14,21 @@ const Navber = () => {
     setIsOpen(!isOpen);
   };
 
-   const [theme, setTheme] = useState<'light' | 'dark' | null>(null); // Default is null to detect first
+   const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 
 
-  // Get the theme from localStorage or system preference on initial load
+ 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
-      setTheme(savedTheme as 'light' | 'dark'); // Set theme from localStorage if exists
+      setTheme(savedTheme as 'light' | 'dark'); 
     } else {
-      // Check system preference if no saved theme
+  
       const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setTheme(userPrefersDark ? 'dark' : 'light');
     }
   }, []);
 
-  // Apply the theme to the document (and store it in localStorage)
+ 
   useEffect(() => {
     if (theme) {
       document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -36,13 +36,13 @@ const Navber = () => {
     }
   }, [theme]);
 
-  // Theme toggle function
+ 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  // Only render the navbar once the theme is determined to avoid flicker
-  if (theme === null) return null;
+
+
   return (
     <footer className="bg-white py-3 rounded shadow-xl dark:bg-gray-900">
     <div className="container font-semibold flex  items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
