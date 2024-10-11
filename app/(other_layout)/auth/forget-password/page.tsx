@@ -4,11 +4,12 @@ import React from 'react';
 import { toast } from 'sonner';
 import { useRouter } from "next/navigation";
 import { useForgetPasswordMutation } from '@/redux/app/feature/api/auth/authApi';
+import Loader from '@/component/UI/Loader';
 
 
 const page = () => {
   const route = useRouter();
-const [ forgetPassword ] = useForgetPasswordMutation();
+const [ forgetPassword, { isLoading } ] = useForgetPasswordMutation();
 
   const handleForgetPassword = async(e: any)=> {
     e.preventDefault();
@@ -61,7 +62,7 @@ const [ forgetPassword ] = useForgetPasswordMutation();
               </div>
             
               <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                Continue
+                  {isLoading ? <Loader /> : "Continue" }
               </button>
               <div className="mt-6 text-center">
                 <Link href="/auth/register"

@@ -33,7 +33,8 @@ const Login = () => {
         } catch ( error: any ) {
           toast.error(error?.data?.message)
         }
-  }
+  };
+
     return (
    
          <div className="w-full mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl dark:bg-gray-800">
