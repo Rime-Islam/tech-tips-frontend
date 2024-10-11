@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Navber } from "@/component/UI/navber";
+import Navber from "@/component/UI/navber";
+
 
 
 
@@ -33,7 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main className="container mx-auto max-w-8xl  px-6 flex-grow">
-      <Navber />
+    <Navber ></Navber>
         {children}
         
         </main>

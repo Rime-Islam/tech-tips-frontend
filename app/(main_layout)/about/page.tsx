@@ -18,11 +18,11 @@ const page = () => {
             <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
             <div>
-            <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+            <p className="inline-block px-3 py-px mb-4 text-xs dark:text-white font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
             What We Offer
             </p>
             </div>
-            <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+            <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight dark:text-white text-gray-900 sm:text-4xl md:mx-auto">
             <span className="relative inline-block">
                 <svg
                 viewBox="0 0 52 24"
@@ -50,7 +50,7 @@ const page = () => {
             </span>
             The Quick, Savvy Fox Navigates Tech Like a Pro
             </h2>
-            <p className="text-base text-gray-700 md:text-lg">
+            <p className="text-base text-gray-700 dark:text-white md:text-lg">
         Explore expert insights, tips, and solutions that empower you to master technology with ease. Whether learning, or staying ahead of trends, we've got you covered.
             </p>
         </div>
@@ -73,7 +73,7 @@ const page = () => {
                 </svg>
                 </div>
                 <h6 className="mb-2 font-semibold leading-5">The deep ocean</h6>
-                <p className="mb-3 text-sm text-gray-900">
+                <p className="mb-3 text-sm text-gray-900 dark:text-white">
                 At Tech Tips & Tricks, we dive deep into the world of tech, solving puzzles and uncovering insights—
                 </p>
             </div>
@@ -103,7 +103,7 @@ const page = () => {
                 </svg>
                 </div>
                 <h6 className="mb-2 font-semibold leading-5">Navigating the Digital Depths</h6>
-                <p className="mb-3 text-sm text-gray-900">
+                <p className="mb-3 text-sm text-gray-900 dark:text-white">
                 Just as the deep sea is home to a myriad of fascinating creatures—rough pomfret, lemon shark, and more—
                 </p>
             </div>
@@ -133,7 +133,7 @@ const page = () => {
                 </svg>
                 </div>
                 <h6 className="mb-2 font-semibold leading-5">A Slice of Tech Heaven</h6>
-                <p className="mb-3 text-sm text-gray-900">
+                <p className="mb-3 text-sm text-gray-900 dark:text-white">
                 From the basics to the advanced, we’ve got a chocka full range of insights that’ll help you grow your skills...
                 </p>
             </div>
@@ -163,7 +163,7 @@ const page = () => {
                 </svg>
                 </div>
                 <h6 className="mb-2 font-semibold leading-5">Innovate and Elevate</h6>
-                <p className="mb-3 text-sm text-gray-900">
+                <p className="mb-3 text-sm text-gray-900 dark:text-white">
                 At Tech Tips & Tricks, we’re here to disrupt the ordinary and inspire the extraordinary...
                 </p>
             </div>
