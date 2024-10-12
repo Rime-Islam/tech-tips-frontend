@@ -13,10 +13,10 @@ import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useCreatePostMutation } from '@/redux/app/feature/api/post/postApi';
 import { toast } from 'sonner';
 import Loader from '@/component/UI/Loader';
+import { IPost } from "@/types/types";
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 const page = () => {
-  const dispatch = useAppDispatch();
   const user = useAppSelector(useCurrentUser);
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
@@ -60,11 +60,14 @@ const page = () => {
   };
 
   const route = useRouter();
-  const handleCreatePost = async (e: any) => {
+  const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+   
     try {
-      const data = {
-        
+      const data: IPost = {
+        title, content, category, user: user?._id,
+         images: file, isPremium: premium,
+        description: editorContent
       };
 
       const res = await createPost(data).unwrap();
@@ -211,7 +214,7 @@ return (
     <p className="mt-2 text-xs tracking-wide text-gray-500 dark:text-gray-400">
       Upload your file SVG, PNG, JPG or GIF.{" "}
     </p>
-    <input id="file-upload" type="file" onChange={handleFileChange}  className="hidden" />
+    <input id="file-upload" required type="file" onChange={handleFileChange}  className="hidden" />
   </label>
 </div>
        
@@ -231,7 +234,7 @@ return (
        </div>
     <div className='mb-12 flex justify-center gap-3'>
     <button type="button" onClick={generatePDF} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Download PDF</button>
-    <button type="button" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Publish Post" }</button>
+    <button type="submit" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Publish Post" }</button>
     </div>
 
       </div>
