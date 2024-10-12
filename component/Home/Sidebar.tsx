@@ -14,7 +14,7 @@ const Sidebar = () => {
     const user = useAppSelector(useCurrentUser);
 
     return (
-        <div>
+        <div className='pt-12'>
             {
                 user?.role === "user" && (
                     <div className=""> 

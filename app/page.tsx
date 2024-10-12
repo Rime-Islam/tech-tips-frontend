@@ -12,9 +12,13 @@ console.log(data?.data);
 if (isLoading) {return <Loader />};
   return (
     <div className="flex gap-10 mt-5 mb-12">
-      <Sidebar />
+     <div className="mt-12">
+     <Sidebar />
+     </div>
     <PostContent />
-   <RightSidebar />
+    <div className="mt-12">
+    <RightSidebar />
+    </div>
     </div>
   );
 }
