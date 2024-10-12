@@ -10,12 +10,13 @@ import { useAppDispatch } from '@/redux/app/hook';
 import Loader from '@/component/UI/Loader';
 import { setUser } from '@/redux/app/feature/api/auth/authSlice';
 
+
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<IUser>();
   const route = useRouter();
   const dispatch = useAppDispatch();
   const [loginUser, {isLoading}] = useLoginUserMutation()
-
+ 
   const onSubmit: SubmitHandler<IUser> = async(data) => {
         
         try {
@@ -38,6 +39,7 @@ const Login = () => {
     return (
    
          <div className="w-full mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl dark:bg-gray-800">
+      
         <div className="px-6 py-4">
           <div className="flex justify-center mx-auto">
             <img

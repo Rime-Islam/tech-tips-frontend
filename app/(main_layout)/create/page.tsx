@@ -1,56 +1,255 @@
+"use client"
+import { useRouter } from "next/navigation";
 import React from 'react';
+import { useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import { uploadImage } from '@/utils/imageDB';
+import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
+import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
+import { useCreatePostMutation } from '@/redux/app/feature/api/post/postApi';
+import { toast } from 'sonner';
+import Loader from '@/component/UI/Loader';
 
-
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 const page = () => {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(useCurrentUser);
+  const [content, setContent] = useState('');
+  const [category, setCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [editorContent, setEditorContent] = useState('');
+  const [file, setFile] = useState<string>('');
+  const [preview, setPreview] = useState(true);
+  const [premium, setPremium] = useState(false);
+  const [createPost, {isLoading}] = useCreatePostMutation()
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+        const imageUrl = await uploadImage(selectedFile);
+        if (imageUrl) {
+          setFile(imageUrl)
+        } 
+    }
+  };
+
+  const handleSelectCategory = (value: string) => {
+    setCategory(value);
+  };
+
+  const handleSelectContent = (value: string) => {
+    setContent(value);
+  };
+
+  const generatePDF = async () => {
+    const pdfContent = document.getElementById("preview-section");
+      const canvas = await html2canvas(pdfContent, {
+        useCORS: true,
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${title}.pdf`);
+  };
+
+  const route = useRouter();
+  const handleCreatePost = async (e: any) => {
+    e.preventDefault();
+    try {
+      const data = {
+        
+      };
+
+      const res = await createPost(data).unwrap();
+   
+      if (res?.success) {
+        toast.success(res?.message);
+        route.push("/")
+      }
+    } catch ( error: any ) {
+      toast.error(error?.data?.message)
+    }
+  }
+
+
 return (
     <>
   
-  <form>
-    <div className="h-screen bg-white dark:bg-gray-800">
-      <div className="pt-10 md:pt-20">
-        <div className="p-4 md:p-8">
-          <h1 className="text-white text-center pb-8 font-light text-4xl md:text-5xl lg:text-6xl">
-            Contact Me
-          </h1>
-          <div className="md:w-3/4 lg:w-2/3 xl:w-1/2">
-            <div className="flex flex-col md:flex-row">
+  <form onSubmit={handleCreatePost}>
+    <div className="">
+      <div className="pt-10 max-w-5xl mx-auto md:pt-10">
+        <h1 className="text-xl md:text-4xl font-bold mb-3">Write A Post</h1>
+        <p>Share your expertise and insights with the GrootHub.
+        Create engaging content to help others learn and grow.</p>
+      <div className="flex gap-3 mb-5 mt-8">
+      <div className="shadow flex-1 mt-2 bg-white dark:bg-gray-800 appearance-none border rounded h-10 text-white dark:text-gray-700">  
+    <div className="group relative cursor-pointer py-2">
+        <div className="flex items-center justify-between dark:bg-gray-800 space-x-5 bg-white px-4">
+        <p className="menu-hover block text-gray-700 dark:text-white ">
+            {content || "Select Content"}
+        </p>
+        <span>
+        <IoIosArrowDown />
+        </span>
+        </div>
+        <div className="invisible absolute z-50 flex w-full flex-col bg-gray-100 py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
+        <p onClick={() => handleSelectContent('Design Patterns')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Design Patterns
+        </p>
+        <p onClick={() => handleSelectContent('Distributed Systems')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Distributed Systems
+        </p>
+        <p onClick={() => handleSelectContent('Refactoring')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Refactoring
+        </p>
+        <p onClick={() => handleSelectContent('Performance Optimization')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Performance Optimization
+        </p>
+        <p onClick={() => handleSelectContent('Database Design')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Database Design
+        </p>
+        <p onClick={() => handleSelectContent('Fullstack Development')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Fullstack Development
+        </p>
+        <p onClick={() => handleSelectContent('Backend Development')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Backend Development
+        </p>
+        </div>
+    </div>
+    </div>
+  
+      <div className="shadow flex-1 mt-2 bg-white dark:bg-gray-800 appearance-none border rounded h-10 text-white dark:text-gray-700">  
+    <div className="group relative cursor-pointer py-2">
+        <div className="flex items-center justify-between dark:bg-gray-800 space-x-5 bg-white px-4">
+        <p className="menu-hover block text-gray-700 dark:text-white ">
+            {category || "Select Category"}
+        </p>
+        <span>
+        <IoIosArrowDown />
+        </span>
+        </div>
+        <div className="invisible absolute z-50 flex w-full flex-col bg-gray-100 py-1 px-4 text-gray-800 shadow-xl group-hover:visible ">
+        <p onClick={() => handleSelectCategory('Software Development')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Software Development
+        </p>
+        <p onClick={() => handleSelectCategory('Web Development')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Web Development
+        </p>
+        <p onClick={() => handleSelectCategory('Cybersecurity')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Cybersecurity
+        </p>
+        <p onClick={() => handleSelectCategory('DevOps')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        DevOps
+        </p>
+        <p onClick={() => handleSelectCategory('Machine Learning')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Machine Learning
+        </p>
+        <p onClick={() => handleSelectCategory('Blockchain')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        Blockchain
+        </p>
+        <p onClick={() => handleSelectCategory('UI/UX Design')} className=" block border-b border-gray-100 py-1  text-gray-500 hover:text-black md:mx-2">
+        UI/UX Design
+        </p>
+        </div>
+    </div>
+    </div>
+     </div>
+
+      <div className=" my-4">
               <input
-                id="name"
-                name="name"
+                className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-white placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
                 type="text"
-                className="my-2 py-2 px-4 rounded-md bg-gray-900 text-gray-300 w-full md:w-1/2 md:mr-2 outline-none focus:ring-2 focus:ring-blue-600"
-                placeholder="Name"
-              />
-              <input
-                id="email"
-                name="name"
-                type="email"
-                className="my-2 py-2 px-4 rounded-md bg-gray-900 text-gray-300 w-full md:w-1/2 md:ml-2 outline-none focus:ring-2 focus:ring-blue-600"
-                placeholder="Email"
+                id="title"
+                value={title}
+                placeholder="Enter your post Title"
+                aria-label="title"
+                required
+                onChange={(e) => setTitle(e.target.value)}
+                />
+            </div>
+
+            <div className='mt-5'>
+            <ReactQuill
+                value={editorContent}
+                onChange={setEditorContent}
+                theme="snow"
+                className="h-80 bg-white text-gray-700"
+                placeholder="Write your post description here..."
               />
             </div>
-            <input
-              id="subject"
-              type="text"
-              placeholder="Subject"
-              className="my-2 py-2 px-4 rounded-md bg-gray-900 text-gray-300 w-full outline-none focus:ring-2 focus:ring-blue-600"
-            />
-            <textarea
-              id="message"
-              name='message"'
-              rows={5}
-              placeholder="Say Something"
-              className="my-2 py-2 px-4 rounded-md bg-gray-900 text-gray-300 w-full outline-none focus:ring-2 focus:ring-blue-600"
-              defaultValue={""}
-            />
-          </div>
-          <button className="border-2 text-md mt-5 rounded-md py-2 px-4 bg-blue-600 hover:bg-blue-700 text-gray-100 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600">
-            Send Message
-          </button>
-        </div>
+
+          
+            <div className='mt-20'>
+  <label
+    htmlFor="file-upload"
+    className="flex flex-col items-center w-full max-w-5xl py-10 p-5 mx-auto mt-2 text-center bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-900 dark:border-gray-700 rounded-xl"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      className="w-8 h-8 text-gray-500 dark:text-gray-400"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+      />
+    </svg>
+    <h2 className="mt-1 font-medium tracking-wide text-gray-700 dark:text-gray-200">
+    Attach images, screenshots, or visual aids
+    </h2>
+    <p className="mt-2 text-xs tracking-wide text-gray-500 dark:text-gray-400">
+      Upload your file SVG, PNG, JPG or GIF.{" "}
+    </p>
+    <input id="file-upload" type="file" onChange={handleFileChange}  className="hidden" />
+  </label>
+</div>
+       
+       <div className='my-5'>
+       <div>
+  <label className="inline-flex items-center" htmlFor="tealCheckBox">
+    <input
+      id="premium"
+      type="checkbox"
+      checked={premium}
+      onChange={(e) => setPremium(e.target.checked)}
+      className="w-4 h-4 accent-teal-600"
+    />
+    <span className="ml-2">Publish as Premium Content.</span>
+  </label>
+</div>
+       </div>
+    <div className='mb-12 flex justify-center gap-3'>
+    <button type="button" onClick={generatePDF} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Download PDF</button>
+    <button type="button" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Publish Post" }</button>
+    </div>
+
       </div>
     </div>
   </form>
+
+  {preview && (
+        <div id="preview-section" className="mt-10  max-w-5xl mx-auto border p-5 rounded-lg bg-gray-50">
+          <h2 className="text-2xl text-black font-bold">{title}</h2>
+          <div className="flex justify-between mt-3">
+          <p className="text-gray-500">Category: {category}</p>
+          <p className="text-gray-500">Content Type: {content}</p>
+          </div>
+          <img src={file} alt="Uploaded content" className="mt-5" />
+          <div className='text-gray-700' dangerouslySetInnerHTML={{ __html: editorContent }} />
+         
+        </div>
+      )}
   
 </>
 

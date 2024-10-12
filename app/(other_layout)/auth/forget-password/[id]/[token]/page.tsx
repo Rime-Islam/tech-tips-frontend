@@ -29,11 +29,11 @@ const page = ({ params }: { params: { id: string, token: string } }) => {
     try {
       const password = data.newPassword;
       const res = await resetPassword({  id, token, password }).unwrap();
-   console.log(res)
+   
       if (res?.success) {
         toast.success(res?.message);
 
-        route.push("/")
+        route.push("/auth/login")
       }
     } catch ( error: any ) {
       toast.error(error?.data?.message)

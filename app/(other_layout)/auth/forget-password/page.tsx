@@ -15,10 +15,10 @@ const [ forgetPassword, { isLoading } ] = useForgetPasswordMutation();
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
-   
+ 
      try {
-          const res = await forgetPassword(email).unwrap();
-       
+          const res = await forgetPassword({email}).unwrap();
+
           if (res?.success) {
             toast.success(res?.message);
 
