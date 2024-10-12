@@ -21,14 +21,15 @@ export interface IPost {
     _id?: string;  
     title: string;  
     content: string;  
-    user: string | undefined;  
+    user: IUser;  
     images?: string;  
     category: string;  
     tags?: string[];  
     isPremium: boolean;  
     description: string;  
-    upvotes?: number; 
-    comments?: IComment[];  
+    upvotesCount?: number; 
+    comments?: IComment[] | undefined; 
+    createdAt?: string | undefined; 
   };
   
   export interface IComment {
