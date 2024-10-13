@@ -32,7 +32,7 @@ const Sidebar = () => {
         <div className="flex my-5">
         <IoDocumentTextSharp className="mt-1 w-6 h-6"/>
         <Link
-          href="/my-post"
+          href="/profile"
           className="mx-2 text-gray-600 transition-colors font-semibold text-lg  duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Facebook"
         >
@@ -65,7 +65,7 @@ const Sidebar = () => {
         <div className="flex">
         <SlUserFollowing className="mt-1 w-6 h-6"/>
         <Link
-          href="/following"
+          href="/follower"
           className="mx-2 text-gray-600  transition-colors font-semibold text-lg  duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Github"
         >

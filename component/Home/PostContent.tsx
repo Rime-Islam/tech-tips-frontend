@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FcApproval } from "react-icons/fc";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetAllPostsQuery } from "@/redux/app/feature/api/post/postApi";
@@ -53,6 +54,10 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
                     src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
                   />
+                    {
+       post?.user?.isVerified &&  <span className='-ml-1'><FcApproval className='-mb-3'/></span>
+     }
+     
                   <Link
                     href="#"
                     className="mx-2 font-semibold text-gray-700 dark:text-gray-200"
@@ -89,12 +94,20 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
             <div className="">
              {
               post?.isPremium ? (
+                <>
                 <div className='flex justify-center text-amber-500'>
                   <div>
                   <FaCrown className='w-6 h-6 mt-5'/>
                   </div>
-                  <div className='px-4 my-5  font-semibold text-lg'>  Premium Content only for Subscribers</div>
+                  <div className='px-4 my-5  font-semibold text-lg'>  Premium Content for verifiyed user</div>
                 </div>
+                <div className='flex justify-center'>
+                  <Link href="/">
+                  <button className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Verify Account</button>
+                  </Link>
+                </div>
+                </>
+                
               ) : (
                 <img
                 className="object-cover mt-3 w-full"

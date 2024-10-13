@@ -36,11 +36,17 @@ export default function RootLayout({
       >
         <main className="container mx-auto max-w-8xl  px-6 flex-grow">
         <Providers>
+        <div className="flex flex-col">
+        <div className="flex-grow min-h-screen">
         <Navber />
        <div>
        {children}
        </div>
-        <Footer />
+        </div>
+       <div className="flex-shrink-0">
+       <Footer />
+       </div>
+        </div>
         </Providers>
         </main>
       </body>

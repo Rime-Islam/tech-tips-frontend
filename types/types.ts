@@ -9,7 +9,7 @@ export interface IUser {
     profilePicture?: string;  
     followers?: string[];  
     following?: string[];  
-    verified: boolean;  
+    isVerified: boolean;  
     phone?: string;
     bio?: string;
     address?: string;  
