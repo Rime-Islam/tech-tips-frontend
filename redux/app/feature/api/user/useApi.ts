@@ -12,18 +12,18 @@ const userApi = baseApi.injectEndpoints({
             providesTags: ["users"],
         }),
         getSingleUser: builder.query({
-            query: ({ userId }) => ({
+            query: ( userId ) => ({
                 url: `/user/${userId}`,
                 method: "GET",
             }),
             providesTags: ["users"],
         }),
         updateUser: builder.mutation({
-            query: ({ userId, data }) => {
+            query: ({ userId, userData }) => {
                 return {
                     url: `/user/${userId}`,
-                    method: "GET" ,
-                    body: data,
+                    method: "PATCH" ,
+                    body: userData,
                 }
             },
             invalidatesTags: ["users"],

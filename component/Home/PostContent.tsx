@@ -10,6 +10,7 @@ import { FaComment } from "react-icons/fa6";
 import { FcLikePlaceholder } from "react-icons/fc";
 import { FcLike } from "react-icons/fc";
 import { FaCrown } from "react-icons/fa";
+import Loader from '../UI/Loader';
 
 
 const PostContent = () => {
@@ -17,13 +18,13 @@ const PostContent = () => {
   const user = useAppSelector(useCurrentUser);
   const {data, isLoading} = useGetAllPostsQuery(undefined);
 const posts = data?.data;
-console.log(posts)
+
 
 
 const toggleReact = () => {
   setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
 };
-
+if (isLoading) {return <Loader />};
 const category: any = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
     return (
       <div className="container max-w-5xl ">
@@ -50,7 +51,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               <div className="flex items-center">
                 <div className="flex items-center">
                   <img
-                    className="object-cover h-10 rounded-full"
+                    className="object-cover w-10 h-10 rounded-full"
                     src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
                   />
@@ -82,7 +83,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               {post?.title}
             </p>) : (
                 <Link
-                href="#"
+                href={ `/post/${post?._id}`}
                 className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
                 tabIndex={0}
                 role="link"
@@ -117,7 +118,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               )
              }
             </div>
-            <div className="p-6">
+            <div className="">
               <div className="px-4">
                 <div className="py-4 flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   {/* link comment section */}

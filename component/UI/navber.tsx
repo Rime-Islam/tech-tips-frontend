@@ -7,14 +7,17 @@ import { IoIosMoon } from "react-icons/io";
 import { MdSunny } from "react-icons/md";
 import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
+import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 
 
 
 const Navber = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const user = useAppSelector(useCurrentUser);
-
+  const use = useAppSelector(useCurrentUser);
+  const id = use?._id;
+  const {data: userData, isLoading } = useGetSingleUserQuery(id);
+  const user = userData?.data;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -54,8 +57,8 @@ const Navber = () => {
 
 
   return (
-    <div className="bg-white py-3 rounded shadow-xl dark:bg-gray-900">
-    <div className="container font-semibold flex  items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
+    <div className="bg-white rounded shadow-xl dark:bg-gray-900">
+    <div className="container font-semibold flex  items-center justify-between px-6 py-2 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
       <Link href="/">
    <div className='flex'>
    <Image
@@ -115,15 +118,15 @@ const Navber = () => {
      <div className='mt-4'><TfiWrite className='w-12 h-6'/></div>
      </Link>
 
-        <div className="relative inline-block">
+        <div className="relative inline-block ">
       {/* Dropdown toggle button */}
       <button
         onClick={toggleDropdown}
-        className="relative z-10 p-2 mx-2 rounded-md   "
+        className="relative z-10 mx-2 rounded-md"
       >
           <img
-    className="w-12 rounded-full"
-    src="https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"
+    className="w-12 h-12 rounded-full"
+    src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
     alt="logo"
   />   
       </button>

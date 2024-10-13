@@ -24,6 +24,13 @@ const postApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ["posts"],
         }),
+        getSinglePost: builder.query({
+            query: (id) => ({
+                url: `/post/${id}`,
+                method: "GET",
+            }),
+            providesTags: ["posts"],
+        }),
         getMyPost: builder.query({
             query: () => ({
                 url: "/post/my-post",
@@ -87,5 +94,5 @@ export const {
     useUpdatePostMutation,
     useUpdateCommentMutation,
     useDeleteCommentMutation,
-
+useGetSinglePostQuery,
 } = postApi;

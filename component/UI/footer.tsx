@@ -6,7 +6,7 @@ import React from 'react';
 export default function Footer()  {
     return (
         <footer className="bg-white rounded dark:bg-gray-800">
-  <div className="container flex  items-center justify-between p-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
+  <div className="container flex  items-center justify-between py-2 px-6 mx-auto space-y-4 sm:space-y-0 sm:flex-row">
     <Link href="/">
  <div className='flex'>
  <Image

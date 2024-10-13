@@ -10,13 +10,19 @@ import Link from 'next/link';
 import { useGetMyPostQuery } from '@/redux/app/feature/api/post/postApi';
 import { IPost } from '@/types/types';
 import Sidebar from '@/component/Home/Sidebar';
+import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
+import { FaPhone } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
 
 
 const page = () => {
-    const user = useAppSelector(useCurrentUser);
-    const {data, isLoading} = useGetMyPostQuery(undefined);
-    const myPost = data?.data;
-    console.log(myPost)
+    const use = useAppSelector(useCurrentUser);
+    const id = use?._id;
+     const {data: myPostData} = useGetMyPostQuery(undefined);
+    const {data: userData } = useGetSingleUserQuery(id);
+    const myPost = myPostData?.data;
+    const user = userData?.data;
+
 
 
 return (
@@ -39,6 +45,14 @@ return (
       <div className='flex gap-2 mt-2'>
       <MdEmail className='w-6 h-6'/><p>{user?.email}</p>
       </div>
+      <div className='flex gap-2 mt-2'>
+            <FaPhone className='w-6 h-6'/>
+            <p>{user?.phone}</p>
+            </div>
+      <div className='flex gap-2 mt-2'>
+            <FaHome className='w-6 h-6'/>
+            <p>{user?.address}</p>
+            </div>
       <div className='mt-5'>
         <div className='flex gap-2'>
             <FaUserCircle className='w-6 h-6'/>
@@ -47,7 +61,7 @@ return (
       <p className='mt-3 text-center'>{user?.bio && <span>" { user?.bio } " </span>}</p>
       </div>
       <div className="pt-12 ">
-        <Link href="/profile/update" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
+        <Link href="/update-profile" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
           Update Profile
         </Link>
       </div>
@@ -57,14 +71,10 @@ return (
     <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
   <img
     className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md"
-    src="https://images.unsplash.com/photo-1521903062400-b80f2cb8cb9d?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80"
+    src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
     
   />
-  <label
-    htmlFor="file-upload" className="w-16 h-16 -mt-5  bg-gray-300 rounded-full shadow-lg dark:bg-gray-800">
-  <MdFileUpload className='mt-5 mx-5 w-6 h-6'/>
-  <input id="file-upload"  type="file"  className="hidden" />
-  </label>
+
 </div>
   </div>
 </div>
@@ -154,7 +164,7 @@ return (
     myPost ? <span>My Posts</span> : <span>No Post Available</span>
 }
 </div>
-<div className='mt-8 md:mt-12 grid grid-cols-1 lg:grid-cols-2'>
+<div className='my-8 md:mt-12 grid grid-cols-1 lg:grid-cols-2'>
     {
         myPost?.length && myPost?.map((post: IPost) => (
             <div key={post._id} className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
