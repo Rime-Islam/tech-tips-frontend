@@ -14,6 +14,7 @@ import Sidebar from '@/component/Home/Sidebar';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { FaPhone } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
+import HtmlContent from '@/component/UI/html/htmlContent';
 
 
 const page = () => {
@@ -178,7 +179,7 @@ return (
 <div className='flex justify-between'>
 <div>
    <Link
-        href="#"
+        href={`post/${post?._id}`}
         className="block mt-1 text-lg dark:text-white leading-tight font-medium text-black hover:underline"
       >
         {post?.title}
@@ -189,8 +190,7 @@ return (
       <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/>
       </div>
 </div>
-      <div className="mt-5 text-slate-500 dark:text-white" dangerouslySetInnerHTML={{ __html: post?.description.slice(0, 200) }} >
-      </div>
+        <HtmlContent content={post?.description.slice(0, 200)}/>
     </div>
   </div>
 </div>

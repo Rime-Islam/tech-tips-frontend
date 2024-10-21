@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { FcApproval } from "react-icons/fc";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
@@ -27,9 +27,9 @@ const toggleReact = () => {
 if (isLoading) {return <Loader />};
 const category: any = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
     return (
-      <div className="container max-w-5xl ">
+      <div className="container max-w-5xl">
         {/* categories tab  */}
-        <div className='mb-5 flex flex-wrap'>
+        <div className='mb-5 flex flex-wrap '>
       {
         category?.length && category?.map((item: string) => (
           <div className='mx-2'>
@@ -40,23 +40,21 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
         </div>
         ))
       }
-
         </div>
 
-      <div className="grid gap-3">
+      <div className="flex flex-col gap-3 max-w-2xl mx-auto">
       {
         posts?.length && posts?.map((post: IPost) => (
-          <div key={post?._id} className=" max-w-5xl shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
+          <div key={post?._id} className="   shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
             <div className="my-4 px-4">
               <div className="flex items-center">
                 <div className="flex items-center">
-                  <img
-                    className="object-cover w-10 h-10 rounded-full"
+                  <img className="object-cover w-10 h-10 rounded-full"
                     src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
                   />
                     {
-       post?.user?.isVerified &&  <span className='-ml-1'><FcApproval className='-mb-3'/></span>
+       post?.user?.isVerified &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>
      }
      
                   <Link
@@ -110,11 +108,13 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
                 </>
                 
               ) : (
-                <img
-                className="object-cover mt-3 w-full"
+               <div className='max-w-2xl'>
+                 <img
+                className="w-full"
                 src={post?.images}
                 alt="Article"
               />
+               </div>
               )
              }
             </div>

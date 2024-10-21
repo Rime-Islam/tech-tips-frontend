@@ -27,7 +27,7 @@ const page = ({ params }: { params: { id: string } }) => {
     const [file, setFile] = useState<string>('');
     const [premium, setPremium] = useState(false);
     const [updatePost, {isLoading}] = useUpdatePostMutation()
-  
+
     useEffect(() => {
       if (post) {
         setTitle(post.title || '');
@@ -66,7 +66,6 @@ const page = ({ params }: { params: { id: string } }) => {
            images: file, isPremium: premium,
           description: editorContent
         };
-        console.log({id, data })
         const res = await updatePost({id, data }).unwrap();
      
         if (res?.success) {

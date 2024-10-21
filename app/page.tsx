@@ -11,11 +11,13 @@ export default function Home() {
 
   return (
     <div className="flex gap-10 mt-5 mb-12">
-     <div className="mt-12">
+     <div className="flex-1 mt-6">
      <Sidebar />
      </div>
-    <PostContent />
-    <div className="mt-12">
+   <div className="flex-2 ">
+   <PostContent />
+   </div>
+    <div className="flex-1 mt-12">
     <RightSidebar />
     </div>
     </div>
