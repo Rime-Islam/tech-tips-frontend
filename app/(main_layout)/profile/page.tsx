@@ -1,7 +1,8 @@
 "use client"
 import React from 'react';
+import { RiDeleteBack2Fill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
-import { MdFileUpload } from "react-icons/md";
+import { AiFillEdit } from "react-icons/ai";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { FcApproval } from "react-icons/fc";
 import { useAppSelector } from '@/redux/app/hook';
@@ -27,58 +28,9 @@ const page = () => {
 
 return (
     <div> 
-<div className='flex justify-evenly'>
+<div className='lg:flex justify-between'>
     <Sidebar />
-<div className="max-w-5xl flex mt-10 h-auto flex-wrap ">
-  <div
-    className="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white dark:bg-gray-700 opacity-75 mx-6 lg:mx-0"
-  >
-    <div className="p-4 md:p-12 text-center lg:text-left">
-   
-     
-     <div className='flex gap-2'>
-     <h1 className="text-3xl text-gray-800 dark:text-white font-bold pt-8 lg:pt-0">{user?.name}  </h1>
-     {
-         user?.isVerified && <span><FcApproval className='w-8 h-8'/></span>
-     }
-     </div>
-      <div className='flex gap-2 mt-2'>
-      <MdEmail className='w-6 h-6'/><p>{user?.email}</p>
-      </div>
-      <div className='flex gap-2 mt-2'>
-            <FaPhone className='w-6 h-6'/>
-            <p>{user?.phone}</p>
-            </div>
-      <div className='flex gap-2 mt-2'>
-            <FaHome className='w-6 h-6'/>
-            <p>{user?.address}</p>
-            </div>
-      <div className='mt-5'>
-        <div className='flex gap-2'>
-            <FaUserCircle className='w-6 h-6'/>
-            <p>{user?.role}</p>
-            </div>
-      <p className='mt-3 text-center'>{user?.bio && <span>" { user?.bio } " </span>}</p>
-      </div>
-      <div className="pt-12 ">
-        <Link href="/update-profile" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
-          Update Profile
-        </Link>
-      </div>
-    </div>
-  </div>
-  <div className="w-full lg:w-2/5">
-    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
-  <img
-    className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md"
-    src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
-    
-  />
-
-</div>
-  </div>
-</div>
-<div>
+    <div>
   <div className="py-2 mt-8">
     <p
       className="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700"
@@ -155,19 +107,66 @@ return (
     See all notifications
   </p>
 </div>
+<div className="max-w-7xl flex mt-10 h-auto flex-wrap ">
+  <div
+    className="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white dark:bg-gray-700 opacity-75 mx-6 lg:mx-0"
+  >
+    <div className="p-4 md:p-12 text-center lg:text-left">  
+     <div className='flex gap-2'>
+     <h1 className="text-3xl text-gray-800 dark:text-white font-bold pt-8 lg:pt-0">{user?.name}  </h1>
+     {
+         user?.isVerified && <span><FcApproval className='w-8 h-8'/></span>
+     }
+     </div>
+      <div className='flex gap-2 mt-2'>
+      <MdEmail className='w-6 h-6'/><p>{user?.email}</p>
+      </div>
+      <div className='flex gap-2 mt-2'>
+            <FaPhone className='w-6 h-6'/>
+            <p>{user?.phone}</p>
+            </div>
+      <div className='flex gap-2 mt-2'>
+            <FaHome className='w-6 h-6'/>
+            <p>{user?.address}</p>
+            </div>
+      <div className='mt-5'>
+        <div className='flex gap-2'>
+            <FaUserCircle className='w-6 h-6'/>
+            <p>{user?.role}</p>
+            </div>
+      <p className='mt-3 text-center'>{user?.bio && <span>" { user?.bio } " </span>}</p>
+      </div>
+      <div className="pt-12 ">
+        <Link href="/update-profile" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
+          Update Profile
+        </Link>
+      </div>
+    </div>
+  </div>
+  <div className="w-full lg:w-2/5">
+    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
+  <img
+    className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md"
+    src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
+    
+  />
 
 </div>
-
+  </div>
+</div>
+</div>
 
 <div className='mt-8 md:mt-16 text-center text-3xl'>
 {
     myPost ? <span>My Posts</span> : <span>No Post Available</span>
 }
 </div>
-<div className='my-8 md:mt-12 grid grid-cols-1 lg:grid-cols-2'>
+<div>
+  {/* post section  */}
+  <div className='my-8 md:mt-12 grid gap-5'>
     {
         myPost?.length && myPost?.map((post: IPost) => (
-            <div key={post._id} className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
+            <div key={post._id} className="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
   <div className="md:flex">
     <div className="md:shrink-0">
       <img
@@ -176,12 +175,20 @@ return (
       />
     </div>
     <div className="p-8">
-      <Link
+<div className='flex justify-between'>
+<div>
+   <Link
         href="#"
         className="block mt-1 text-lg dark:text-white leading-tight font-medium text-black hover:underline"
       >
         {post?.title}
       </Link>
+   </div>
+      <div className='flex gap-3'>
+     <Link href={`edit-post/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link>
+      <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/>
+      </div>
+</div>
       <div className="mt-5 text-slate-500 dark:text-white" dangerouslySetInnerHTML={{ __html: post?.description.slice(0, 200) }} >
       </div>
     </div>
@@ -189,6 +196,11 @@ return (
 </div>
         ))
     }
+</div>
+
+{/* follower section  */}
+
+
 </div>
     
     </div>

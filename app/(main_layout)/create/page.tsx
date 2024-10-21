@@ -46,7 +46,7 @@ const page = () => {
   };
 
   const generatePDF = async () => {
-    const pdfContent = document.getElementById("preview-section");
+    const pdfContent: any = document.getElementById("preview-section");
       const canvas = await html2canvas(pdfContent, {
         useCORS: true,
       });

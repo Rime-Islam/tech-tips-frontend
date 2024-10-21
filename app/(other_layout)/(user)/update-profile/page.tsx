@@ -4,15 +4,14 @@ import { useGetSingleUserQuery, useUpdateUserMutation } from "@/redux/app/featur
 import { useAppSelector } from "@/redux/app/hook";
 import { IUser } from "@/types/types";
 import { uploadImage } from "@/utils/imageDB";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 
 
-const page = () => {
-    // const route = useRouter();
+const Page = () => {
+  
     const { register, handleSubmit, formState: { errors } } = useForm<IUser>();
     const use = useAppSelector(useCurrentUser);
     const id = use?._id;
@@ -36,8 +35,7 @@ const page = () => {
         const userData = {
             profilePicture: file , name: data.name, phone: data.phone, address: data.address, bio: data.bio
         }
-        console.log(data)
-        console.log(userData)
+      
         try {
           const res = await updateUser({ userId: user?._id, userData }).unwrap();
        
@@ -165,7 +163,7 @@ const page = () => {
     <p className="mt-2 text-xs tracking-wide text-gray-500 dark:text-gray-400">
       Upload your file SVG, PNG, JPG or GIF.{" "}
     </p>
-    <input id="file-upload" required type="file" onChange={handleFileChange}  className="hidden" />
+    <input id="file-upload" type="file" onChange={handleFileChange}  className="hidden" />
   </label>
 </div>
       </div>
@@ -186,4 +184,4 @@ const page = () => {
     )
 }
 
-export default page;
+export default Page;
