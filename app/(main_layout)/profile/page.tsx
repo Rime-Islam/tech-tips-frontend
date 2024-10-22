@@ -26,6 +26,10 @@ const page = () => {
     const user = userData?.data;
 
 
+    const handleDelete = (_id: string | undefined) => {
+
+    };
+
 
 return (
     <div> 
@@ -187,7 +191,7 @@ return (
    </div>
       <div className='flex gap-3'>
      <Link href={`edit-post/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link>
-      <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/>
+     <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button>
       </div>
 </div>
         <HtmlContent content={post?.description.slice(0, 200)}/>
