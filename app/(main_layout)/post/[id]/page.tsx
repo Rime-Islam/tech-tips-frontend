@@ -14,6 +14,9 @@ import { toast } from 'sonner';
 import { AiFillEdit } from 'react-icons/ai';
 import { RiDeleteBack2Fill } from 'react-icons/ri';
 import Swal from 'sweetalert2';
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const page = ({ params }: { params: { id: string} }) => {
@@ -108,11 +111,47 @@ const page = ({ params }: { params: { id: string} }) => {
         toast.error(error?.data?.message);
       }
       }
-    }
+    };
+
+    const generatePDF = async () => {
+      const postContent = document.getElementById('post-content'); 
+    
+      if (postContent) {
+        const pdf = new jsPDF("p", "mm", "a4"); 
+        const canvas = await html2canvas(postContent, { useCORS: true, scale: 2 }); 
+        const imgData = canvas.toDataURL("image/png");
+        
+        const padding = 10;
+    
+        const imgWidth = 210 - padding * 2; 
+        const pageHeight = 295 - padding * 2; 
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        
+        let position = padding;
+    
+        // Add first page with padding
+        pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+    
+        // Add more pages if content exceeds one page
+        while (heightLeft > 0) {
+          position = heightLeft - imgHeight + padding;
+          pdf.addPage();
+          pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+    
+        pdf.save(`${post?.title}.pdf`); // Save the PDF with the post's title
+      } else {
+        toast.error("Post content not found!");
+      }
+    };
+    
     
 if (isLoading) {return <Loader />};
     return (
-        <div className="min-h-[100vh] py-10">
+        <div id="post-content" className="min-h-[100vh] py-10">
             {/*  title section  */}
             <h1 className="text-3xl my-6 font-bold">{post?.title}</h1>
 
@@ -283,23 +322,25 @@ if (isLoading) {return <Loader />};
             </div>
 
             {/* save section  */}
-            <div className='mt-2'>
+            {/* <div className='mt-2'>
              <button><BsBookmarkCheckFill className='w-5 h-5 '/></button>
-            </div>
+            </div> */}
            
             </div>
             
             <div className='max-w-5xl rounded-sm my-8'>
                <div className='mb-5'>
-               <span className='text-xl font-semibold'>Category : </span> {post?.category}
+               <span className='text-xl font-semibold text-gray-900 dark:text-gray-300'>Category : </span> {post?.category}
                </div>
                 <img className='w-full object-cover' src={post?.images} alt="post image" />
             </div>
           
             <HtmlContent content={post?.description}/>
           
+            <button type="button" onClick={generatePDF} className="mt-8 px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Download PDF</button>
         </div>
     )
 };
 
 export default page;
+

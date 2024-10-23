@@ -5,8 +5,6 @@ import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import { uploadImage } from '@/utils/imageDB';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
@@ -23,7 +21,6 @@ const page = () => {
   const [title, setTitle] = useState('');
   const [editorContent, setEditorContent] = useState('');
   const [file, setFile] = useState<string>('');
-  const [preview, setPreview] = useState(true);
   const [premium, setPremium] = useState(false);
   const [createPost, {isLoading}] = useCreatePostMutation()
 
@@ -43,20 +40,6 @@ const page = () => {
 
   const handleSelectContent = (value: string) => {
     setContent(value);
-  };
-
-  const generatePDF = async () => {
-    const pdfContent: any = document.getElementById("preview-section");
-      const canvas = await html2canvas(pdfContent, {
-        useCORS: true,
-      });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${title}.pdf`);
   };
 
   const route = useRouter();
@@ -233,7 +216,7 @@ return (
 </div>
        </div>
     <div className='mb-12 flex justify-center gap-3'>
-    <button type="button" onClick={generatePDF} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Download PDF</button>
+   
     <button type="submit" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Publish Post" }</button>
     </div>
 
@@ -241,18 +224,7 @@ return (
     </div>
   </form>
 
-  {preview && (
-        <div id="preview-section" className="mt-10  max-w-5xl mx-auto border p-5 rounded-lg bg-gray-50">
-          <h2 className="text-2xl text-black font-bold">{title}</h2>
-          <div className="flex justify-between mt-3">
-          <p className="text-gray-500">Category: {category}</p>
-          <p className="text-gray-500">Content Type: {content}</p>
-          </div>
-          <img src={file} alt="Uploaded content" className="mt-5" />
-          <div className='text-gray-700' dangerouslySetInnerHTML={{ __html: editorContent }} />
-         
-        </div>
-      )}
+
   
 </>
 
