@@ -15,6 +15,7 @@ import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { FaPhone } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import HtmlContent from '@/component/UI/html/htmlContent';
+import Swal from 'sweetalert2';
 
 
 const page = () => {
@@ -26,9 +27,36 @@ const page = () => {
     const user = userData?.data;
 
 
-    const handleDelete = (_id: string | undefined) => {
-
-    };
+    // const handleDelete = (_id: string | undefined) => {
+    //   Swal.fire({
+    //     title: "Are you sure?",
+    //     text: "You won't be able to revert this!",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#3085d6",
+    //     cancelButtonColor: "#d33",
+    //     confirmButtonText: "Yes, delete it!"
+    //   }).then( async (result) => {
+    //     if (result.isConfirmed) {
+    //       const res = await deleteCar({ carId }).unwrap();
+         
+    //        if (res?.success) {
+    //         Swal.fire({
+    //           title: "Deleted!",
+    //           text: "Your file has been deleted.",
+    //           icon: "success"
+    //         });
+    //        } else {
+    //         Swal.fire({
+    //           icon: "error",
+    //           title: "Oops...",
+    //           text:  "An Error occured"
+    //         });
+    //        }
+         
+    //     }
+    //   });
+    // };
 
 
 return (
@@ -181,17 +209,19 @@ return (
     </div>
     <div className="p-8">
 <div className='flex justify-between'>
-<div>
-   <Link
+<div className='mb-2'>
+ <div>
+ <Link
         href={`post/${post?._id}`}
         className="block mt-1 text-lg dark:text-white leading-tight font-medium text-black hover:underline"
       >
         {post?.title}
       </Link>
+ </div>
    </div>
       <div className='flex gap-3'>
-     <Link href={`edit-post/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link>
-     <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button>
+     <div><Link href={`edit-post/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link></div>
+    {/* <div> <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button></div> */}
       </div>
 </div>
         <HtmlContent content={post?.description.slice(0, 200)}/>

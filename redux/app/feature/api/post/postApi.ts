@@ -32,6 +32,15 @@ const postApi = baseApi.injectEndpoints({
             }),
             providesTags: ["posts"],
         }),
+        getCategoryPost: builder.query({
+            query: ({ id }) => {
+                return {
+                    url: `/post/${id}`,
+                    method: "GET"
+                };
+            },
+            providesTags: ["posts"],
+        }),
         getMyPost: builder.query({
             query: () => ({
                 url: "/post/my-post",
@@ -66,8 +75,9 @@ const postApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ["posts"],
         }),
-        votePost: builder.mutation({
+        upvotePost: builder.mutation({
             query: ({ postId }) => {
+              
                 return {
                     url: `/post/vote/${postId}`,
                     method: "PATCH",
@@ -95,5 +105,9 @@ export const {
     useUpdatePostMutation,
     useUpdateCommentMutation,
     useDeleteCommentMutation,
-useGetSinglePostQuery,
+    useGetSinglePostQuery,
+    useUpvotePostMutation,
+    useGetCategoryPostQuery,
+
+    
 } = postApi;

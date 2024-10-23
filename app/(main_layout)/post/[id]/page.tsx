@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Loader from "@/component/UI/Loader";
-import { useGetSinglePostQuery } from "@/redux/app/feature/api/post/postApi";
+import { useGetSinglePostQuery, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import { FcApproval, FcLike, FcLikePlaceholder } from "react-icons/fc";
 import { FaShareAlt } from "react-icons/fa";
 import { BsBookmarkCheckFill } from 'react-icons/bs';
 import HtmlContent from '@/component/UI/html/htmlContent';
+import { toast } from 'sonner';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const page = ({ params }: { params: { id: string} }) => {
@@ -17,10 +18,16 @@ const page = ({ params }: { params: { id: string} }) => {
     const [react, setReact] = useState<'like' | 'dislike' | null>(null); 
     const { data, isLoading } = useGetSinglePostQuery(id);
     const post = data?.data;
+const [upvotePost] = useUpvotePostMutation();
 
-    const toggleReact = () => {
-        setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
-    };
+    const toggleReact = async() => {
+          const res = await upvotePost({postId: post._id}).unwrap();
+        console.log(res)
+        toast.success(res?.message);
+    if (res?.success) {
+      setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
+    }
+      };
 
 if (isLoading) {return <Loader />};
     return (
