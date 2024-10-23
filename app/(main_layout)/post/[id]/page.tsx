@@ -22,7 +22,6 @@ const [upvotePost] = useUpvotePostMutation();
 
     const toggleReact = async() => {
           const res = await upvotePost({postId: post._id}).unwrap();
-        console.log(res)
         toast.success(res?.message);
     if (res?.success) {
       setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));

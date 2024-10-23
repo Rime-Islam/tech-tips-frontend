@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { FcApproval } from "react-icons/fc";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
-import { useGetAllPostsQuery } from "@/redux/app/feature/api/post/postApi";
+import { useGetAllPostsQuery, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
 import { IPost } from '@/types/types';
 import { FaComment } from "react-icons/fa6";
 import { FcLikePlaceholder } from "react-icons/fc";
 import { FcLike } from "react-icons/fc";
 import { FaCrown } from "react-icons/fa";
 import Loader from '../UI/Loader';
+import { toast } from 'sonner';
 
 
 const PostContent = () => {
@@ -18,12 +19,20 @@ const PostContent = () => {
   const user = useAppSelector(useCurrentUser);
   const {data, isLoading} = useGetAllPostsQuery(undefined);
 const posts = data?.data;
+const premium = user?.premium;
+const [upvotePost] = useUpvotePostMutation();
 
 
-
-const toggleReact = () => {
-  setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
+const toggleReact = async(_id: string | undefined) => {
+  const res = await upvotePost({postId: _id}).unwrap();
+  toast.success(res?.message);
+if (res?.success) {
+setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
+}
 };
+
+
+
 if (isLoading) {return <Loader />};
 const category: any = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
     return (
@@ -72,14 +81,25 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               </div>
             </div>
           {
-            post?.isPremium ? (  <p
+            post?.isPremium ? (  premium ? (
+              <Link
+              href={ `/post/${post?._id}`}
+              className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
+              tabIndex={0}
+              role="link"
+            >
+              {post?.title}
+            </Link>
+            ) : (
+              <p
               
               className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 "
               tabIndex={0}
               role="link"
             >
               {post?.title}
-            </p>) : (
+            </p>
+            )) : (
                 <Link
                 href={ `/post/${post?._id}`}
                 className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
@@ -93,6 +113,15 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
             <div className="">
              {
               post?.isPremium ? (
+              premium ? (
+                <div className='max-w-2xl'>
+                 <img
+                className="w-full"
+                src={post?.images}
+                alt="Article"
+              />
+               </div>
+              ) : (
                 <>
                 <div className='flex justify-center text-amber-500'>
                   <div>
@@ -106,6 +135,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
                   </Link>
                 </div>
                 </>
+              )
                 
               ) : (
                <div className='max-w-2xl'>
@@ -127,7 +157,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
                 <span className='mt-1 px-2'>{post?.comments?.length }</span>
                 </div>                 
                  <div className="flex"> 
-                  <button onClick={toggleReact} className="mt-1">
+                  <button onClick={() => toggleReact(post?._id)} className="mt-1">
                   {react === 'like' ? (
           <>
             <FcLike className="w-6 h-6 " />

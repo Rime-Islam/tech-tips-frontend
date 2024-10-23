@@ -94,6 +94,15 @@ const postApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ["posts"],
         }),
+        payment: builder.mutation({
+            query: ({ userId }) => {
+                return {
+                    url: `/post/payment/${userId}`,
+                    method: "POST",
+                };
+            },
+            invalidatesTags: ["posts"],
+        }),
     }),
 });
 
@@ -108,6 +117,6 @@ export const {
     useGetSinglePostQuery,
     useUpvotePostMutation,
     useGetCategoryPostQuery,
-
+    usePaymentMutation
     
 } = postApi;
