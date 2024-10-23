@@ -15,21 +15,15 @@ import { toast } from 'sonner';
 
 
 const PostContent = () => {
-  const [react, setReact] = useState<'like' | 'dislike' | null>(null); 
+  const [react, setReact] = useState<Record<string, 'like' | 'dislike'>>({}); 
   const user = useAppSelector(useCurrentUser);
   const {data, isLoading} = useGetAllPostsQuery(undefined);
 const posts = data?.data;
 const premium = user?.premium;
-const [upvotePost] = useUpvotePostMutation();
 
 
-const toggleReact = async(_id: string | undefined) => {
-  const res = await upvotePost({postId: _id}).unwrap();
-  toast.success(res?.message);
-if (res?.success) {
-setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
-}
-};
+
+
 
 
 
@@ -54,7 +48,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
       <div className="flex flex-col gap-3 max-w-2xl mx-auto">
       {
         posts?.length && posts?.map((post: IPost) => (
-          <div key={post?._id} className="   shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
+          <div key={post?._id} className="py-4 shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
             <div className="my-4 px-4">
               <div className="flex items-center">
                 <div className="flex items-center">
@@ -148,31 +142,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               )
              }
             </div>
-            <div className="">
-              <div className="px-4">
-                <div className="py-4 flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                  {/* link comment section */}
-              <div className="flex"> 
-                <FaComment className='w-6 h-6 '/> 
-                <span className='mt-1 px-2'>{post?.comments?.length }</span>
-                </div>                 
-                 <div className="flex"> 
-                  <button onClick={() => toggleReact(post?._id)} className="mt-1">
-                  {react === 'like' ? (
-          <>
-            <FcLike className="w-6 h-6 " />
            
-          </>
-        ) : (
-          <>
-            <FcLikePlaceholder className="w-6 h-6  " />
-          </>
-        )}</button> 
-        <span className="mt-2 px-2">{post?.upvotesCount}</span>
-         </div>
-                </div>
-              </div>
-            </div>
           </div>
         ))
       }

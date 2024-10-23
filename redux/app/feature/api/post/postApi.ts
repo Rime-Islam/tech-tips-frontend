@@ -56,11 +56,12 @@ const postApi = baseApi.injectEndpoints({
             providesTags: ["posts"],
         }),
         createComment: builder.mutation({
-            query: ({ postId, commentText }) => {
+            query: (body) => {
+                // console.log(commentText)
                 return {
-                    url: `/post/comments/${postId}`,
+                    url: `/post/comments/${body.postId}`,
                     method: "POST",
-                    body: commentText,
+                    body,
                 };
             },
             invalidatesTags: ["posts"],
@@ -86,10 +87,11 @@ const postApi = baseApi.injectEndpoints({
             invalidatesTags: ["posts"],
         }),
         deleteComment: builder.mutation({
-            query: ({ postId }) => {
+            query: (body) => {
                 return {
-                    url: `/post/delete/${postId}`,
+                    url: `/post/comment-delete/${body.postId}`,
                     method: "DELETE",
+                    body,
                 };
             },
             invalidatesTags: ["posts"],

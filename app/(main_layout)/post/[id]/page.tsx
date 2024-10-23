@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Loader from "@/component/UI/Loader";
-import { useGetSinglePostQuery, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
+import { useCreateCommentMutation, useDeleteCommentMutation, useGetSinglePostQuery, useUpdateCommentMutation, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,23 +11,105 @@ import { FaShareAlt } from "react-icons/fa";
 import { BsBookmarkCheckFill } from 'react-icons/bs';
 import HtmlContent from '@/component/UI/html/htmlContent';
 import { toast } from 'sonner';
+import { AiFillEdit } from 'react-icons/ai';
+import { RiDeleteBack2Fill } from 'react-icons/ri';
+import Swal from 'sweetalert2';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const page = ({ params }: { params: { id: string} }) => {
     const { id } = params;
     const [react, setReact] = useState<'like' | 'dislike' | null>(null); 
+    const [isOpen, setIsOpen] = useState(false); 
+    const [comment, setComment] = useState(''); 
     const { data, isLoading } = useGetSinglePostQuery(id);
     const post = data?.data;
-const [upvotePost] = useUpvotePostMutation();
+    const comments = post?.comments;
+    
+    const [upvotePost] = useUpvotePostMutation();
+    const [createComment] = useCreateCommentMutation();
+    const [updateComment] = useUpdateCommentMutation();
+    const [deleteComment] = useDeleteCommentMutation();
+
+    const [editCommentId, setEditCommentId] = useState<string | null>(null);
+    const [editCommentText, setEditCommentText] = useState<string>('');
 
     const toggleReact = async() => {
           const res = await upvotePost({postId: post._id}).unwrap();
-        toast.success(res?.message);
     if (res?.success) {
+      toast.success(res?.message);
       setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
+    } else {
+      toast.error(res?.message);
     }
-      };
+    };
 
+    const toggleModal = () => {
+        setIsOpen(!isOpen);
+    };
+    
+    const handleComment = async(e: React.FormEvent) => {
+         e.preventDefault();
+      
+        if (comment) {
+          const res = await createComment({postId: post?._id, commentText: comment}).unwrap();
+          if (res.success) {
+            toast.success(res?.message);
+          }
+        }
+    };
+
+    const handleDelete = async (id: any) => {
+      Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then( async (result) => {
+            if (result.isConfirmed) {
+              const res = await deleteComment({ postId: post?._id, comentId: id }).unwrap();
+    
+               if (res?.success) {
+                Swal.fire({
+                  title: "Deleted!",
+                  text: "Your file has been deleted.",
+                  icon: "success"
+                });
+               } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text:  "An Error occured"
+                });
+               }
+             
+            }
+          });
+    };
+
+    const handleEdit = (id: string, currentText: string) => {
+        setEditCommentId(id);
+        setEditCommentText(currentText);
+    };
+
+    const handleUpdate = async ( e: React.FormEvent) => {
+      e.preventDefault();
+
+      if (editCommentText) {
+      try {
+        const res = await updateComment({ postId: post?._id, commentId: editCommentId, commentText: editCommentText }).unwrap();
+        if (res.success) {
+          toast.success(res?.message);
+          setEditCommentId(null);
+        }
+      } catch (error: any) {
+        toast.error(error?.data?.message);
+      }
+      }
+    }
+    
 if (isLoading) {return <Loader />};
     return (
         <div className="min-h-[100vh] py-10">
@@ -79,8 +161,120 @@ if (isLoading) {return <Loader />};
            {/* comment section  */}
                     <div>
            <div className="flex mt-2"> 
-                <FaComment className='w-5 h-5 '/> 
+           <button onClick={toggleModal}>
+                <FaComment className='w-5 h-5 '/>  </button>
                 <span className=' px-2'>{post?.comments?.length }</span>
+                
+                {/* comment modal  */}
+                {isOpen && (
+        <div
+          className="fixed lg:top-0  "
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+
+            <div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
+              <div>
+                  {
+                    comments?.length && comments?.map((item: any) => (
+                      <div key={item?._id} className="flex items-center my-2">
+                      <img className="object-cover w-10 h-10 rounded-full"
+                        src={item?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
+                        alt="Avatar"/>
+                      {
+                        item?.user?.premium && (<div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>)
+                      }
+                      <div>
+                        <div className="ml-3">
+                        <div>
+                   
+                    </div>
+                   <div className='text-sm'>
+                   <div className='flex gap-3 '>
+                      <div>
+                        {
+                          item?.user?.name
+                        }
+                      </div>
+                   <div className="dark:text-gray-400 text-gray-600">{ new Date(post?.createdAt).toLocaleString('en-US', {
+                        year: "numeric",
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                      })}</div>
+                        <div className='md:ml-5 flex gap-3'>
+     <div><button  onClick={() => handleEdit(item?._id, item?.comment)}> <AiFillEdit className='w-4 h-4 text-amber-600'/></button></div>
+    <div className='mb-2'> <button onClick={() => handleDelete(item?._id)}> <RiDeleteBack2Fill className='w-4 h-4 text-red-600'/></button></div>
+      </div>
+                   </div>
+                      <div>
+                      {editCommentId === item._id ? (
+                      <form onSubmit={handleUpdate} className='flex gap-2'>
+                        <input
+                          type="text"
+                          value={editCommentText}
+                          onChange={(e) => setEditCommentText(e.target.value)}
+                          className="block h-6 text-black px-1 text-sm border rounded-md"
+                        />
+                        <button type="submit" className="text-sm bg-blue-600 text-white rounded-md px-2 py-1">
+                          Save
+                        </button>
+                        <button onClick={() => setEditCommentId(null)} className="text-sm bg-red-600 text-white rounded-md px-2 py-1">
+                          Cancel
+                        </button>
+                      </form>
+                    ): (item?.comment)}
+                       
+                      </div>
+                   </div>
+                        </div>
+                      </div>
+                    </div>
+                    ))
+                  }
+              </div>
+
+          <form onSubmit={handleComment} className='pt-5'>
+          <div className="flex items-center justify-between w-full mt-5 gap-x-2">
+          <input
+                  id="comment"
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                />
+
+              </div>
+
+              <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
+                <button
+                  onClick={toggleModal}
+                  className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
+                >
+                  Cancel
+                </button>
+
+                <button type='submit' className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
+                  Confirm
+                </button>
+                </div>
+              
+          </form>
+          </div>
+          </div>
+        </div>
+      )}
+                
                 </div></div>  
 
             {/* share section  */}
@@ -96,6 +290,9 @@ if (isLoading) {return <Loader />};
             </div>
             
             <div className='max-w-5xl rounded-sm my-8'>
+               <div className='mb-5'>
+               <span className='text-xl font-semibold'>Category : </span> {post?.category}
+               </div>
                 <img className='w-full object-cover' src={post?.images} alt="post image" />
             </div>
           
