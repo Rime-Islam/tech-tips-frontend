@@ -25,7 +25,7 @@ const page = () => {
     const {data: userData } = useGetSingleUserQuery(id);
     const myPost = myPostData?.data;
     const user = userData?.data;
-
+console.log(user)
 
     // const handleDelete = (_id: string | undefined) => {
     //   Swal.fire({
@@ -148,7 +148,7 @@ return (
      <div className='flex gap-2'>
      <h1 className="text-3xl text-gray-800 dark:text-white font-bold pt-8 lg:pt-0">{user?.name}  </h1>
      {
-         user?.isVerified && <span><FcApproval className='w-8 h-8'/></span>
+         user?.premium && <span><FcApproval className='w-8 h-8'/></span>
      }
      </div>
       <div className='flex gap-2 mt-2'>

@@ -6,9 +6,13 @@ const layout = ({children}: { children: React.ReactNode }) => {
     return (
         <div>
                <main className="container mx-auto max-w-8xl  px-6 flex-grow">
-       <Navber />
-       {children} 
-       <Footer />
+     <div className="flex flex-col min-h-[100vh]">
+     <div className="flex-grow">
+     <Navber />
+     {children} 
+     </div>
+       <div className="flex-shrink-0"><Footer /></div>
+     </div>
         </main>
         </div>
     );

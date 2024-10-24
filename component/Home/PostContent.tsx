@@ -12,19 +12,17 @@ import { FcLike } from "react-icons/fc";
 import { FaCrown } from "react-icons/fa";
 import Loader from '../UI/Loader';
 import { toast } from 'sonner';
+import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 
 
 const PostContent = () => {
   const [react, setReact] = useState<Record<string, 'like' | 'dislike'>>({}); 
-  const user = useAppSelector(useCurrentUser);
+  const use = useAppSelector(useCurrentUser);
+  const id = use?._id;
+  const {data: userData } = useGetSingleUserQuery(id);
   const {data, isLoading} = useGetAllPostsQuery(undefined);
 const posts = data?.data;
-const premium = user?.premium;
-
-
-
-
-
+const premium = userData?.data?.premium;
 
 
 if (isLoading) {return <Loader />};
@@ -52,17 +50,19 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
             <div className="my-4 px-4">
               <div className="flex items-center">
                 <div className="flex items-center">
+                <Link
+              href={ `/post/${post?._id}`}>
                   <img className="object-cover w-10 h-10 rounded-full"
                     src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
-                  />
+                  /></Link>
                     {
-       post?.user?.isVerified &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>
+       post?.user?.premium &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>
      }
      
                   <Link
-                    href="#"
-                    className="mx-2 font-semibold text-gray-700 dark:text-gray-200"
+                    href={`/user/${post?.user?._id}`}
+                    className="mx-2 hover:underline font-semibold text-gray-700 dark:text-gray-200"
                     tabIndex={0}
                     role="link"
                   >
@@ -78,7 +78,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
             post?.isPremium ? (  premium ? (
               <Link
               href={ `/post/${post?._id}`}
-              className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
+              className="block px-4 my-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
               tabIndex={0}
               role="link"
             >
@@ -108,7 +108,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
              {
               post?.isPremium ? (
               premium ? (
-                <div className='max-w-2xl'>
+                <div className='max-w-2xl '>
                  <img
                 className="w-full"
                 src={post?.images}
@@ -132,7 +132,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               )
                 
               ) : (
-               <div className='max-w-2xl'>
+               <div className='max-w-2xl mt-5'>
                  <img
                 className="w-full"
                 src={post?.images}
@@ -142,7 +142,9 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
               )
              }
             </div>
-           
+           <div className='flex ml-5 mt-5'>
+           <p className="px-4 py-1 text-sm bg-gray-100 dark:bg-gray-900 rounded-lg select-none ">{post?.category}</p>
+           </div>
           </div>
         ))
       }

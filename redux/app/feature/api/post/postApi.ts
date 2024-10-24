@@ -105,6 +105,7 @@ const postApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ["posts"],
         }),
+        
     }),
 });
 

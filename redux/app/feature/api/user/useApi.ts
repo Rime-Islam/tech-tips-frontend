@@ -36,6 +36,16 @@ const userApi = baseApi.injectEndpoints({
                     body: payment,
                 }
             },
+        }),
+        followUser: builder.mutation({
+            query: ({ userId }) => {
+              
+                return {
+                    url: `/user/follow/${userId}`,
+                    method: "PATCH",
+                };
+            },
+            invalidatesTags: ["users"],
         }),       
     }),
 });
@@ -45,6 +55,7 @@ export const {
     useGetSingleUserQuery,
     useUpdateUserMutation,
     usePaymentVerifyMutation,
+    useFollowUserMutation
 
 
 } = userApi;
