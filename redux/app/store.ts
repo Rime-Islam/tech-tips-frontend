@@ -13,6 +13,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { baseApi } from './feature/api/baseApi/baseApi';
 import authReducer from './feature/api/auth/authSlice';
 import counterReducer from './feature/api/user/useSlice';
+import postReducer from './feature/api/post/postSlice';
 
 const persistConfig = {
     key: 'root',
@@ -26,6 +27,7 @@ export const store = configureStore({
         [baseApi.reducerPath]: baseApi.reducer,
         auth: persistedAuthReducer,
         counter: counterReducer,
+        post: postReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

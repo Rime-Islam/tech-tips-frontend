@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FcApproval } from "react-icons/fc";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
@@ -13,10 +13,12 @@ import { FaCrown } from "react-icons/fa";
 import Loader from '../UI/Loader';
 import { toast } from 'sonner';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/redux/app/store';
+import { filteredPost, filterPosts, setFilters, setPosts } from '@/redux/app/feature/api/post/postSlice';
 
 
 const PostContent = () => {
-  const [react, setReact] = useState<Record<string, 'like' | 'dislike'>>({}); 
   const use = useAppSelector(useCurrentUser);
   const id = use?._id;
   const {data: userData } = useGetSingleUserQuery(id);
@@ -25,19 +27,31 @@ const posts = data?.data;
 const premium = userData?.data?.premium;
 
 
+  const filterPost = useAppSelector(filteredPost);
+  const dispatch = useAppDispatch();
+
+const category: string[] = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
+useEffect(() => {
+  if (data) {
+      dispatch(setPosts(posts));
+  }
+}, [data, dispatch]);
+const handleCategory = (category: string) => {
+  dispatch(setFilters({category}))
+  dispatch(filterPosts());
+};
+
 if (isLoading) {return <Loader />};
-const category: any = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
-    return (
+return (
       <div className="container max-w-5xl">
         {/* categories tab  */}
         <div className='mb-5 flex flex-wrap '>
       {
         category?.length && category?.map((item: string) => (
           <div className='mx-2'>
-          <Link href="/category/education">
-          <p className="px-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-800 rounded-lg select-none ">
+          <button onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-800 rounded-lg select-none ">
             {item}
-          </p></Link>
+          </button>
         </div>
         ))
       }
@@ -45,7 +59,7 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
 
       <div className="flex flex-col gap-3 max-w-2xl mx-auto">
       {
-        posts?.length && posts?.map((post: IPost) => (
+        filterPost?.length ? (filterPost?.map((post: IPost) => (
           <div key={post?._id} className="py-4 shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
             <div className="my-4 px-4">
               <div className="flex items-center">
@@ -147,6 +161,9 @@ const category: any = ["Software Engineer", "Web Development", "Cybersecurity", 
            </div>
           </div>
         ))
+      ) : (
+          <p className='text-center mt-12'>No Post Found In This Category</p>
+        )
       }
       </div>
     </div>

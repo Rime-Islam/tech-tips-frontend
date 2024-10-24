@@ -31,6 +31,16 @@ export interface IPost {
     comments?: IComment[] | undefined; 
     createdAt?: string | undefined; 
   };
+
+  export interface Filter {
+    category: string;
+  }
+
+  export interface PostState {
+    post: IPost[];
+    filteredPost: IPost[];
+    filters: Filter; 
+  };
   
   export interface IComment {
     _id?: string;  
