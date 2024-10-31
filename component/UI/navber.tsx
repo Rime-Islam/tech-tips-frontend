@@ -139,7 +139,7 @@ const Navber = () => {
          <div className='px-2'>
          <Link
             href="/profile"
-            className="block my-4 rounded hover:bg-gray-200 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+            className="block my-4 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
           >
             Profile & Analytic
           </Link>

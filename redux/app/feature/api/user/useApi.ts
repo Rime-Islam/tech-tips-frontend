@@ -46,6 +46,13 @@ const userApi = baseApi.injectEndpoints({
                 };
             },
             invalidatesTags: ["users"],
+        }),
+        getFollower: builder.query({
+            query: ( userId ) => ({
+                url: `/user/follower/${userId}`,
+                method: "GET",
+            }),
+            providesTags: ["users"],
         }),       
     }),
 });
@@ -55,7 +62,8 @@ export const {
     useGetSingleUserQuery,
     useUpdateUserMutation,
     usePaymentVerifyMutation,
-    useFollowUserMutation
+    useFollowUserMutation,
+    useGetFollowerQuery
 
 
 } = userApi;

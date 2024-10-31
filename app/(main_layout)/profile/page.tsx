@@ -1,4 +1,4 @@
-
+"use client"
 import Image from 'next/image';
 import React from 'react';
 import { RiDeleteBack2Fill } from "react-icons/ri";
@@ -61,86 +61,10 @@ const page = () => {
 
 
 return (
-    <div> 
+    <div className='container mx-auto max-w-5xl'> 
 <div className='lg:flex justify-between'>
     <Sidebar />
-    <div>
-  <div className="py-2 mt-8">
-    <p
-      className="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700"
-    >
-      <img
-        className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
-        alt="avatar"
-      />
-      <p className="mx-2 text-sm text-gray-600 dark:text-white">
-        <span className="font-bold" >
-          Sara Salah
-        </span>{" "}
-        replied on the{" "}
-       
-        artical . 2m
-      </p>
-    </p>
-    <p
-      
-      className="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700"
-    >
-      <img
-        className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-        src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-        alt="avatar"
-      />
-      <p className="mx-2 text-sm text-gray-600 dark:text-white">
-        <span className="font-bold" >
-          Slick Net
-        </span>{" "}
-        start following you . 45m
-      </p>
-    </p>
-    <p
-      
-      className="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 transform border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700"
-    >
-      <img
-        className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-        src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
-        alt="avatar"
-      />
-      <p className="mx-2 text-sm text-gray-600 dark:text-white">
-        <span className="font-bold" >
-          Jane Doe
-        </span>{" "}
-        Like Your reply on{" "}
-        
-        artical . 1h
-      </p>
-    </p>
-    <p
-      
-      className="flex items-center px-4 py-3 -mx-2 transition-colors duration-300 transform hover:bg-gray-100 dark:hover:bg-gray-700"
-    >
-      <img
-        className="flex-shrink-0 object-cover w-8 h-8 mx-1 rounded-full"
-        src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=398&q=80"
-        alt="avatar"
-      />
-      <p className="mx-2 text-sm text-gray-600 dark:text-white">
-        <span className="font-bold" >
-          Abigail Bennett
-        </span>{" "}
-        start following you . 3h
-      </p>
-    </p>
-  </div>
-  <p
-    
-    className="block py-2 font-bold text-center text-white bg-gray-800 dark:bg-gray-700 hover:underline"
-  >
-    See all notifications
-  </p>
-</div>
+   
 <div className="max-w-7xl flex mt-10 h-auto flex-wrap ">
   <div
     className="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white dark:bg-gray-700 opacity-75 mx-6 lg:mx-0"
