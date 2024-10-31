@@ -9,6 +9,7 @@ import { useLoginUserMutation } from '@/redux/app/feature/api/auth/authApi';
 import { useAppDispatch } from '@/redux/app/hook';
 import Loader from '@/component/UI/Loader';
 import { setUser } from '@/redux/app/feature/api/auth/authSlice';
+import Image from 'next/image';
 
 
 const Login = () => {
@@ -37,15 +38,16 @@ const Login = () => {
   };
 
     return (
-   
          <div className="w-full mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl dark:bg-gray-800">
-      
         <div className="px-6 py-4">
           <div className="flex justify-center mx-auto">
-            <img
+            <Image
               className="w-28"
               src="https://i.ibb.co.com/FBBRt37/Google-Photos-Logo-2015.png"
               alt="logo"
+              width={64} 
+              height={64} 
+              priority 
             />
           </div>
           <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">

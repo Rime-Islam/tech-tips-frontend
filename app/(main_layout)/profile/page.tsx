@@ -1,4 +1,5 @@
-"use client"
+
+import Image from 'next/image';
 import React from 'react';
 import { RiDeleteBack2Fill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
@@ -25,7 +26,7 @@ const page = () => {
     const {data: userData } = useGetSingleUserQuery(id);
     const myPost = myPostData?.data;
     const user = userData?.data;
-console.log(user)
+// console.log(user)
 
     // const handleDelete = (_id: string | undefined) => {
     //   Swal.fire({
@@ -178,10 +179,13 @@ return (
   </div>
   <div className="w-full lg:w-2/5">
     <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto">
-  <img
+  <Image
     className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md"
     src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
-    
+    alt="logo"
+    width={64} 
+    height={64} 
+    priority 
   />
 
 </div>

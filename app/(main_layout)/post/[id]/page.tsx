@@ -18,7 +18,6 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const page = ({ params }: { params: { id: string} }) => {
     const { id } = params;
     const [react, setReact] = useState<'like' | 'dislike' | null>(null); 

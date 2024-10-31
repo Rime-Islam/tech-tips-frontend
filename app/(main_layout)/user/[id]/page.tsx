@@ -9,7 +9,6 @@ import { toast } from "sonner";
 
 
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const page = ({ params }: { params: { id: string} }) => {
     const { id } = params;
     const {data} = useGetSingleUserQuery(id);

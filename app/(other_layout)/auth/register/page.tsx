@@ -7,9 +7,7 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useRouter } from "next/navigation";
-
-
-
+import Image from 'next/image';
 
 
 const page = () => {
@@ -46,10 +44,13 @@ const page = () => {
       <div className="flex justify-center mx-auto">
   <div >
    
-  <img
+  <Image
               className="w-28 ml-20"
               src="https://i.ibb.co.com/FBBRt37/Google-Photos-Logo-2015.png"
               alt="logo"
+              width={64} 
+              height={64} 
+              priority 
             />
              <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
             Register In GrootHub

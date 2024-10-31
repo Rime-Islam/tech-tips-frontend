@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import Loader from '@/component/UI/Loader';
 import { useResetPasswordMutation } from '@/redux/app/feature/api/auth/authApi';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import axios from 'axios'
+
 
 interface IPassword {
   newPassword: string;
   confirmPassword: string;
 }
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+
 const page = ({ params }: { params: { id: string, token: string } }) => {
   const route = useRouter();
   const { id, token } = params;
