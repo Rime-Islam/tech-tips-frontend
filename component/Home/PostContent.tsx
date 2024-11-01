@@ -138,7 +138,7 @@ return (
                   <div className='px-4 my-5  font-semibold text-lg'>  Premium Content for verifiyed user</div>
                 </div>
                 <div className='flex justify-center'>
-                  <Link href="/payment">
+                  <Link href="/profile/payment">
                   <button className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Verify Account</button>
                   </Link>
                 </div>

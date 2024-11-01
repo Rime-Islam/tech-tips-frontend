@@ -95,7 +95,7 @@ return (
       <p className='mt-3 text-center'>{user?.bio && <span>" { user?.bio } " </span>}</p>
       </div>
       <div className="pt-12 ">
-        <Link href="/update-profile" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
+        <Link href="/profile/update" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
           Update Profile
         </Link>
       </div>
@@ -148,7 +148,7 @@ return (
  </div>
    </div>
       <div className='flex gap-3'>
-     <div><Link href={`edit-post/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link></div>
+     <div><Link href={`post/edit/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link></div>
     {/* <div> <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button></div> */}
       </div>
 </div>

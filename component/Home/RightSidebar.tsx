@@ -29,7 +29,7 @@ if (isLoading) {return <Loader />};
      }
 
                   <Link
-                    href={`/user/${item?._id}`}
+                    href={`/profile/${item?._id}`}
                     className="mx-2 hover:text-blue-600 hover:underline font-semibold text-gray-700 dark:text-gray-200"
                     tabIndex={0}
                     role="link"
