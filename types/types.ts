@@ -1,7 +1,7 @@
 type role = "user" | "admin";
 
 export interface IUser {
-    _id?: string; 
+    _id?: any; 
     name: string; 
     email: string;
     password: string;
@@ -9,10 +9,12 @@ export interface IUser {
     profilePicture?: string;  
     followers?: string[];  
     following?: string[];  
-    isVerified: boolean;  
+    status?: string;  
+    isDelete: boolean;  
     phone?: string;
     bio?: string;
     address?: string;  
+    transactionId?: string;  
     role: role;  
     premium: boolean; 
 };
