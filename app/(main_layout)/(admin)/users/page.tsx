@@ -89,6 +89,9 @@ const page = () => {
      Email
       </th>
       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
+      Activity Logs
+      </th>
+      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
      Payment
       </th>
       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-white uppercase tracking-wider">
@@ -115,6 +118,14 @@ const page = () => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">{user?.name} </td>
             <td className="px-6 py-4 whitespace-nowrap">{user?.email} </td>
+            <td className="px-6 py-4 whitespace-nowrap">{ new Date(user?.updatedAt).toLocaleString('en-US', {
+                    year: "numeric",
+                    month: 'long',
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                  })} </td>
             <td className="px-6 py-4 whitespace-nowrap">{user?.transactionId ? <span className="text-green-600 font-semibold">Paid</span> :  <span className="text-red-600 font-semibold">Unpaid</span>} </td>
             <td className="px-6 py-4 whitespace-nowrap">
            {

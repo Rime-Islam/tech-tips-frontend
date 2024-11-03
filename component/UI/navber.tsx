@@ -24,7 +24,9 @@ const Navber = () => {
   };
 
   const handleLogout = async () => {
-    dispatch(logout());
+   await dispatch(logout());
+   window.location.reload();
+
   };
 
    const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 

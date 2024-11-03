@@ -17,6 +17,7 @@ export interface IUser {
     transactionId?: string;  
     role: role;  
     premium: boolean; 
+    updatedAt: number;
 };
 
 export interface IPost {
