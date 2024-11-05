@@ -9,7 +9,7 @@ import { FcApproval } from "react-icons/fc";
 import { useAppSelector } from '@/redux/app/hook';
 import { FaUserCircle } from "react-icons/fa";
 import Link from 'next/link';
-import { useGetMyPostQuery } from '@/redux/app/feature/api/post/postApi';
+import { useDeletePostMutation, useGetMyPostQuery } from '@/redux/app/feature/api/post/postApi';
 import { IPost } from '@/types/types';
 import Sidebar from '@/component/Home/Sidebar';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
@@ -26,38 +26,39 @@ const page = () => {
     const {data: userData } = useGetSingleUserQuery(id);
     const myPost = myPostData?.data;
     const user = userData?.data;
+    const [deletePost] = useDeletePostMutation();
 // console.log(user)
 
-    // const handleDelete = (_id: string | undefined) => {
-    //   Swal.fire({
-    //     title: "Are you sure?",
-    //     text: "You won't be able to revert this!",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#3085d6",
-    //     cancelButtonColor: "#d33",
-    //     confirmButtonText: "Yes, delete it!"
-    //   }).then( async (result) => {
-    //     if (result.isConfirmed) {
-    //       const res = await deleteCar({ carId }).unwrap();
+    const handleDelete = (_id: string | undefined) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then( async (result) => {
+        if (result.isConfirmed) {
+          const res = await deletePost({ _id }).unwrap();
          
-    //        if (res?.success) {
-    //         Swal.fire({
-    //           title: "Deleted!",
-    //           text: "Your file has been deleted.",
-    //           icon: "success"
-    //         });
-    //        } else {
-    //         Swal.fire({
-    //           icon: "error",
-    //           title: "Oops...",
-    //           text:  "An Error occured"
-    //         });
-    //        }
+           if (res?.success) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success"
+            });
+           } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text:  "An Error occured"
+            });
+           }
          
-    //     }
-    //   });
-    // };
+        }
+      });
+    };
 
 
 return (
@@ -117,7 +118,10 @@ return (
 </div>
 </div>
 
-<div className='mt-8 md:mt-16 text-center text-3xl'>
+     {
+      user?.role === 'user' && (
+        <>
+        <div className='mt-8 md:mt-16 text-center text-3xl'>
 {
     myPost ? <span>My Posts</span> : <span>No Post Available</span>
 }
@@ -126,7 +130,7 @@ return (
   {/* post section  */}
   <div className='my-8 md:mt-12 grid gap-5'>
     {
-        myPost?.length && myPost?.map((post: IPost) => (
+        myPost?.length ? (myPost?.map((post: IPost) => (
             <div key={post._id} className="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden md:max-w-2xl">
   <div className="md:flex">
     <div className="md:shrink-0">
@@ -149,14 +153,16 @@ return (
    </div>
       <div className='flex gap-3'>
      <div><Link href={`post/edit/${post?._id}`}> <AiFillEdit className='w-6 h-6 text-amber-600'/></Link></div>
-    {/* <div> <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button></div> */}
+    <div> <button onClick={() => handleDelete(post._id)}> <RiDeleteBack2Fill className='w-6 h-6 text-red-600'/></button></div>
       </div>
 </div>
         <HtmlContent content={post?.description.slice(0, 200)}/>
     </div>
   </div>
 </div>
-        ))
+        ))) : ( 
+          <span className='text-center'>No post Available</span>
+        )
     }
 </div>
 
@@ -164,6 +170,9 @@ return (
 
 
 </div>
+        </>
+      )
+     }
     
     </div>
 );

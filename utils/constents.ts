@@ -1,7 +1,8 @@
 export const protectedRoutes = [
     "/profile",
-    "/profile/:page*",
-    "/admin",
+    "/admin/users",
+    "/statistics",
+    "/users",
     "/login",
     "/register"
 ]

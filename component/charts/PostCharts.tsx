@@ -1,22 +1,25 @@
+
+
+
 import dayjs from "dayjs";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title } from 'chart.js';
 
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title);
 
-interface User {
+interface Post {
     createdAt: string;
 }
 
-interface UserBarChartsProps {
-    userData: User[];
+interface PostChartsProps {
+    postData: Post[];
 }
 
-const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
+const PostCharts: React.FC<PostChartsProps> = ({ postData }) => {
 
-    const formattedData = (userData ?? []).reduce((acc: Record<string, number>, user) => {
-        const month = dayjs(user.createdAt).format('MM-YYYY');
+    const formattedData = (postData ?? []).reduce((acc: Record<string, number>, user) => {
+        const month = dayjs(user.createdAt).format('DD-MM-YYYY');
         acc[month] = (acc[month] || 0) + 1;
         return acc;
     }, {});
@@ -30,9 +33,10 @@ const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
             {
                 label: "Number of Users Created",
                 data,
+                fill: false,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
+
             },
         ],
     };
@@ -45,7 +49,7 @@ const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
             },
             title: {
                 display: true,
-                text: "User Registrations by Month",
+                text: "Post Created by Month",
             },
         },
         scales: {
@@ -59,7 +63,7 @@ const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: "Number of Users"
+                    text: "Number of Posts"
                 },
             },
         },
@@ -68,9 +72,9 @@ const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
 
     return (
         <div className="max-w-2xl">
-            <Bar data={chartsData} options={options}/>
+            <Line data={chartsData} options={options}/>
         </div>
     ) 
 };
 
-export default UserBarCharts;
+export default PostCharts;

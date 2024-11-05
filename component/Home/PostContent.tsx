@@ -16,6 +16,7 @@ import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/app/store';
 import { filteredPost, filterPosts, setFilters, setPosts } from '@/redux/app/feature/api/post/postSlice';
+import { motion } from 'framer-motion';
 
 
 const PostContent = () => {
@@ -48,10 +49,14 @@ return (
         <div className='mb-5 flex flex-wrap '>
       {
         category?.length && category?.map((item: string) => (
-          <div className='mx-2'>
-          <button onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-800 rounded-lg select-none ">
+          <div key={item} className='mx-2'>
+          <motion.button
+  whileHover={{
+    scale: 1.1,
+    transition: { duration: 0.5 },
+  }} onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-800 rounded-lg select-none ">
             {item}
-          </button>
+          </motion.button>
         </div>
         ))
       }
@@ -64,18 +69,24 @@ return (
             <div className="my-4 px-4">
               <div className="flex items-center">
                 <div className="flex items-center">
-                <Link
+               <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }}>
+               <Link
               href={ `/post/${post?._id}`}>
                   <img className="object-cover w-10 h-10 rounded-full"
                     src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
                   /></Link>
+               </motion.button>
                     {
        post?.user?.premium &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>
      }
      
                   <Link
-                    href={`/user/${post?.user?._id}`}
+                    href={`/profile/${post?.user?._id}`}
                     className="mx-2 hover:underline font-semibold text-gray-700 dark:text-gray-200"
                     tabIndex={0}
                     role="link"

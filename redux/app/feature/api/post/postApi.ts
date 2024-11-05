@@ -25,6 +25,15 @@ const postApi = baseApi.injectEndpoints({
             },
             invalidatesTags: ["posts"],
         }),
+        deletePost: builder.mutation({
+            query: (postId) => {
+                return {
+                    url: `/post/delete/${postId._id}`,
+                    method: "DELETE",
+                };
+            },
+            invalidatesTags: ["posts"],
+        }),
         getSinglePost: builder.query({
             query: (id) => ({
                 url: `/post/${id}`,
@@ -120,6 +129,7 @@ export const {
     useGetSinglePostQuery,
     useUpvotePostMutation,
     useGetCategoryPostQuery,
-    usePaymentMutation
+    usePaymentMutation,
+    useDeletePostMutation
     
 } = postApi;

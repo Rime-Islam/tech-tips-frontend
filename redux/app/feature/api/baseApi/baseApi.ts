@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api/",
+  credentials: 'include',
 
   prepareHeaders: (headers, { getState}) => {
     const token = (getState() as RootState).auth.token;

@@ -8,7 +8,10 @@ import { MdSunny } from "react-icons/md";
 import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
-
+import Cookies from 'js-cookie';
+import path from 'path';
+import { cookies } from 'next/headers';
+import { motion } from 'framer-motion';
 
 
 const Navber = () => {
@@ -76,31 +79,48 @@ const Navber = () => {
       </Link>
       
       <div className="flex font-semibold">
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }}>
         <Link
           href="/"
           className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Reddit"
         >
           Home
-        </Link>
-        <Link
+        </Link></motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }}> <Link
           href="/about"
           className="mx-2 text-gray-600 transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Facebook"
         >
           About
-        </Link>
-        <Link
+        </Link></motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }}> <Link
           href="/contact"
           className="mx-2 text-gray-600  transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Github"
         >
           Contact
-        </Link>
+        </Link></motion.button>
       </div>
 
       <div className="text-sm flex pr-6 text-gray-600 dark:text-gray-300">
-      <button onClick={toggleTheme} className="mt-1">
+      <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }} onClick={toggleTheme} className="mt-1">
       {theme === 'light' ? (
           <>
             <IoIosMoon className="w-6 h-6  dark:text-white" />
@@ -111,18 +131,28 @@ const Navber = () => {
             <MdSunny className="w-6 h-6  dark:text-white" />
           </>
         )}
-      </button>
-   
+      </motion.button>
+   {user?.role === 'user' &&
+   <motion.button
+   whileHover={{
+     scale: 1.2,
+     transition: { duration: 0.3 },
+   }}>
+      <Link href="/post/create">
+      <div><TfiWrite className='w-12 h-6'/></div>
+      </Link>
+     </motion.button>
+   }
     {
       user ? ( 
     <> 
-     <Link href="/create">
-     <div className='mt-4'><TfiWrite className='w-12 h-6'/></div>
-     </Link>
-
         <div className="relative inline-block ">
       {/* Dropdown toggle button */}
-      <button
+      <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }}
         onClick={toggleDropdown}
         className="relative z-10 mx-2 rounded-md"
       >
@@ -131,7 +161,7 @@ const Navber = () => {
     src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
     alt="logo"
   />   
-      </button>
+      </motion.button>
 
       {/* Dropdown menu */}
       {isOpen && (
@@ -146,18 +176,26 @@ const Navber = () => {
             Profile & Analytic
           </Link>
         
-          <button onClick={handleLogout}
+          <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }} onClick={handleLogout}
             className="px-6 mx-2 py-2  font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 "
           >
             LogOut
-          </button>
+          </motion.button>
          </div>
         </div>
       )}
     </div>
     </>
       ) : (
-<Link href="/auth/login"><button className="px-4 mt-2 mx-2 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 ">Log in</button></Link>
+<Link href="/auth/login"><motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.3 },
+  }} className="px-4 mt-2 mx-2 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 ">Log in</motion.button></Link>
       )
     }
       </div>

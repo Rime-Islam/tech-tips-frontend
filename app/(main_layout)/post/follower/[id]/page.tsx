@@ -9,11 +9,11 @@ import { FcApproval } from "react-icons/fc";
 const page = ({ params }: { params: { id: string} }) => {
     const { id } = params;
     const {data, isLoading} = useGetFollowerQuery(id);
-console.log(data)
+
 const followers = data?.data?.followers;
-console.log(followers)
+
 const following = data?.data?.following;
-console.log(following)
+
 
     return (
         <div className="lg:flex lg:gap-20 px-5">

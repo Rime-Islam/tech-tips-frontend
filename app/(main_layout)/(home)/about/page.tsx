@@ -1,22 +1,69 @@
-
+'use client'
+import { motion, useScroll, } from "framer-motion"
 
 
 const page = () => {
+    const { scrollYProgress } = useScroll();
+
+    const variants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.3
+            },
+        },
+    };
+
+    const item = {
+        hidden: {
+            opacity: 0,
+            y: 30,
+        },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 2
+            },
+        },
+    };
+
     return (
-        <div className="mb-8">
-            {/* about us section 1 */}
-            <div className="text-center mt-16 mb-10">
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show"
+        className="mb-8">
+         
+            <motion.div
+            variants={item}
+    // animate={{ x: 20 }}
+    // transition={{
+    //     ease: "linear",
+    //     duration: 2,
+    //     x: { duration: 1 }
+    //   }} 
+      className="text-center mt-16 mb-10">
                 <h1 className=" text-3xl md:text-5xl font-semibold">GrootHub</h1>
                 <p className="text-lg mt-3">Transforming Ideas into Code, Together.</p>
                 <div className="mt-10">
                     <p className="text-3xl">Our Mission & Vission</p>
                     <p className="mt-3 text-lg">At Tech Tips & Tricks, our mission is to empower tech enthusiasts, entrepreneurs, and everyday users with accessible, actionable insights that enhance their understanding and use of technology. We strive to create a supportive community where knowledge is shared, and everyone can navigate the ever-evolving digital landscape with confidence and creativity. We envision a world where technology is not just a tool, but a catalyst for innovation and social change. By fostering a culture of continuous learning and collaboration, we aim to inspire individuals to embrace technology as a means to solve real-world challenges, drive positive change, and unlock their full potential. Together, we aspire to be the leading platform for tech tips and resources, bridging the gap between technology and its users.</p>
                 </div>
-            </div>
+            </motion.div>
 
             {/* about us section 2 */}
-            <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-        <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+            <motion.div
+            variants={item} className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div 
+    // animate={{ x: -20 }}
+    // transition={{
+    //     ease: "linear",
+    //     duration: 2,
+    //     x: { duration: 1 }
+    //   }} 
+      className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
             <div>
             <p className="inline-block px-3 py-px mb-4 text-xs dark:text-white font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
             What We Offer
@@ -55,7 +102,7 @@ const page = () => {
             </p>
         </div>
         <div className="grid gap-4 row-gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -84,8 +131,8 @@ const page = () => {
             >
                 Learn more
             </a>
-            </div>
-            <div className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            </motion.div>
+            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -114,8 +161,8 @@ const page = () => {
             >
                 Learn more
             </a>
-            </div>
-            <div className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            </motion.div>
+            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -144,8 +191,8 @@ const page = () => {
             >
                 Learn more
             </a>
-            </div>
-            <div className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            </motion.div>
+            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -174,13 +221,18 @@ const page = () => {
             >
                 Learn more
             </a>
-            </div>
+            </motion.div>
         </div>
-        </div>
+        </motion.div>
 
         {/* about us section 3 */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
-        <div className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
+        <motion.div
+            variants={item} className="grid grid-cols-2 gap-8 md:grid-cols-6 lg:grid-cols-5">
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.8 },
+  }}   className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
             <svg
             className="h-12 text-gray-500 fill-current dark:text-gray-300"
             xmlns="http://www.w3.org/2000/svg"
@@ -189,8 +241,12 @@ const page = () => {
             <path fill="none" d="M0 0h266v100H0z" />
             <path d="M140.021 49.597c-1.784 0-3.07.585-4.374 1.181v13.486c1.249.119 1.965.119 3.15.119 4.282 0 4.869-1.961 4.869-4.699v-6.441c0-2.022-.671-3.646-3.645-3.646zm-28.438-.736c-2.971 0-3.649 1.631-3.649 3.651v1.135h7.294v-1.135c0-2.02-.678-3.651-3.645-3.651zm-55.09 14.037c0 1.598.754 2.428 2.418 2.428 1.785 0 2.842-.582 4.145-1.18v-3.199h-3.903c-1.848 0-2.66.344-2.66 1.951zm111.191-13.301c-2.976 0-4.007 1.624-4.007 3.646v7.379c0 2.027 1.031 3.656 4.007 3.656 2.968 0 4.007-1.629 4.007-3.656v-7.379c-.001-2.022-1.04-3.646-4.007-3.646zM41.909 71.172h-8.748V49.998H28.79v-7.296h4.372V38.32c0-5.953 2.467-9.492 9.479-9.492h5.838v7.298H44.83c-2.73 0-2.91 1.02-2.91 2.923l-.011 3.652h6.61l-.773 7.296h-5.837v21.175zm29.897.055h-7.291l-.315-1.844c-3.329 1.844-6.3 2.143-8.26 2.143-5.347 0-8.193-3.572-8.193-8.512 0-5.828 3.321-7.908 9.262-7.908h6.047v-1.26c0-2.975-.341-3.848-4.916-3.848h-7.48l.731-7.296h8.176c10.038 0 12.239 3.171 12.239 11.203v17.322zm24.793-20.694c-4.537-.778-5.84-.949-8.023-.949-3.921 0-5.106.865-5.106 4.195v6.299c0 3.33 1.185 4.199 5.106 4.199 2.183 0 3.486-.174 8.023-.955v7.117c-3.974.891-6.563 1.125-8.751 1.125-9.392 0-13.125-4.939-13.125-12.074v-5.111c0-7.141 3.733-12.089 13.125-12.089 2.188 0 4.777.235 8.751 1.13v7.113zm27.376 8.957h-16.042v.588c0 3.33 1.186 4.199 5.106 4.199 3.524 0 5.675-.174 10.204-.955v7.117c-4.368.891-6.644 1.125-10.929 1.125-9.393 0-13.128-4.939-13.128-12.074v-5.844c0-6.243 2.771-11.356 12.396-11.356s12.393 5.054 12.393 11.356v5.844zm28.437.135c0 6.896-1.971 11.926-13.911 11.926-4.312 0-6.841-.379-11.6-1.111V31.02l8.745-1.459V43.35c1.89-.702 4.336-1.059 6.562-1.059 8.746 0 10.203 3.921 10.203 10.222v7.112zm28.033.15c0 5.949-2.456 11.719-12.732 11.719-10.281 0-12.783-5.77-12.783-11.719v-5.744c0-5.952 2.502-11.723 12.783-11.723 10.276 0 12.732 5.771 12.732 11.723v5.744zm28.014 0c0 5.949-2.459 11.719-12.733 11.719-10.281 0-12.783-5.77-12.783-11.719v-5.744c0-5.952 2.502-11.723 12.783-11.723 10.274 0 12.733 5.771 12.733 11.723v5.744zm28.749 11.397h-9.479l-8.017-13.383v13.383h-8.748V31.019l8.748-1.459v25.849l8.017-12.707h9.479l-8.752 13.867 8.752 14.603zm-41.512-21.575c-2.971 0-4.002 1.624-4.002 3.646v7.379c0 2.027 1.031 3.656 4.002 3.656 2.967 0 4.017-1.629 4.017-3.656v-7.379c0-2.022-1.05-3.646-4.017-3.646zm46.505 16.581c1.473 0 2.646 1.201 2.646 2.701 0 1.523-1.174 2.711-2.657 2.711-1.476 0-2.673-1.188-2.673-2.711 0-1.5 1.197-2.701 2.673-2.701h.011zm-.011.42c-1.187 0-2.158 1.021-2.158 2.281 0 1.283.972 2.291 2.169 2.291 1.198.012 2.155-1.008 2.155-2.279s-.957-2.293-2.155-2.293h-.011zm-.503 3.853h-.48v-3.014c.252-.035.492-.07.852-.07.456 0 .754.096.937.227.177.133.272.336.272.623 0 .398-.262.637-.585.734v.023c.263.049.442.287.503.73.07.469.143.648.19.746h-.503c-.071-.098-.144-.373-.204-.77-.07-.383-.264-.527-.648-.527h-.333v1.298zm0-1.668h.348c.394 0 .729-.145.729-.518 0-.264-.19-.527-.729-.527-.157 0-.266.012-.348.023v1.022z" />
             </svg>
-        </div>
-        <div className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
+        </motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.8 },
+  }} className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
             <svg
             className="h-10 text-gray-500 fill-current dark:text-gray-300"
             xmlns="http://www.w3.org/2000/svg"
@@ -213,8 +269,12 @@ const page = () => {
                 <path d="M204.3 23.4c-1.8 0-3.3.6-4.5 1.8s-1.9 2.7-1.9 4.4c0 1.8.6 3.3 1.9 4.5 1.2 1.2 2.7 1.9 4.5 1.9s3.3-.6 4.5-1.9c1.2-1.2 1.9-2.8 1.9-4.5 0-1.8-.6-3.3-1.9-4.4-1.2-1.2-2.8-1.8-4.5-1.8z" />
             </defs>
             </svg>
-        </div>
-        <div className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
+        </motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.8 },
+  }} className="flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
             <svg
             className="h-8 mt-2 text-gray-500 fill-current dark:text-gray-300"
             viewBox="0 0 398 120"
@@ -225,8 +285,12 @@ const page = () => {
                 <path d="M256.533 82.534c-2.965-3.771-19.551-1.787-27.003-.897-2.254.277-2.605-1.692-.57-3.122 13.233-9.265 34.922-6.587 37.447-3.487 2.54 3.13-.666 24.802-13.073 35.147-1.91 1.59-3.718.744-2.877-1.357 2.782-6.952 9.04-22.505 6.076-26.284zM230.05 13.058V4.063c.015-1.378 1.04-2.29 2.291-2.283l40.493-.007c1.295 0 2.335.94 2.335 2.268v7.726c-.015 1.29-1.113 2.983-3.053 5.668l-20.97 29.843c7.78-.182 16.022.985 23.093 4.939 1.596.897 2.027 2.217 2.152 3.516v9.607c0 1.32-1.457 2.86-2.987 2.057-12.458-6.507-29-7.214-42.776.08-1.405.745-2.884-.765-2.884-2.086v-9.133c0-1.459.03-3.961 1.508-6.186l24.302-34.738h-21.162c-1.295 0-2.327-.927-2.342-2.276zM82.354 69.294H70.042c-1.171-.08-2.108-.956-2.203-2.072l.014-63.006c0-1.262 1.062-2.268 2.38-2.268L81.71 1.94c1.2.059 2.159.963 2.232 2.116v8.221h.234C87.163 4.326 92.8.613 100.39.613c7.708 0 12.539 3.713 15.98 11.664C119.361 4.326 126.14.613 133.393.613c5.175 0 10.804 2.123 14.251 6.893 3.916 5.311 3.111 12.993 3.111 19.755l-.015 39.764c0 1.255-1.061 2.262-2.379 2.262h-12.304c-1.23-.08-2.203-1.05-2.203-2.262l-.007-33.41c0-2.648.234-9.28-.344-11.796-.923-4.246-3.675-5.435-7.24-5.435-2.986 0-6.09 1.985-7.356 5.165-1.266 3.188-1.15 8.484-1.15 12.066v33.403c0 1.255-1.06 2.262-2.378 2.262h-12.297c-1.237-.08-2.21-1.051-2.21-2.262l-.015-33.41c0-7.025 1.142-17.362-7.59-17.362-8.858 0-8.506 10.074-8.506 17.362l-.007 33.403c-.022 1.276-1.084 2.283-2.401 2.283zm227.788-55.82c-9.084 0-9.662 12.328-9.662 20.017s-.117 24.131 9.545 24.131c9.545 0 10.006-13.262 10.006-21.345 0-5.303-.234-11.664-1.845-16.705-1.383-4.377-4.143-6.098-8.044-6.098zM310.025.613c18.284 0 28.173 15.647 28.173 35.533 0 19.222-10.92 34.468-28.173 34.468-17.933 0-27.712-15.647-27.712-35.132C282.305 15.86 292.2.612 310.025.612zm51.882 68.681h-12.275c-1.23-.08-2.211-1.05-2.211-2.261l-.015-63.028c.103-1.16 1.12-2.057 2.365-2.057l11.426-.008c1.076.059 1.961.788 2.188 1.766v9.636h.234c3.448-8.622 8.279-12.73 16.785-12.73 5.519 0 10.92 1.992 14.375 7.427C398 13.072 398 21.556 398 27.662v39.64c-.14 1.117-1.142 1.985-2.364 1.985h-12.349c-1.141-.073-2.064-.912-2.188-1.984V33.097c0-6.894.805-16.968-7.708-16.968-2.993 0-5.753 1.984-7.13 5.033-1.72 3.845-1.953 7.69-1.953 11.935v33.928c-.03 1.262-1.091 2.27-2.401 2.27zm-151.715-.16c-.813.73-1.991.78-2.913.284-4.092-3.385-4.824-4.953-7.064-8.177-6.756 6.864-11.543 8.921-20.305 8.921-10.372 0-18.438-6.376-18.438-19.134 0-9.965 5.424-16.742 13.139-20.061 6.683-2.925 16.023-3.458 23.167-4.253v-1.598c0-2.925.234-6.375-1.5-8.9-1.501-2.26-4.378-3.195-6.918-3.195-4.692 0-8.871 2.4-9.904 7.375-.212 1.11-1.024 2.204-2.137 2.262l-11.938-1.291c-1.01-.234-2.13-1.029-1.838-2.568C166.288 4.362 179.37 0 191.087 0c5.995 0 13.827 1.59 18.556 6.113 5.995 5.58 5.416 13.021 5.416 21.126v19.127c0 5.756 2.401 8.28 4.648 11.373.79 1.116.967 2.444-.036 3.26-2.518 2.102-6.983 5.968-9.443 8.15l-.036-.015zm-12.414-29.931v-2.656c-8.908 0-18.322 1.897-18.322 12.35 0 5.319 2.767 8.908 7.488 8.908 3.455 0 6.566-2.123 8.528-5.58 2.423-4.254 2.306-8.237 2.306-13.022zM48.72 69.133c-.813.73-1.991.781-2.913.285-4.092-3.385-4.824-4.953-7.064-8.177-6.763 6.864-11.55 8.921-20.305 8.921C8.06 70.162 0 63.786 0 51.028c0-9.965 5.417-16.742 13.139-20.061 6.683-2.925 16.015-3.458 23.16-4.253v-1.598c0-2.925.233-6.375-1.501-8.9-1.5-2.26-4.377-3.195-6.91-3.195-4.7 0-8.879 2.4-9.904 7.375-.212 1.11-1.024 2.204-2.137 2.262L3.91 21.367c-1.01-.234-2.13-1.029-1.845-2.568C4.81 4.362 17.89.007 29.615.007c5.995 0 13.827 1.59 18.556 6.113 5.995 5.581 5.416 13.022 5.416 21.126v19.128c0 5.755 2.401 8.28 4.648 11.372.79 1.116.967 2.444-.036 3.261-2.518 2.101-6.99 5.967-9.45 8.148l-.03-.021zm-12.422-29.93v-2.656c-8.908 0-18.32 1.897-18.32 12.35 0 5.319 2.766 8.908 7.487 8.908 3.462 0 6.573-2.123 8.528-5.58 2.422-4.254 2.305-8.237 2.305-13.022z" />
             </g>
             </svg>
-        </div>
-        <div className="flex items-center justify-center col-span-1 md:col-span-3 lg:col-span-1">
+        </motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.8 },
+  }} className="flex items-center justify-center col-span-1 md:col-span-3 lg:col-span-1">
             <svg
             className="h-5 mt-1 text-gray-500 fill-current dark:text-gray-300"
             xmlns="http://www.w3.org/2000/svg"
@@ -239,8 +303,12 @@ const page = () => {
                 />
             </g>
             </svg>
-        </div>
-        <div className="flex items-center justify-center col-span-2 md:col-span-3 lg:col-span-1">
+        </motion.button>
+        <motion.button
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 0.8 },
+  }} className="flex items-center justify-center col-span-2 md:col-span-3 lg:col-span-1">
             <svg
             className="h-8 text-gray-500 fill-current dark:text-gray-300"
             viewBox="0 0 2270 546"
@@ -254,11 +322,13 @@ const page = () => {
                 <path d="M373.462 16.043h218.501v523.07L373.462 16.044zm-153.926 0H.88v523.07l218.657-523.07zm76.976 192.77l139.218 330.3H344.5l-41.633-105.197H200.964l95.548-225.103z" />
             </g>
             </svg>
-        </div>
-        </div>
+        </motion.button>
+        </motion.div>
 
         {/* about us section 4  */}
-        <section className="bg-white my-8 md:mt-16 dark:bg-gray-900">
+        <motion.div
+        whileInView={{ opacity: 1 }}
+            variants={item} className="bg-white my-8 md:mt-16 dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
             <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
             Our Executive Team
@@ -267,7 +337,14 @@ const page = () => {
             At Tech Tips & Tricks, our executive team is a dynamic blend of seasoned professionals and visionary leaders passionate about technology and innovation. 
             </p>
             <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 xl:grid-cols-4">
-            <div className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
+            <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }} className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
                 <img
                 className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
                 src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
@@ -323,8 +400,15 @@ const page = () => {
                     </svg>
                 </a>
                 </div>
-            </div>
-            <div className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
+            </motion.button>
+            <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }} className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
                 <img
                 className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
                 src="https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"
@@ -380,8 +464,15 @@ const page = () => {
                     </svg>
                 </a>
                 </div>
-            </div>
-            <div className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
+            </motion.button>
+            <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }} className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
                 <img
                 className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
                 src="https://images.unsplash.com/photo-1488508872907-592763824245?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
@@ -437,8 +528,15 @@ const page = () => {
                     </svg>
                 </a>
                 </div>
-            </div>
-            <div className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
+            </motion.button>
+            <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.2,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }} className="flex flex-col items-center p-8 transition-colors duration-300 transform border cursor-pointer rounded-xl hover:border-transparent group hover:bg-blue-600 dark:border-gray-700 dark:hover:border-transparent">
                 <img
                 className="object-cover w-32 h-32 rounded-full ring-4 ring-gray-300"
                 src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
@@ -494,12 +592,12 @@ const page = () => {
                     </svg>
                 </a>
                 </div>
-            </div>
+            </motion.button>
             </div>
         </div>
-        </section>
+        </motion.div>
     
-        </div>
+        </motion.div>
     );
 };
 
