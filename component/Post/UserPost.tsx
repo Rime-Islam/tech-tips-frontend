@@ -2,11 +2,15 @@ import HtmlContent from '@/component/UI/html/htmlContent';
 import Swal from 'sweetalert2';
 import { AiFillEdit } from "react-icons/ai";
 import { RiDeleteBack2Fill } from "react-icons/ri";
-import { IPost } from '@/types/types';
+import { IPost, IUser } from '@/types/types';
 import { useDeletePostMutation, useGetMyPostQuery } from '@/redux/app/feature/api/post/postApi';
 import Link from 'next/link';
 
-const UserPost = ({user}) => {
+interface UserPostProps {
+  user: IUser;
+};
+
+const UserPost: React.FC<UserPostProps> = ({user}) => {
     const [deletePost] = useDeletePostMutation();
     const {data: myPostData} = useGetMyPostQuery(undefined);
     const myPost = myPostData?.data;

@@ -6,8 +6,13 @@ import Link from 'next/link';
 import { FcApproval } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import Image from 'next/image';
+import { IUser } from '@/types/types';
 
-const UserProfile = ({ user }) => {
+interface UserProfileProps {
+  user: IUser;
+};
+
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
     return (
         <div className="max-w-7xl flex mt-10 h-auto flex-wrap ">

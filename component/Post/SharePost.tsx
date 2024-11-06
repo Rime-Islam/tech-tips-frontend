@@ -1,9 +1,13 @@
 'use client'
-import React, { useState } from 'react';
+import React from 'react';
 import { FaShareAlt, FaFacebook, FaTwitter, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
 
+interface SharePostProps {
+    open: boolean;
+    setOpen: (value: boolean) => void;
+}
 
-const SharePost = ({ open, setOpen }) => {
+const SharePost: React.FC<SharePostProps> = ({ open, setOpen }) => {
     const shareUrl = window.location.href;
     const shareTitle = 'Check out this amazing content!';
 
