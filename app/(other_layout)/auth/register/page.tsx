@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 
 const page = () => {
@@ -37,12 +38,54 @@ const page = () => {
    
 };
 
+  // frammer motion animation 
+  const variants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.3
+        },
+    },
+};
+
+const item1 = {
+    hidden: {
+        opacity: 0,
+        x: -40,
+    },
+    show: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 2,
+        },
+    },
+};
+const item2 = {
+    hidden: {
+        opacity: 0,
+        x: 40,
+    },
+    show: {
+        opacity: 1,
+        x: 0,
+        transition: {
+            duration: 2,
+        },
+    },
+};
+
     return (
-        <div className="bg-white py-6 rounded shadow-xl mt-[12vh]  max-w-xl mx-auto dark:bg-gray-900">
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show" className="bg-white py-6 rounded shadow-xl mt-[12vh]  max-w-xl mx-auto dark:bg-gray-900">
   <div className="flex justify-center mx-auto ">
     <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
       <div className="flex justify-center mx-auto">
-  <div >
+  <motion.div
+        variants={item2} >
    
   <Image
               className="w-28 ml-20"
@@ -52,15 +95,16 @@ const page = () => {
               height={64} 
               priority 
             />
-             <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
+             <h3 className="mt-3 hover:text-blue-500 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
             Register In GrootHub
           </h3>
           <p className="mt-1 text-center text-gray-500 dark:text-gray-400">
             Create Your Account and Start Writing
           </p>
-  </div>
+  </motion.div>
       </div>
-      <div className="relative flex items-center mt-8">
+      <motion.div
+        variants={item1} className="relative flex items-center mt-8">
         <span className="absolute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,9 +131,9 @@ const page = () => {
         {errors.name && (
           <p className="text-red-600">{errors.name.message}</p>
         )}
-      </div>
-     
-      <div className="relative flex items-center mt-6">
+      </motion.div>
+      <motion.div
+        variants={item2} className="relative flex items-center mt-6">
         <span className="absolute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -116,8 +160,9 @@ const page = () => {
           {errors.email && (
             <p className="text-red-600">{errors.email.message}</p>
           )}
-      </div>
-      <div className="relative flex items-center mt-4">
+      </motion.div>
+      <motion.div
+        variants={item1} className="relative flex items-center mt-4">
         <span className="absolute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -144,8 +189,9 @@ const page = () => {
           {errors.password && (
             <p className="text-red-600">{errors.password.message}</p>
           )}
-      </div>
-      <div className="relative flex items-center mt-4">
+      </motion.div>
+      <motion.div
+        variants={item2} className="relative flex items-center mt-4">
         <span className="absolute">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -172,22 +218,30 @@ const page = () => {
           {errors.confirmPassword && (
             <p className="text-red-600">{errors.confirmPassword.message}</p>
           )}
-      </div>
+      </motion.div>
       <div className="mt-6">
-        <button className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+        <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.1,
+    transition: { duration: 0.5 },
+  }}
+  whileTap={{ scale: 1.5 }}
+  whileInView={{ opacity: 1 }} className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
      {isLoading ? <Loader /> : "Sign Up" }
-        </button>
-        <div className="mt-6 text-center ">
+        </motion.button>
+        <motion.div
+        variants={item1} className="mt-6 text-center ">
           <Link href="/auth/login"
             className="text-sm text-blue-500 hover:underline dark:text-blue-400"
           >
             Already have an account?
           </Link>
-        </div>
+        </motion.div>
       </div>
     </form>
   </div>
-</div>
+</motion.div>
 
     );
 };

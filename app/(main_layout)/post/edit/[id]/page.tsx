@@ -13,6 +13,7 @@ import { useGetSinglePostQuery, useUpdatePostMutation } from '@/redux/app/featur
 import { toast } from 'sonner';
 import Loader from '@/component/UI/Loader';
 import { IPost } from "@/types/types";
+import { motion } from 'framer-motion';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 const page = ({ params }: { params: { id: string } }) => {
@@ -77,12 +78,41 @@ const page = ({ params }: { params: { id: string } }) => {
       }
     }
   
+    // frammer motion animation 
+    const variants = {
+      hidden: { opacity: 0 },
+      show: {
+          opacity: 1,
+          transition: {
+              staggerChildren: 0.3
+          },
+      },
+  };
+  
+  const item1 = {
+      hidden: {
+          opacity: 0,
+          x: 40,
+      },
+      show: {
+          opacity: 1,
+          x: 0,
+          transition: {
+              duration: 2,
+          },
+      },
+  };
     return (
-        <>
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show">
+        
+        <motion.div
+        variants={item1}>
         <form onSubmit={handleCreatePost}>
-          <div className="">
             <div className="pt-10 max-w-5xl mx-auto md:pt-10">
-              <h1 className="text-xl md:text-4xl font-bold mb-3">Edit Your Post</h1>
+              <h1 className="text-xl hover:text-blue-500 md:text-4xl font-bold mb-3">Edit Your Post</h1>
             <div className="flex gap-3 mb-5 mt-8">
             <div className="shadow flex-1 mt-2 bg-white dark:bg-gray-800 appearance-none border rounded h-10 text-white dark:text-gray-700">  
           <div className="group relative cursor-pointer py-2">
@@ -175,7 +205,7 @@ const page = ({ params }: { params: { id: string } }) => {
                       value={editorContent}
                       onChange={setEditorContent}
                       theme="snow"
-                      className="h-80 bg-white text-gray-700"
+                      className="h-full bg-white text-gray-700"
                       placeholder="Write your post description here..."
                     />
                   </div>
@@ -225,14 +255,21 @@ const page = ({ params }: { params: { id: string } }) => {
       </div>
              </div>
           <div className='mb-12 flex justify-center gap-3'>
-          <button type="submit" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Edit Post" }</button>
+          <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.1,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }} type="submit" className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-amber-500 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring focus:ring-amber-300 focus:ring-opacity-50"> {isLoading ? <Loader /> : "Edit Post" }</motion.button>
           </div>
       
             </div>
-          </div>
         </form>
+        </motion.div>
         
-      </>     
+      </motion.div>     
     );
 };
 

@@ -1,12 +1,9 @@
 'use client'
-
 import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
 import { useFollowUserMutation, useGetSingleUserQuery } from "@/redux/app/feature/api/user/useApi";
 import { useAppSelector } from "@/redux/app/hook";
-import axios from "axios";
 import { FcApproval } from "react-icons/fc";
 import { toast } from "sonner";
-
 
 
 const page = ({ params }: { params: { id: string} }) => {
@@ -17,7 +14,6 @@ const page = ({ params }: { params: { id: string} }) => {
     const currentUser = useAppSelector(useCurrentUser);
     const currentUserId = currentUser?._id;
    
-
     const handleFollow = async() => {
     try {
         const res = await followUser({ userId: id}).unwrap();

@@ -1,9 +1,9 @@
 'use client'
-import { motion, useScroll, } from "framer-motion"
+import { motion,  } from "framer-motion"
 
 
 const page = () => {
-    const { scrollYProgress } = useScroll();
+
 
     const variants = {
         hidden: { opacity: 0 },
@@ -18,13 +18,28 @@ const page = () => {
     const item = {
         hidden: {
             opacity: 0,
-            y: 30,
+            y: 40,
         },
         show: {
             opacity: 1,
             y: 0,
             transition: {
                 duration: 2
+            },
+        },
+    };
+
+    const item2 = {
+        hidden: {
+            opacity: 0,
+            y: 40,
+        },
+        show: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 2,
+                delay: 2
             },
         },
     };
@@ -38,17 +53,11 @@ const page = () => {
          
             <motion.div
             variants={item}
-    // animate={{ x: 20 }}
-    // transition={{
-    //     ease: "linear",
-    //     duration: 2,
-    //     x: { duration: 1 }
-    //   }} 
       className="text-center mt-16 mb-10">
-                <h1 className=" text-3xl md:text-5xl font-semibold">GrootHub</h1>
+                <h1 className="hover:text-blue-500 text-3xl md:text-5xl font-semibold">GrootHub</h1>
                 <p className="text-lg mt-3">Transforming Ideas into Code, Together.</p>
                 <div className="mt-10">
-                    <p className="text-3xl">Our Mission & Vission</p>
+                    <p className="text-3xl hover:text-blue-500">Our Mission & Vission</p>
                     <p className="mt-3 text-lg">At Tech Tips & Tricks, our mission is to empower tech enthusiasts, entrepreneurs, and everyday users with accessible, actionable insights that enhance their understanding and use of technology. We strive to create a supportive community where knowledge is shared, and everyone can navigate the ever-evolving digital landscape with confidence and creativity. We envision a world where technology is not just a tool, but a catalyst for innovation and social change. By fostering a culture of continuous learning and collaboration, we aim to inspire individuals to embrace technology as a means to solve real-world challenges, drive positive change, and unlock their full potential. Together, we aspire to be the leading platform for tech tips and resources, bridging the gap between technology and its users.</p>
                 </div>
             </motion.div>
@@ -57,12 +66,6 @@ const page = () => {
             <motion.div
             variants={item} className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div 
-    // animate={{ x: -20 }}
-    // transition={{
-    //     ease: "linear",
-    //     duration: 2,
-    //     x: { duration: 1 }
-    //   }} 
       className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
             <div>
             <p className="inline-block px-3 py-px mb-4 text-xs dark:text-white font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
@@ -93,16 +96,21 @@ const page = () => {
                     height={24}
                 />
                 </svg>
-                <span className="relative">The</span>
+                <span className="relative ">The </span>
             </span>
-            The Quick, Savvy Fox Navigates Tech Like a Pro
+            <span className="hover:text-blue-500"> Quick, Savvy Fox Navigates Tech Like a Pro</span>
             </h2>
             <p className="text-base text-gray-700 dark:text-white md:text-lg">
         Explore expert insights, tips, and solutions that empower you to master technology with ease. Whether learning, or staying ahead of trends, we've got you covered.
             </p>
         </div>
         <div className="grid gap-4 row-gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            <motion.div whileHover={{
+    scale: 1.15,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -132,7 +140,11 @@ const page = () => {
                 Learn more
             </a>
             </motion.div>
-            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            <motion.div whileHover={{
+    scale: 1.15,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -162,7 +174,11 @@ const page = () => {
                 Learn more
             </a>
             </motion.div>
-            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            <motion.div whileHover={{
+    scale: 1.15,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -192,7 +208,11 @@ const page = () => {
                 Learn more
             </a>
             </motion.div>
-            <motion.div style={{ scaleY: scrollYProgress }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
+            <motion.div whileHover={{
+    scale: 1.15,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }} className="flex flex-col justify-between p-5 border rounded shadow-sm">
             <div>
                 <div className="flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-indigo-50">
                 <svg
@@ -328,11 +348,11 @@ const page = () => {
         {/* about us section 4  */}
         <motion.div
         whileInView={{ opacity: 1 }}
-            variants={item} className="bg-white my-8 md:mt-16 dark:bg-gray-900">
+            variants={item2} className="bg-white my-8 md:mt-16 dark:bg-gray-900">
         <div className="container px-6 py-10 mx-auto">
-            <h1 className="text-2xl font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
+            <p className="text-2xl hover:text-blue-500 font-semibold text-center text-gray-800 capitalize lg:text-3xl dark:text-white">
             Our Executive Team
-            </h1>
+            </p>
             <p className="max-w-2xl mx-auto my-6 text-center text-gray-500 dark:text-gray-300">
             At Tech Tips & Tricks, our executive team is a dynamic blend of seasoned professionals and visionary leaders passionate about technology and innovation. 
             </p>

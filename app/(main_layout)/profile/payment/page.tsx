@@ -3,6 +3,7 @@
 import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
 import { usePaymentMutation } from "@/redux/app/feature/api/post/postApi";
 import { useAppSelector } from "@/redux/app/hook";
+import { motion } from "framer-motion";
 
 
 const page = () => {
@@ -18,11 +19,40 @@ if(res?.success) {
 }
     }
 
+       // frammer motion animation 
+       const variants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.3
+            },
+        },
+    };
+    
+    const item1 = {
+        hidden: {
+            opacity: 0,
+            x: 40,
+        },
+        show: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                duration: 2,
+            },
+        },
+    };
+
     return (
-        <div className="p-4 h-screen dark:bg-gray-800">
-  <div className="max-w-lg mx-auto rounded-lg overflow-hidden lg:max-w-none lg:flex my-10 shadow-teal border-4 border-teal-400">
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show" className="p-4 h-screen dark:bg-gray-800">
+  <motion.div
+        variants={item1} className="max-w-lg mx-auto rounded-lg overflow-hidden lg:max-w-none lg:flex my-10 shadow-teal border-4 border-teal-400">
     <div className="bg-white px-6 py-8 lg:flex-shrink-1 lg:p-12 dark:bg-gray-900">
-      <h3 className="text-2xl text-left leading-8 font-extrabold text-gray-900 sm:text-3xl sm:leading-9 dark:text-gray-100">
+      <h3 className="text-2xl hover:text-blue-500 text-left leading-8 font-extrabold text-gray-900 sm:text-3xl sm:leading-9 dark:text-gray-100">
         Subscription
       </h3>
       <p className="mt-6 text-left font-ttnorms leading-8 text-gray-500 text-lg dark:text-gray-400">
@@ -124,17 +154,24 @@ if(res?.success) {
       </div>
       <div className="lg:mt-6">
         <div className="rounded-md shadow">
-          <button
+          <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.1,
+    transition: { duration: 1 },
+  }}
+  whileTap={{ scale: 0.9 }}
+  whileInView={{ opacity: 1 }}
             onClick={handlePayment}
             className=" px-5 py-3 leading-6 font-medium rounded-md focus:outline-none focus:ring transition duration-200 ease-in-out shadow-teal border-2 border-teal-400 bg-white hover:bg-teal-400 hover:shadow-teal-hover text-teal-400 hover:text-white text-lg relative z-20 dark:bg-teal-400 dark:text-white dark:hover:bg-teal-500 dark:hover:text-white"
           >
             Subscribe
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </motion.div>
+</motion.div>
 
     )
 }

@@ -4,6 +4,7 @@ import { useGetSingleUserQuery, useUpdateUserMutation } from "@/redux/app/featur
 import { useAppSelector } from "@/redux/app/hook";
 import { IUser } from "@/types/types";
 import { uploadImage } from "@/utils/imageDB";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -47,11 +48,40 @@ const Page = () => {
         }
   };
 
+      // frammer motion animation 
+      const variants = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.3
+            },
+        },
+    };
+    
+    const item1 = {
+        hidden: {
+            opacity: 0,
+            x: 40,
+        },
+        show: {
+            opacity: 1,
+            x: 0,
+            transition: {
+                duration: 2,
+            },
+        },
+    };
+
     return (
-        <div>
-            <div className="bg-white dark:bg-gray-800 border-4 rounded-lg shadow relative m-10">
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show" >
+            <motion.div
+variants={item1} className="bg-white dark:bg-gray-800 border-4 rounded-lg shadow relative m-10">
   <div className="flex items-start justify-between p-5 border-b rounded-t">
-    <h3 className="text-xl font-semibold">Update Profile</h3>
+    <h3 className="text-xl font-semibold hover:text-blue-500">Update Profile</h3>
    
   </div>
   <div className="p-6 space-y-6">
@@ -168,19 +198,26 @@ const Page = () => {
 </div>
       </div>
       <div className="p-6 border-t border-gray-200 rounded-b">
-    <button
+    <motion.button
+  initial={{ opacity: 0.6 }}
+  whileHover={{
+    scale: 1.1,
+    transition: { duration: 0.5 },
+  }}
+  whileTap={{ scale: 1.2 }}
+  whileInView={{ opacity: 1 }}
       className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
       type="submit"
     >
       Save all
-    </button>
+    </motion.button>
   </div>
     </form>
   </div>
 
-</div>
+</motion.div>
 
-        </div>
+        </motion.div>
     )
 }
 

@@ -19,7 +19,7 @@ const Sidebar = () => {
         <div className='pt-12'>
             {
                 user?.role === "user" && (
-                    <div className=""> 
+                    <div > 
         <div className="flex">
         <motion.button
    whileHover={{
@@ -27,7 +27,7 @@ const Sidebar = () => {
      transition: { duration: 0.3 },
    }}><IoIosCreate className=" w-6 h-6"/></motion.button>
      <Link
-          href="/create"
+          href="/post/create"
           className="mx-2 hover:underline text-gray-600 font-semibold text-lg transition-colors duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Reddit"
         >
@@ -101,7 +101,7 @@ const Sidebar = () => {
      transition: { duration: 0.3 },
    }}> <SiSubstack className="mt-1 w-6 h-6"/></motion.button>
         <Link
-          href="/payment"
+          href="/profile/payment"
           className="mx-2 text-gray-600 hover:underline  transition-colors font-semibold text-lg  duration-300 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
           aria-label="Github"
         >
@@ -113,7 +113,7 @@ const Sidebar = () => {
             }
             {
                 user?.role === "admin" && (
-                    <> 
+                    <div> 
                         <div className="flex">
                         <motion.button
    whileHover={{
@@ -157,7 +157,7 @@ const Sidebar = () => {
           Statistics
         </Link>
         </div>
-                    </>
+                    </div>
                 )
             }
         </div>
