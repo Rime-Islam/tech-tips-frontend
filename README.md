@@ -43,24 +43,17 @@ To run this project locally:
    git clone https://github.com/bashputi/tech-tips-frontend 
 Navigate to the project directory:
 
-bash
-Copy code
+``` bash
 cd project-name
-Install dependencies:
 
-bash
-Copy code
+- **Install dependencies**: 
+
+``` bash
 npm install
-Create an .env.local file in the root directory and add the following environment variables:
 
-plaintext
-Copy code
-NEXT_PUBLIC_API_URL=http://localhost:3000
-Run the development server:
-
-bash
-Copy code
- npm run dev ```
+``` bash
+ npm run dev
+ ```
 Open http://localhost:3000 in your browser to see the application.
 
 ## Usage
