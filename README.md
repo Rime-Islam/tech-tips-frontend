@@ -41,12 +41,14 @@ To run this project locally:
 
    ``` bash
    git clone https://github.com/bashputi/tech-tips-frontend 
+
 Navigate to the project directory:
 
 ``` bash
-cd project-name
+cd project-name 
+```
 
-- **Install dependencies**: 
+Install dependencies** 
 
 ``` bash
 npm install
