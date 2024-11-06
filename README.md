@@ -40,7 +40,7 @@ To run this project locally:
 1. Clone the repository:
 
    ``` bash
-   git clone https://github.com/bashputi/tech-tips-frontend ```
+   git clone https://github.com/bashputi/tech-tips-frontend 
 Navigate to the project directory:
 
 bash
@@ -60,7 +60,7 @@ Run the development server:
 
 bash
 Copy code
-``` npm run dev ```
+ npm run dev ```
 Open http://localhost:3000 in your browser to see the application.
 
 ## Usage
