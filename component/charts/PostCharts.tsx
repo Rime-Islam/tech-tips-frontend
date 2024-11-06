@@ -1,15 +1,13 @@
-
-
-
 import dayjs from "dayjs";
-import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title } from 'chart.js';
+import { Line,Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title, ArcElement } from 'chart.js';
 
-
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Tooltip, Legend, Title, ArcElement);
 
 interface Post {
     createdAt: string;
+    comments: any[];
+    upvotesCount: number;
 }
 
 interface PostChartsProps {
@@ -17,13 +15,13 @@ interface PostChartsProps {
 }
 
 const PostCharts: React.FC<PostChartsProps> = ({ postData }) => {
-
+console.log(postData)
     const formattedData = (postData ?? []).reduce((acc: Record<string, number>, user) => {
-        const month = dayjs(user.createdAt).format('DD-MM-YYYY');
+        const month = dayjs(user.createdAt).format('MM-YYYY');
         acc[month] = (acc[month] || 0) + 1;
         return acc;
     }, {});
-    
+
     const labels = Object.keys(formattedData);
     const data = Object.values(formattedData);
 
@@ -45,11 +43,11 @@ const PostCharts: React.FC<PostChartsProps> = ({ postData }) => {
         responsive: true,
         plugins: {
             legend: {
-                position: 'top' as const
+                position: 'top' as const,
             },
             title: {
                 display: true,
-                text: "Post Created by Month",
+                text: "Posts Created by Date",
             },
         },
         scales: {
@@ -70,9 +68,43 @@ const PostCharts: React.FC<PostChartsProps> = ({ postData }) => {
     };
 
 
+ const totalComments = postData?.reduce((sum, post) => sum + post.comments.length, 0);
+    const totalUpvotes = postData?.reduce((sum, post) => sum + post.upvotesCount, 0);
+
+    const donutData = {
+        labels: ["Total Comments", "Total Upvotes"],
+        datasets: [
+            {
+                data: [totalComments, totalUpvotes],
+                backgroundColor: ["#FF6384", "#36A2EB"],
+                hoverBackgroundColor: ["#FF6384", "#36A2EB"]
+            },
+        ],
+    };
+
+    const donutOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: "Total Comments and Upvotes",
+            },
+        },
+    };
+
+
     return (
         <div className="max-w-2xl">
+            <div>
             <Line data={chartsData} options={options}/>
+            </div>
+
+            <div className="mt-20">
+            <Doughnut data={donutData} options={donutOptions} />
+            </div>
         </div>
     ) 
 };

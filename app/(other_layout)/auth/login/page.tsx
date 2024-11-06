@@ -7,7 +7,6 @@ import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLoginUserMutation } from '@/redux/app/feature/api/auth/authApi';
 import { useAppDispatch } from '@/redux/app/hook';
-import Loader from '@/component/UI/Loader';
 import { setUser } from '@/redux/app/feature/api/auth/authSlice';
 import Image from 'next/image';
 import { motion } from 'framer-motion';

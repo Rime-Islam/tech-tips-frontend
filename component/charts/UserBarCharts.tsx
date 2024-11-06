@@ -67,7 +67,7 @@ const UserBarCharts: React.FC<UserBarChartsProps> = ({ userData }) => {
 
 
     return (
-        <div className="max-w-2xl">
+        <div className="max-w-2xl ">
             <Bar data={chartsData} options={options}/>
         </div>
     ) 

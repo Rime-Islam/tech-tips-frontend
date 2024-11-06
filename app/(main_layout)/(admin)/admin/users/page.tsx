@@ -2,6 +2,7 @@
 import Loader from "@/component/UI/Loader";
 import { useGetAllUserQuery, useUpdateUserMutation } from "@/redux/app/feature/api/user/useApi";
 import { IUser } from "@/types/types";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
@@ -66,12 +67,41 @@ const page = () => {
           });
     };
     
+        // frammer motion animation 
+        const variants = {
+          hidden: { opacity: 0 },
+          show: {
+              opacity: 1,
+              transition: {
+                  staggerChildren: 0.3
+              },
+          },
+      };
+      
+      const item1 = {
+          hidden: {
+              opacity: 0,
+              y: 40,
+          },
+          show: {
+              opacity: 1,
+              y: 0,
+              transition: {
+                  duration: 2,
+                  delay: 1
+              },
+          },
+      };
 
     if (isLoading) {return <Loader />};
     return (
-        <>
-                 <div className="text-2xl mt-5 text-center font-semibold mb-4 text-[#70AABD] md:mb-8">User Management</div>
-                 <div className="flex justify-center">
+        <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show">
+                 <div  className="text-2xl mt-5 hover:text-blue-500 text-center font-semibold mb-4 text-[#70AABD] md:mb-8">User Management</div>
+                 <motion.div
+         variants={item1} className="flex justify-center">
         <div className="flex mt-5 gap-5 md:gap-8 ">
             {/* all added users  */}
             <div>
@@ -130,7 +160,14 @@ const page = () => {
             <td className="px-6 py-4 whitespace-nowrap">
            {
             user?.isDelete ? ( <span className="text-red-500 font-semibold">Deleted</span>) : (
-                <button onClick={() => handleDelete(user?._id)} className="py-1.5 px-3 bg-red-500 rounded text-white">Delete</button>
+                <motion.button
+                initial={{ opacity: 0.6 }}
+                whileHover={{
+                  scale: 1.2,
+                  transition: { duration: 0.5 },
+                }}
+                whileTap={{ scale: 0.8 }}
+                whileInView={{ opacity: 1 }} onClick={() => handleDelete(user?._id)} className="py-1.5 px-3 bg-red-500 rounded text-white">Delete</motion.button>
             )
            }
                  </td>
@@ -142,18 +179,46 @@ const page = () => {
             <td className="px-6 py-4 whitespace-nowrap">
                 {
                 user?.status === "block" ? (
-                    <button onClick={() => handleBlock(user?._id, "unblock")} className="py-1.5 px-3 bg-blue-600 rounded text-white">Activate</button>
+                    <motion.button
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{
+                      scale: 1.2,
+                      transition: { duration: 0.5 },
+                    }}
+                    whileTap={{ scale: 0.8 }}
+                    whileInView={{ opacity: 1 }} onClick={() => handleBlock(user?._id, "unblock")} className="py-1.5 px-3 bg-blue-600 rounded text-white">Activate</motion.button>
                 ) : (
-                    <button onClick={() => handleBlock(user?._id, "block")} className="py-1.5 px-3 bg-[#70AABD] rounded text-white">Block</button>
+                    <motion.button
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{
+                      scale: 1.2,
+                      transition: { duration: 0.5 },
+                    }}
+                    whileTap={{ scale: 0.8 }}
+                    whileInView={{ opacity: 1 }} onClick={() => handleBlock(user?._id, "block")} className="py-1.5 px-3 bg-[#70AABD] rounded text-white">Block</motion.button>
                 )
                 }
                 </td>
             <td className="px-6 py-4 whitespace-nowrap">
             {
                 user?.role === "admin" ? (
-                    <button onClick={() => handleRole(user?._id, "user")} className="py-1.5 px-3 bg-amber-500 rounded text-white">Make User</button>
+                    <motion.button
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{
+                      scale: 1.2,
+                      transition: { duration: 0.5 },
+                    }}
+                    whileTap={{ scale: 0.8 }}
+                    whileInView={{ opacity: 1 }} onClick={() => handleRole(user?._id, "user")} className="py-1.5 px-3 bg-amber-500 rounded text-white">Make User</motion.button>
                 ) : (
-                    <button onClick={() => handleRole(user?._id, "admin")} className="py-1.5 px-3 bg-purple-500 rounded text-white">Make Admin</button>
+                    <motion.button
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{
+                      scale: 1.1,
+                      transition: { duration: 0.5 },
+                    }}
+                    whileTap={{ scale: 1.1 }}
+                    whileInView={{ opacity: 1 }} onClick={() => handleRole(user?._id, "admin")} className="py-1.5 px-3 bg-purple-500 rounded text-white">Make Admin</motion.button>
                 )
                 }
             </td>
@@ -166,8 +231,8 @@ const page = () => {
         </div>
          <div>
       </div>
-        </div>
-        </>
+        </motion.div>
+      </motion.div>
     )
 };
 

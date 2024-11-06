@@ -2,7 +2,6 @@
 import React from 'react';
 import Loader from "@/component/UI/Loader";
 import { useCreateCommentMutation, useDeleteCommentMutation, useGetSinglePostQuery, useUpdateCommentMutation, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
-import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
 import { FaComment } from "react-icons/fa6";
@@ -17,10 +16,13 @@ import Swal from 'sweetalert2';
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { motion } from 'framer-motion';
+import SharePost from '@/component/Post/SharePost';
+
 
 
 const page = ({ params }: { params: { id: string} }) => {
     const { id } = params;
+    const [open, setOpen] = useState(false);
     const [react, setReact] = useState<'like' | 'dislike' | null>(null); 
     const [isOpen, setIsOpen] = useState(false); 
     const [comment, setComment] = useState(''); 
@@ -369,8 +371,8 @@ aria-modal="true"
     </div></div>  
 
 {/* share section  */}
-<div className='mt-2'>
-    <button><FaShareAlt className='w-5 h-5 '/></button>
+<div className='mt-1'>
+    <SharePost open={open} setOpen={setOpen} />
 </div>
 
 {/* save section  */}
