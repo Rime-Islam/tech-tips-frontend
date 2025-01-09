@@ -55,87 +55,18 @@ const Card = () => {
       }
         </div>
 
-      <div className="flex flex-col gap-3 max-w-2xl mx-auto">
+      <div className="grid grid-cols-2 gap-5">
       {
         filterPost?.length ? (filterPost?.map((post: IPost) => (
-          <div key={post?._id} className="py-4 shadow-xl overflow-hidden bg-white rounded-lg dark:bg-gray-800">
-            <div className="my-4 px-4">
-              <div className="flex items-center">
-                <div className="flex items-center">
-               <motion.button
-  whileHover={{
-    scale: 1.2,
-    transition: { duration: 0.3 },
-  }}>
-               <Link
-              href={ `/post/${post?._id}`}>
-                  <img className="object-cover w-10 h-10 rounded-full"
-                    src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
-                    alt="Avatar"
-                  /></Link>
-               </motion.button>
-                    {
-       post?.user?.premium &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>
-     }
-     
-                  <Link
-                    href={`/profile/${post?.user?._id}`}
-                    className="mx-2 hover:underline font-semibold text-gray-700 dark:text-gray-200"
-                    tabIndex={0}
-                    role="link"
-                  >
-                    {post?.user?.name}
-                  </Link>
-                </div>
-                <span className="mx-1 text-xs text-gray-600 dark:text-gray-300">
-                  {post?.createdAt?.slice(0, 10)}
-                </span>
-              </div>
-            </div>
-          {
-            post?.isPremium ? (  premium ? (
-              <Link
-              href={ `/post/${post?._id}`}
-              className="block px-4 my-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
-              tabIndex={0}
-              role="link"
-            >
-              {post?.title}
-            </Link>
-            ) : (
-              <p
-              
-              className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 "
-              tabIndex={0}
-              role="link"
-            >
-              {post?.title}
-            </p>
-            )) : (
-                <Link
-                href={ `/post/${post?._id}`}
-                className="block px-4 mt-2 text-xl font-semibold text-gray-800 transition-colors duration-300 transform dark:text-white hover:text-gray-600 hover:underline"
-                tabIndex={0}
-                role="link"
-              >
-                {post?.title}
-              </Link>
-            )
-          }
-            <div className="">
-             {
-              post?.isPremium ? (
+          <div className="flex flex-col bg-white rounded-lg shadow-lg max-w-lg h-full">
+          {/* Image Section */}
+          <div>
+            {post?.isPremium ? (
               premium ? (
-                <div className='max-w-2xl '>
-                 <img
-                className="w-full"
-                src={post?.images}
-                alt="Article"
-              />
-               </div>
+                <img className="w-full" src={post?.images} alt="Article" />
               ) : (
                 <>
-                <div className='flex justify-center text-amber-500'>
+                   <div className='flex justify-center'>
                   <div>
                   <FaCrown className='w-6 h-6 mt-5'/>
                   </div>
@@ -148,22 +79,58 @@ const Card = () => {
                 </div>
                 </>
               )
-                
-              ) : (
-               <div className='max-w-2xl mt-5'>
-                 <img
-                className="w-full"
-                src={post?.images}
-                alt="Article"
-              />
-               </div>
-              )
-             }
-            </div>
-           <div className='flex ml-5 mt-5'>
-           <p className="px-4 py-1 text-sm bg-gray-100 dark:bg-gray-900 rounded-lg select-none ">{post?.category}</p>
-           </div>
+            ) : (
+              <Link href={`/post/${post?._id}`}>
+                <img className="w-full" src={post?.images} alt="Article" />
+              </Link>
+            )}
           </div>
+        
+          {/* Content Section */}
+          <div className="flex flex-col justify-between flex-1 p-6">
+            <div>
+              {post?.isPremium && !premium ? (
+                <p className="text-xl font-semibold text-gray-800 dark:text-white">
+                  {post?.title}
+                </p>
+              ) : (
+                <Link
+                  href={`/post/${post?._id}`}
+                  className="block text-xl font-semibold text-gray-800 transition-colors duration-300 dark:text-white hover:text-gray-600 hover:underline"
+                >
+                  {post?.title}
+                </Link>
+              )}
+            </div>
+        
+            {/* User Profile Section */}
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex items-center">
+                <Link href={`/post/${post?._id}`}>
+                  <img
+                    className="object-cover w-10 h-10 rounded-full"
+                    src={
+                      post?.user?.profilePicture ||
+                      "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"
+                    }
+                    alt="Avatar"
+                  />
+                </Link>
+                <div className="ml-2">
+                  {post?.user?.premium && <FcApproval className="text-xl" />}
+                </div>
+                <Link
+                  href={`/profile/${post?.user?._id}`}
+                  className="mx-2 font-semibold text-gray-700 dark:text-gray-200 hover:underline"
+                >
+                  {post?.user?.name}
+                </Link>
+              </div>
+              <span className="text-gray-600">2 hours ago</span>
+            </div>
+          </div>
+        </div>
+        
         ))
       ) : (
           <p className='text-center mt-12'>No Post Found In This Category</p>

@@ -5,9 +5,9 @@ import { Providers } from "@/lib/Providers";
 const layout = ({children}: { children: React.ReactNode }) => {
     return (
         <div>
-               <main className=" flex-grow">
-     <div className="flex flex-col min-h-[100vh]">
-     <div className="flex-grow">
+               <main className="bg-gray-100 dark:bg-gray-800 ">
+     <div className=" ">
+     <div className="min-h-[100vh]">
      <Navber />
      {children} 
      </div>
