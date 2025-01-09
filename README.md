@@ -48,7 +48,7 @@ Navigate to the project directory:
 cd project-name 
 ```
 
-Install dependencies** 
+Install dependencies:
 
 ``` bash
 npm install

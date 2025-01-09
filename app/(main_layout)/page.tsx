@@ -66,10 +66,10 @@ const item3 = {
      <Sidebar />
      </motion.div>
    <motion.div  variants={item2} className="flex-2 ">
-   <PostContent />
+   {/* <PostContent /> */}
    </motion.div>
     <motion.div  variants={item3} className="flex-1 mt-12">
-    <RightSidebar />
+    {/* <RightSidebar /> */}
     </motion.div>
     </motion.div>
   );

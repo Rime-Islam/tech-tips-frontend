@@ -14,16 +14,16 @@ export default async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const userToken = await getCurrentUser();
     const user = userToken?.user;
+console.log(user)
 
-
-    if (!user) {
+    // if (!user) {
     
-        if (AuthRoutes.includes(pathname)) {
-            return NextResponse.next();
-        } else {
-            return NextResponse.redirect(new URL("/auth/login", request.url));
-        }
-    }
+    //     if (AuthRoutes.includes(pathname)) {
+    //         return NextResponse.next();
+    //     } else {
+    //         return NextResponse.redirect(new URL("/auth/login", request.url));
+    //     }
+    // }
 
     if (user) {
         if (AuthRoutes.includes(pathname)) {
@@ -31,7 +31,8 @@ export default async function middleware(request: NextRequest) {
         }
         
         if (user.role && roleBasedRoutes[user.role as Role]) {
-            const routes = roleBasedRoutes[user.role as Role];
+            const routes = roleBasedRoutes[user?.role as Role];
+            console.log(routes)
 
             if (routes.some((route) => pathname.match(route))) {
                 return NextResponse.next(); 
@@ -43,5 +44,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/admin/users", "/admin/statistics"]
+    matcher: []
 };

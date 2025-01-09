@@ -45,8 +45,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
       <p className='mt-3 text-center'>{user?.bio && <span>" { user?.bio } " </span>}</p>
       </div>
       <div className="pt-12 ">
-        <Link href="/profile/update" className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">
-          Update Profile
+        <Link href="/profile/update" >
+         <p className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full"> Update Profile</p>
         </Link>
       </div>
     </div>

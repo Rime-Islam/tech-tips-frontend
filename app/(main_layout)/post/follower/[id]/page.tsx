@@ -90,7 +90,7 @@ if (isLoading) {return <Loader />};
              
                             </div>
                             <div className="flex items-center">
-                                <Link href={`/user/${follower?._id}`}><motion.button
+                                <Link href={`/profile/${follower?._id}`}><motion.button
   initial={{ opacity: 0.6 }}
   whileHover={{
     scale: 1.1,
@@ -135,7 +135,7 @@ if (isLoading) {return <Loader />};
              
                             </div>
                             <div className="flex items-center">
-                                <Link href={`/user/${follower?._id}`}>
+                                <Link href={`/profile/${follower?._id}`}>
 <motion.button
   initial={{ opacity: 0.6 }}
   whileHover={{

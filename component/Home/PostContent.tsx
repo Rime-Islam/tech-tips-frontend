@@ -7,7 +7,7 @@ import Card from './Card';
 const PostContent = () => {
  
 return (
-      <div className="container max-w-5xl">
+      <div className="">
       <Card />
     </div>
     

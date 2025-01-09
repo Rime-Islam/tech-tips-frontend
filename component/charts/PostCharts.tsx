@@ -15,7 +15,7 @@ interface PostChartsProps {
 }
 
 const PostCharts: React.FC<PostChartsProps> = ({ postData }) => {
-console.log(postData)
+
     const formattedData = (postData ?? []).reduce((acc: Record<string, number>, user) => {
         const month = dayjs(user.createdAt).format('MM-YYYY');
         acc[month] = (acc[month] || 0) + 1;
