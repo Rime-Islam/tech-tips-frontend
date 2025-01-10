@@ -47,7 +47,7 @@ const Card = () => {
   whileHover={{
     scale: 1.1,
     transition: { duration: 0.5 },
-  }} onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-900 rounded-lg select-none ">
+  }} onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 bg-gray-100 dark:bg-gray-900 rounded-lg select-none text-lg">
             {item}
           </motion.button>
         </div>
@@ -58,36 +58,18 @@ const Card = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
       {
         filterPost?.length ? (filterPost?.map((post: IPost) => (
-          <div className="flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
+          <div className="flex flex-col justify-between bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
           {/* Image Section */}
-          <div>
-            {post?.isPremium ? (
-              premium ? (
-                <img className="w-full" src={post?.images} alt="Article" />
-              ) : (
-                <>
-                   <div className='flex justify-center'>
-                  <div>
-                  <FaCrown className='w-6 h-6 mt-5'/>
-                  </div>
-                  <div className='px-4 my-5  font-semibold text-lg'>  Premium Content for verifiyed user</div>
-                </div>
-                <div className='flex justify-center'>
-                  <Link href="/profile/payment">
-                  <button className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Verify Account</button>
-                  </Link>
-                </div>
-                </>
-              )
-            ) : (
+          <div className=''>
+         
               <Link href={`/post/${post?._id}`}>
-                <img className="w-full" src={post?.images} alt="Article" />
+                <img className="w-full h-1/2" src={post?.images} alt="Article" />
               </Link>
-            )}
+            
           </div>
         
           {/* Content Section */}
-          <div className="flex flex-col justify-between flex-1 p-6">
+          <div className="  p-6">
             <div>
               {post?.isPremium && !premium ? (
                 <p className="text-xl font-semibold text-gray-800 dark:text-white">
@@ -102,11 +84,12 @@ const Card = () => {
                 </Link>
               )}
             </div>
-<div className='my-4'>
+
+            {/* User Profile Section */}
+          <div>
+          <div className='my-4'>
 <span className='bg-white text-black font-semibold  rounded-lg my-3 px-2'>{post?.category}</span>
 </div>
-        
-            {/* User Profile Section */}
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center">
                 <Link href={`/profile/${post?.user?._id}`}>
@@ -140,6 +123,7 @@ const Card = () => {
                        </div>
              </div>
             </div>
+          </div>
           </div>
           
         </div>

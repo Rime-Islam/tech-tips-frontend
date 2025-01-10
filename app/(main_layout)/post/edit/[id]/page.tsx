@@ -205,7 +205,7 @@ const page = ({ params }: { params: { id: string } }) => {
                       value={editorContent}
                       onChange={setEditorContent}
                       theme="snow"
-                      className="h-full bg-white text-gray-700"
+                      className="h-[30vh] bg-white text-gray-700"
                       placeholder="Write your post description here..."
                     />
                   </div>

@@ -78,14 +78,52 @@ const Sidebar = () => {
           </div>
         </div>
         ) : (
-          <Link
+          <div className=" px-2">
+          <div className="  mt-3 ">
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href=""
+            >
+             <FcHome className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Home</span>
+            </Link>
+           
+           
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href="/post/create"
+            >
+              <FcDocument className='h-6 w-6'/>
+              <span className="ml-2 text-sm font-medium">Create Post</span>
+            </Link>
+          </div>
+          <div className="flex flex-col items-center w-full mt-2 ">
+         
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href="#"
+            >
+             <FcEngineering className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Settings</span>
+            </Link>
+            <Link
               className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
               href="#"
             >
-             <MdOutlineAccountCircle className='w-6 h-6'/>
+             <FcFaq className='w-6 h-6'/>
               <span className="ml-2 text-sm font-medium">Messages</span>
               <span className="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full" />
             </Link>
+            <Link
+              className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href={`/profile/${id}`}
+            >
+             <MdOutlineAccountCircle className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Profile</span>
+              <span className="absolute top-0 left-0 w-2 h-2 mt-2 ml-2 bg-indigo-500 rounded-full" />
+            </Link>
+          </div>
+        </div>
         )
       }
   </div>

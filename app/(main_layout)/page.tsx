@@ -61,12 +61,12 @@ const item3 = {
   return (
     <motion.div  variants={variants}
     initial="hidden"
-    animate="show" className="flex ">
+    animate="show" className="flex mt-[6vh]">
      <motion.div  variants={item1} className=" bg-white dark:bg-gray-900 min-h-[100vh] w-56">
      <Sidebar />
      </motion.div>
 
- <motion.div  variants={item2} className=" max-w-full mx-auto">
+ <motion.div  variants={item2} className=" mx-auto">
    <PostContent />
    </motion.div>
     <motion.div  variants={item3} className=" mt-10">

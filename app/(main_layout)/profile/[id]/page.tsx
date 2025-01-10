@@ -1,7 +1,9 @@
 'use client'
+import UserPost from "@/component/Post/UserPost";
 import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
 import { useFollowUserMutation, useGetSingleUserQuery } from "@/redux/app/feature/api/user/useApi";
 import { useAppSelector } from "@/redux/app/hook";
+import { div } from "framer-motion/client";
 import { FcApproval } from "react-icons/fc";
 import { toast } from "sonner";
 
@@ -28,7 +30,7 @@ const page = ({ params }: { params: { id: string} }) => {
     const followsList = user?.followers?.some((followerId: string) => followerId === currentUserId);
    
     return (
-        <div>
+        <div className="container mx-auto">
         <div>
             <div><img className="w-full h-[40vh]" src="https://marketplace.canva.com/EAEmGBdkt5A/3/0/1600w/canva-blue-pink-photo-summer-facebook-cover-gy8LiIJTTGw.jpg" alt="Cover Photo"/></div>
             <div className="mx-12 -mt-10 flex items-center justify-between"> 
@@ -57,8 +59,6 @@ const page = ({ params }: { params: { id: string} }) => {
                    } 
                 </div>
                   </div>
-
-                  {/* post section  */}
                   <div>
 
                   </div>

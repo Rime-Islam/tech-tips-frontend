@@ -158,12 +158,12 @@ const CreatePost = () => {
                     />
                 </div>
     
-                <div className='mt-5'>
+                <div className='mt-5 '>
                 <ReactQuill
                     value={editorContent}
                     onChange={setEditorContent}
                     theme="snow"
-                    className="h-full bg-white text-gray-700"
+                    className="h-[30vh] bg-white text-gray-700"
                     placeholder="Write your post description here..."
                   />
                 </div>

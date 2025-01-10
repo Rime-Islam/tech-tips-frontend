@@ -18,8 +18,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const [loginUser, {isLoading}] = useLoginUserMutation()
  
-  const onSubmit: SubmitHandler<IUser> = async(data) => {
-        
+  const onSubmit: SubmitHandler<IUser> = async(data) => { 
         try {
           const res = await loginUser(data).unwrap();
        
@@ -31,6 +30,48 @@ const Login = () => {
             dispatch(setUser({ userData, token }));
 
             route.push("/")
+          }
+        } catch ( error: any ) {
+          toast.error(error?.data?.message)
+        }
+  };
+  const handleUser = async() => { 
+        try {
+          const data = {
+            email: "siam12@gmail.com",
+            password: '1'
+          }
+          const res = await loginUser(data).unwrap();
+       
+          if (res?.success) {
+            toast.success(res?.message);
+           
+            const userData = res?.data?.user;
+            const token = res?.data?.token;
+            dispatch(setUser({ userData, token }));
+
+            route.push("/")
+          }
+        } catch ( error: any ) {
+          toast.error(error?.data?.message)
+        }
+  };
+  const handleAdmin = async() => { 
+        try {
+          const data = {
+            email: "admin@gmail.com",
+            password: '123'
+          }
+          const res = await loginUser(data).unwrap();
+       
+          if (res?.success) {
+            toast.success(res?.message);
+           
+            const userData = res?.data?.user;
+            const token = res?.data?.token;
+            dispatch(setUser({ userData, token }));
+
+            route.push("/profile")
           }
         } catch ( error: any ) {
           toast.error(error?.data?.message)
@@ -100,6 +141,10 @@ const Login = () => {
           <p className="mt-1 text-center hover:text-blue-500 text-gray-500 dark:text-gray-400">
             Login to GrootHub
           </p>
+          <div className=' flex justify-center gap-5 my-8'>
+            <button onClick={handleUser} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">User Login</button>
+            <button onClick={handleAdmin} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Admin Login</button>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
            
            <motion.div

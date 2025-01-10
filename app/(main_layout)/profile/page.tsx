@@ -10,10 +10,7 @@ import { motion } from 'framer-motion';
 
 
 const page = () => {
-    const use = useAppSelector(useCurrentUser);
-    const id = use?._id;
-    const {data: userData } = useGetSingleUserQuery(id);
-    const user = userData?.data;
+   
    
         // frammer motion animation 
         const variants = {
@@ -71,22 +68,12 @@ return (
     <motion.div
     variants={variants}
     initial="hidden"
-    animate="show" className='container mx-auto max-w-5xl'> 
-<div className='lg:flex justify-between'>
+    animate="show" className='container mx-auto '> 
 
-    <motion.div variants={item1}>
-    <Sidebar />
-    </motion.div>
+
+
+
    
-<motion.div variants={item2}>
-<UserProfile user={user}/>
-</motion.div>
-
-</div>
-
-    <motion.div variants={item3}>
-    <UserPost user={user}/>
-    </motion.div>
     
     </motion.div>
 );
