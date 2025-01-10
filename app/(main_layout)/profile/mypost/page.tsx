@@ -18,6 +18,7 @@ const page = () => {
       const [deletePost] = useDeletePostMutation();
       const {data: myPostData} = useGetMyPostQuery(undefined);
       const myPost = myPostData?.data;
+
       
       const handleDelete = (_id: string | undefined) => {
           Swal.fire({
@@ -52,7 +53,7 @@ const page = () => {
       return (
           <div>
                {
-        user?.role === 'user' && (
+        user?.role && (
           <>
           <div className='mt-8 md:mt-16 text-center text-3xl'>
   {

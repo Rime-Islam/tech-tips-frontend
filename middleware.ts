@@ -1,47 +1,48 @@
 import { getCurrentUser } from "@/lib/AuthServices";
 import { NextRequest, NextResponse } from "next/server";
 
-const AuthRoutes = ["/login", "/register"];
+const AuthRoutes = ["/auth/login", "/auth/register"];
 
-type Role = keyof typeof roleBasedRoutes;
+type Role = 'admin' | 'user'; 
 
-const roleBasedRoutes = {
-  user: [/^\/user/],
-  admin: [/^\/admin/],
+const roleBasedRoutes: Record<Role, RegExp[]> = {
+    admin: [/^\/admin/],
+    user: [] 
 };
 
 export default async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+    const { pathname } = request.nextUrl;
+    const userToken = await getCurrentUser();
+    const user = userToken?.user;
+console.log(userToken )
 
-  const userToken = await getCurrentUser();
-  const user = userToken?.user;
+    // if (!user) {
+    
+    //     if (AuthRoutes.includes(pathname)) {
+    //         return NextResponse.next();
+    //     } else {
+    //         return NextResponse.redirect(new URL("/auth/login", request.url));
+    //     }
+    // }
 
-  if (!user) {
-    // User is not authenticated
-    if (AuthRoutes.includes(pathname)) {
-      return NextResponse.next();
-    } else {
-      console.log(`Redirecting to login from ${pathname} due to no user.`);
-      return NextResponse.redirect(new URL("/login", request.url));
+    if (user) {
+        if (AuthRoutes.includes(pathname)) {
+            return NextResponse.redirect(new URL("/", request.url));
+        }
+        
+        if (user.role && roleBasedRoutes[user.role as Role]) {
+            const routes = roleBasedRoutes[user?.role as Role];
+            console.log(routes)
+
+            if (routes.some((route) => pathname.match(route))) {
+                return NextResponse.next(); 
+            }
+        }
     }
-  }
 
-  // Check if the user has the right role for the requested route
-  if (user.role && roleBasedRoutes[user.role as Role]) {
-    const routes = roleBasedRoutes[user.role as Role];
-    const hasAccess = routes.some((route) => pathname.match(route));
-    console.log("hasAccess", hasAccess);
-    if (!hasAccess) {
-      console.log(
-        `Redirecting from ${pathname} to home due to insufficient role.`
-      );
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-  }
-
-  return NextResponse.next(); // Allow the request to continue
+    return NextResponse.redirect(new URL("/", request.url)); 
 }
 
 export const config = {
-  matcher: ["/user/:page*", "/admin/:page*", "/login", "/register"],
+    matcher: []
 };

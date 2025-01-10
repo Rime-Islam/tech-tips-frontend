@@ -27,6 +27,7 @@ const Login = () => {
            
             const userData = res?.data?.user;
             const token = res?.data?.token;
+            
             dispatch(setUser({ userData, token }));
 
             route.push("/")
@@ -69,9 +70,10 @@ const Login = () => {
            
             const userData = res?.data?.user;
             const token = res?.data?.token;
+            console.log(token)
             dispatch(setUser({ userData, token }));
 
-            route.push("/profile")
+            route.push("/")
           }
         } catch ( error: any ) {
           toast.error(error?.data?.message)

@@ -27,9 +27,11 @@ const Navber = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
+  // accessToken
   const handleLogout = async () => {
+    
    await dispatch(logout());
+
    window.location.reload();
 
   };

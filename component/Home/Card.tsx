@@ -58,7 +58,7 @@ const Card = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
       {
         filterPost?.length ? (filterPost?.map((post: IPost) => (
-          <div className="flex flex-col justify-between bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
+          <div key={post?._id} className="flex flex-col justify-between bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
           {/* Image Section */}
           <div className=''>
          

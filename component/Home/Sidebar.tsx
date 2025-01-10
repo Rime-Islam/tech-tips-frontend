@@ -4,10 +4,14 @@ import { useAppSelector } from '@/redux/app/hook';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { div } from 'framer-motion/client';
-import { FcDocument, FcEngineering, FcFaq, FcSearch } from "react-icons/fc";
+import { FcDatabase, FcDocument, FcEngineering, FcFaq, FcReadingEbook, FcSearch } from "react-icons/fc";
 import { FcHome } from "react-icons/fc";
 import { FcBearish } from "react-icons/fc";
 import { MdOutlineAccountCircle } from 'react-icons/md';
+import { FcVip } from "react-icons/fc";
+import { FcBookmark } from "react-icons/fc";
+import { TbPremiumRights } from 'react-icons/tb';
+
 
 
 const Sidebar = () => {
@@ -101,10 +105,31 @@ const Sidebar = () => {
          
             <Link
               className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-              href="#"
+              href="/profile/update"
             >
-             <FcEngineering className='w-6 h-6'/>
-              <span className="ml-2 text-sm font-medium">Settings</span>
+             <FcDatabase className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Feed</span>
+            </Link>
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href="/profile/follow"
+            >
+             <FcReadingEbook  className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Follower</span>
+            </Link>
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href="/profile/follow"
+            >
+             <FcVip  className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Following</span>
+            </Link>
+            <Link
+              className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
+              href="/profile/payment"
+            >
+             <TbPremiumRights  className='w-6 h-6'/>
+              <span className="ml-2 text-sm font-medium">Subscribe</span>
             </Link>
             <Link
               className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
