@@ -106,7 +106,7 @@ const Card = () => {
                   {post?.user?.premium && <FcApproval className="text-xl " />}
                 </div>
                 <Link
-                  href={`/profile/${post?.user?._id}`}
+                  href={`/user/${post?.user?._id}`}
                   className="mx-2 font-semibold text-gray-700 dark:text-gray-200 hover:underline"
                 >
                   {post?.user?.name}

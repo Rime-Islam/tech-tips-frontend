@@ -116,7 +116,7 @@ const Sidebar = () => {
             </Link>
             <Link
               className="relative flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-              href={`/profile/${id}`}
+              href="/profile"
             >
              <MdOutlineAccountCircle className='w-6 h-6'/>
               <span className="ml-2 text-sm font-medium">Profile</span>

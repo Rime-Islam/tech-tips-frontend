@@ -4,7 +4,6 @@ import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppSelector } from '@/redux/app/hook';
 import Sidebar from '@/component/Home/Sidebar';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
-import UserPost from '@/component/Post/UserPost';
 import UserProfile from '@/component/Profile/UserProfile';
 import { motion } from 'framer-motion';
 

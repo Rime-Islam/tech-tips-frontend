@@ -1,5 +1,4 @@
 'use client'
-import UserPost from "@/component/Post/UserPost";
 import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
 import { useFollowUserMutation, useGetSingleUserQuery } from "@/redux/app/feature/api/user/useApi";
 import { useAppSelector } from "@/redux/app/hook";

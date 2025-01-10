@@ -1,6 +1,8 @@
 "use client"
 import Loader from "@/component/UI/Loader";
+import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
 import { useGetFollowerQuery } from "@/redux/app/feature/api/user/useApi";
+import { useAppSelector } from "@/redux/app/hook";
 import { IUser } from "@/types/types";
 import { motion } from "framer-motion";
 import Image from 'next/image';
@@ -8,8 +10,9 @@ import Link from "next/link";
 import { FcApproval } from "react-icons/fc";
 
 
-const page = ({ params }: { params: { id: string} }) => {
-    const { id } = params;
+const page = () => {
+    const use = useAppSelector(useCurrentUser);
+       const id = use?._id;
     const {data, isLoading} = useGetFollowerQuery(id);
 
 const followers = data?.data?.followers;
@@ -66,7 +69,7 @@ if (isLoading) {return <Loader />};
                     <h1 className="text-3xl hover:text-blue-500 font-bold text-center my-5">Followers</h1>
                 <div className="mt-10">
                     {
-                        followers?.length && followers?.map((follower: IUser) => (
+                        followers?.length ? (followers?.map((follower: IUser) => (
                             <div key={follower?._id} className="flex justify-between mb-5">
                             <div className="flex">
                             <div className="flex items-center py-2">
@@ -78,7 +81,7 @@ if (isLoading) {return <Loader />};
                                 height={20} 
                                 priority 
                             />
-                                <Link href={`/profile/${follower?._id}`}>
+                                <Link href={`/user/${follower?._id}`}>
                                 <p className="text-lg font-semibold hover:underline ml-3">
                                     {follower?.name}
                                 </p>
@@ -90,7 +93,7 @@ if (isLoading) {return <Loader />};
              
                             </div>
                             <div className="flex items-center">
-                                <Link href={`/profile/${follower?._id}`}><motion.button
+                                <Link href={`/user/${follower?._id}`}><motion.button
   initial={{ opacity: 0.6 }}
   whileHover={{
     scale: 1.1,
@@ -100,7 +103,9 @@ if (isLoading) {return <Loader />};
   whileInView={{ opacity: 1 }} type="button" className="mx-2 text-sm font-bold bg-blue-500 px-3 py-1.5 dark:bg-blue-400 rounded-md text-white">View Details</motion.button></Link>
                             </div>
                             </div>
-                        ))
+                        ))) : (
+                            <p>No one following you</p>
+                        )
                     }
                 </div>
             </motion.div>
@@ -111,7 +116,7 @@ if (isLoading) {return <Loader />};
                     <h1 className="text-3xl hover:text-blue-500 font-bold text-center my-5">Following</h1>
                 <div className="mt-10">
                     {
-                        following?.length && following?.map((follower: IUser) => (
+                        following?.length ? (following?.map((follower: IUser) => (
                             <div key={follower?._id} className="flex justify-between mb-5">
                             <div className="flex">
                             <div className="flex items-center py-2">
@@ -123,7 +128,7 @@ if (isLoading) {return <Loader />};
                                 height={20} 
                                 priority 
                             />
-                               <Link href={`/profile/${follower?._id}`}>
+                               <Link href={`/user/${follower?._id}`}>
                                <p className="text-lg font-semibold ml-3 hover:underline">
                                     {follower?.name}
                                 </p>
@@ -135,7 +140,7 @@ if (isLoading) {return <Loader />};
              
                             </div>
                             <div className="flex items-center">
-                                <Link href={`/profile/${follower?._id}`}>
+                                <Link href={`/user/${follower?._id}`}>
 <motion.button
   initial={{ opacity: 0.6 }}
   whileHover={{
@@ -146,7 +151,9 @@ if (isLoading) {return <Loader />};
   whileInView={{ opacity: 1 }} type="button" className="mx-2 text-sm font-bold bg-blue-500 px-3 py-1.5 dark:bg-blue-400 rounded-md text-white">View Details</motion.button></Link>
                             </div>
                             </div>
-                        ))
+                        ))) : (
+                            <p>You are not following anyone</p>
+                        )
                     }
                 </div>
             </motion.div>
