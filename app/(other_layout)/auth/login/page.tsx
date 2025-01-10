@@ -81,7 +81,7 @@ const Login = () => {
          <motion.div
          variants={variants}
          initial="hidden"
-         animate="show" className=" mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl bg-white ">
+         animate="show" className=" mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl ">
         <motion.div
         variants={item2} className="px-6 py-4">
           <div className="flex justify-center mx-auto">

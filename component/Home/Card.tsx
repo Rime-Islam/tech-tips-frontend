@@ -1,12 +1,12 @@
 
 import React, { useEffect} from 'react';
 import Link from 'next/link';
-import { FcApproval } from "react-icons/fc";
+import { FcApproval, FcLike } from "react-icons/fc";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetAllPostsQuery } from "@/redux/app/feature/api/post/postApi";
 import { IPost } from '@/types/types';
-import { FaCrown } from "react-icons/fa";
+import { FaComment, FaCrown } from "react-icons/fa";
 import Loader from '../UI/Loader';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { filteredPost, filterPosts, setFilters, setPosts } from '@/redux/app/feature/api/post/postSlice';
@@ -47,7 +47,7 @@ const Card = () => {
   whileHover={{
     scale: 1.1,
     transition: { duration: 0.5 },
-  }} onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-800 rounded-lg select-none ">
+  }} onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 md:text-lg bg-gray-100 dark:bg-gray-900 rounded-lg select-none ">
             {item}
           </motion.button>
         </div>
@@ -55,10 +55,10 @@ const Card = () => {
       }
         </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
       {
         filterPost?.length ? (filterPost?.map((post: IPost) => (
-          <div className="flex flex-col bg-white rounded-lg shadow-lg max-w-lg h-full">
+          <div className="flex flex-col bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
           {/* Image Section */}
           <div>
             {post?.isPremium ? (
@@ -102,11 +102,14 @@ const Card = () => {
                 </Link>
               )}
             </div>
+<div className='my-4'>
+<span className='bg-white text-black font-semibold  rounded-lg my-3 px-2'>{post?.category}</span>
+</div>
         
             {/* User Profile Section */}
             <div className="flex justify-between items-center mt-4">
               <div className="flex items-center">
-                <Link href={`/post/${post?._id}`}>
+                <Link href={`/profile/${post?.user?._id}`}>
                   <img
                     className="object-cover w-10 h-10 rounded-full"
                     src={
@@ -116,8 +119,8 @@ const Card = () => {
                     alt="Avatar"
                   />
                 </Link>
-                <div className="ml-2">
-                  {post?.user?.premium && <FcApproval className="text-xl" />}
+                <div className="mb-5">
+                  {post?.user?.premium && <FcApproval className="text-xl " />}
                 </div>
                 <Link
                   href={`/profile/${post?.user?._id}`}
@@ -126,9 +129,19 @@ const Card = () => {
                   {post?.user?.name}
                 </Link>
               </div>
-              <span className="text-gray-600">2 hours ago</span>
+             <div className='flex gap-5'>
+              <div className='flex gap-2'>
+              <FcLike className="w-6 h-6 " />
+              <span>{post?.upvotesCount}</span>
+              </div>
+                       <div className='flex gap-2'>
+                       <FaComment className='w-5 h-5 '/>
+                       <span>{post?.comments?.length}</span>
+                       </div>
+             </div>
             </div>
           </div>
+          
         </div>
         
         ))

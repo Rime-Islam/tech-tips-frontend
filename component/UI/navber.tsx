@@ -67,7 +67,7 @@ const Navber = () => {
     <div className="bg-white rounded shadow-xl dark:bg-gray-900">
     <div className=" font-semibold flex  items-center justify-between px-6 py-2 space-y-4 sm:space-y-0 sm:flex-row">
     <div className='flex gap-8'>
-   <div className='lg:w-56'>
+   <div className=''>
    <Link href="/">
    <div className='flex'>
    <Image
@@ -82,10 +82,12 @@ const Navber = () => {
    </div>
       </Link>
    </div>
-      <label className="input flex items-center gap-2 bg-gray-100">
+   <div className='ml-5 '>
+   <label className="input ml-5 flex items-center gap-2 bg-gray-100">
        <input type="text" className="" placeholder="Search" />
        <CiSearch />
 </label>
+   </div>
     </div>
 
       <div className="text-sm flex pr-6 text-gray-600 dark:text-gray-300">
@@ -93,15 +95,15 @@ const Navber = () => {
   whileHover={{
     scale: 1.2,
     transition: { duration: 0.3 },
-  }} onClick={toggleTheme} className="mt-1">
+  }} onClick={toggleTheme} className="mt-1 ">
       {theme === 'light' ? (
           <>
-            <IoIosMoon className="w-6 h-6  dark:text-white" />
+            <IoIosMoon className="w-6 h-6 mx-1 dark:text-white" />
            
           </>
         ) : (
           <>
-            <MdSunny className="w-6 h-6  dark:text-white" />
+            <MdSunny className="w-6 h-6 mx-1 dark:text-white" />
           </>
         )}
       </motion.button>
