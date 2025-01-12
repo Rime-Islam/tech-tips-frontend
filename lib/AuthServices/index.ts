@@ -1,3 +1,4 @@
+"use server"
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers"
 
@@ -27,3 +28,7 @@ export const getCurrentUser = async () => {
 
     return null;
 };
+
+export const logout = async () => {
+    cookies().delete("refreshToken");
+  };

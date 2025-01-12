@@ -39,8 +39,8 @@ const Login = () => {
   const handleUser = async() => { 
         try {
           const data = {
-            email: "siam12@gmail.com",
-            password: '1'
+            email: "rimeislam672@gmail.com",
+            password: '123'
           }
           const res = await loginUser(data).unwrap();
        

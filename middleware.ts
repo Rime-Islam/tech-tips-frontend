@@ -1,48 +1,58 @@
 import { getCurrentUser } from "@/lib/AuthServices";
 import { NextRequest, NextResponse } from "next/server";
 
-const AuthRoutes = ["/auth/login", "/auth/register"];
-
-type Role = 'admin' | 'user'; 
-
-const roleBasedRoutes: Record<Role, RegExp[]> = {
-    admin: [/^\/admin/],
-    user: [] 
+const roleBasedAccess: { [key: string]: string[] } = {
+    "/profile": ["admin", "user"],
+    "/admin": ["admin"],
 };
 
-export default async function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
-    const userToken = await getCurrentUser();
-    const user = userToken?.user;
-console.log(userToken )
-
-    // if (!user) {
-    
-    //     if (AuthRoutes.includes(pathname)) {
-    //         return NextResponse.next();
-    //     } else {
-    //         return NextResponse.redirect(new URL("/auth/login", request.url));
-    //     }
-    // }
-
-    if (user) {
-        if (AuthRoutes.includes(pathname)) {
-            return NextResponse.redirect(new URL("/", request.url));
-        }
-        
-        if (user.role && roleBasedRoutes[user.role as Role]) {
-            const routes = roleBasedRoutes[user?.role as Role];
-            console.log(routes)
-
-            if (routes.some((route) => pathname.match(route))) {
-                return NextResponse.next(); 
-            }
-        }
+export async function middleware(req: NextRequest) {
+    const { pathname } = req.nextUrl;
+  
+    // Check if the request is for static assets
+    if (pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname.includes(".")) {
+      return NextResponse.next();
     }
 
-    return NextResponse.redirect(new URL("/", request.url)); 
-}
+    const userToken = await getCurrentUser();
+    const user = userToken?.user;
+console.log(user )
 
-export const config = {
-    matcher: []
-};
+    if (!user) {
+        if (pathname.startsWith("/auth")) {
+            return NextResponse.next();
+          } else {
+            return NextResponse.redirect(
+              new URL(`/auth/login`, req.url)
+            );
+          }
+    }
+
+    if (user && pathname.startsWith("/auth")) {
+        return NextResponse.redirect(new URL("/", req.nextUrl));
+      }
+
+      const requiredRole = Object.keys(roleBasedAccess).find((route) =>
+        pathname.startsWith(route)
+      );
+    
+      if (requiredRole) {
+        const allowedRoles = roleBasedAccess[requiredRole];
+    
+        if (!allowedRoles.includes(user?.role)) {
+          return NextResponse.redirect(new URL("/", req.nextUrl));
+        }
+      }
+    
+      return NextResponse.next();
+    }
+    
+    // Matcher for middleware to include the home route and protected routes
+    export const config = {
+      matcher: [
+        "/",
+        "/profile/:path*",
+        "/auth/:path*",
+        "/admin/:path*",
+      ],
+    };

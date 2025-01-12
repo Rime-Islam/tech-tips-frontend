@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { TfiWrite } from "react-icons/tfi";
 import { IoIosMoon } from "react-icons/io";
 import { MdSunny } from "react-icons/md";
-import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
+import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import Cookies from 'js-cookie';
@@ -14,6 +14,7 @@ import path from 'path';
 import { CiSearch } from "react-icons/ci";
 import { cookies } from 'next/headers';
 import { motion } from 'framer-motion';
+import { logout } from '@/lib/AuthServices';
 
 
 const Navber = () => {
@@ -29,11 +30,8 @@ const Navber = () => {
   };
   // accessToken
   const handleLogout = async () => {
-    
-   await dispatch(logout());
-
+    await logout();;
    window.location.reload();
-
   };
 
    const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 
