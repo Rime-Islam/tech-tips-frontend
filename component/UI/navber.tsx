@@ -71,7 +71,7 @@ const Navber = () => {
 
   return (
     <div className="bg-white fixed top-0 z-50 w-full rounded shadow-xl dark:bg-gray-900">
-    <div className=" font-semibold flex  items-center justify-between px-6 py-2 space-y-4 sm:space-y-0 sm:flex-row">
+    <div className="container mx-auto font-semibold flex items-center justify-between py-2 space-y-4 sm:space-y-0 sm:flex-row">
     <div className='flex gap-2 md:gap-4 lg:gap-8'>
    <div className=''>
    <Link href="/">
@@ -167,8 +167,6 @@ const Navber = () => {
     </div>
   )}
 </div>
-
-
      </div>
       <motion.button
   whileHover={{
@@ -186,7 +184,7 @@ const Navber = () => {
           </>
         )}
       </motion.button>
-   {user?.role === 'user' &&
+  
    <motion.button
    whileHover={{
      scale: 1.2,
@@ -196,7 +194,6 @@ const Navber = () => {
       <div><TfiWrite className='w-8 md:w-12 h-6'/></div>
       </Link>
      </motion.button>
-   }
     {
       user ? ( 
     <>

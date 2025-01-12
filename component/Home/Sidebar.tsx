@@ -10,10 +10,8 @@ import { FcVip } from "react-icons/fc";
 import { TbPremiumRights } from 'react-icons/tb';
 
 
-
 const Sidebar = () => {
     const user = useAppSelector(useCurrentUser);
-   
 
     return (
      <div className='fixed'>
@@ -149,7 +147,6 @@ const Sidebar = () => {
         )
       }
   </div>
-
    </div>
     );
 };

@@ -53,6 +53,6 @@ console.log(user )
         "/",
         "/profile/:path*",
         "/auth/:path*",
-        "/admin/:path*",
+        "/dashboard/:path*",
       ],
     };

@@ -33,11 +33,15 @@ const UserProfile = () => {
                     alt="Avatar"
                   />
                         <div className="bg-white dark:bg-gray-900 p-5 rounded-lg">
-                           <div className='text-xl font-semibold'>
+                           <div className='text-xl font-semibold flex'>
+                          <div>
                           {user?.name}
-                          {
+                          </div>
+                            <div>
+                            {
        user?.premium &&  <div><FcApproval className='w-5 h-5'/></div>
      }
+                            </div>
                            </div>
                             <div className='flex gap-2 '> <MdEmail className='mt-1'/> <span>{user?.email}</span> </div>
                             <div className='flex gap-2 '> <FaHome className='mt-1'/> <span>{user?.address}</span> </div>

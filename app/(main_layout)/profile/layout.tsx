@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 
 const layout = ({ children }: { children: ReactNode }) => {
     return (
-       <div className=" container mx-auto">
+       <div className=" container mx-auto pb-8">
        <div className="border-b-2 border-gray-300 dark:border-gray-100">
        <UserProfile />
        </div>

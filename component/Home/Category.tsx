@@ -15,15 +15,20 @@ const Category:React.FC<CategoryCardProps> = ({ handleCategory }) => {
       ];
 
     return (
-        <div>
+        <div className="mb-8">
+            <h1 className="lg:text-lg font-semibold px-4">Filter</h1>
   <div className=''>
       {
         categories?.length && categories?.map((item: string) => (
-          <div key={item} className='mx-2'>
-          <motion.div
-  onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 lg:text-sm  bg-gray-300 dark:bg-gray-900 rounded-lg select-none ">
+          <div key={item} className='mx-2  '>
+          <motion.button
+                            whileHover={{
+                              scale: 1.1,
+                              transition: { duration: 0.5 },
+                            }}
+  onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 text-sm bg-gray-800 dark:bg-gray-300 rounded-lg">
             {item}
-          </motion.div>
+          </motion.button>
         </div>
         ))
       }

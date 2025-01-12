@@ -60,7 +60,7 @@ const Login = () => {
   const handleAdmin = async() => { 
         try {
           const data = {
-            email: "admin@gmail.com",
+            email: "kal@gmail.com",
             password: '123'
           }
           const res = await loginUser(data).unwrap();

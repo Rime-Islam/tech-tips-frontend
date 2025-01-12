@@ -3,7 +3,7 @@ const page = () => {
    
 
 return (
-    <div className='container mx-auto '> 
+    <div className='container mx-auto pb-8'> 
 
     </div>
 );
