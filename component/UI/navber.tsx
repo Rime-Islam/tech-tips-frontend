@@ -4,22 +4,22 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { TfiWrite } from "react-icons/tfi";
 import { IoIosMoon } from "react-icons/io";
-import { MdSunny } from "react-icons/md";
+import { MdFeed, MdSunny } from "react-icons/md";
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
-import Cookies from 'js-cookie';
-import { FcDocument } from "react-icons/fc";
-import path from 'path';
-import { CiSearch } from "react-icons/ci";
-import { cookies } from 'next/headers';
+import { IoHomeOutline } from "react-icons/io5";
+import { BiNotepad } from "react-icons/bi";
+import { BiSolidContact } from "react-icons/bi";
+import { FaBars } from "react-icons/fa";
 import { motion } from 'framer-motion';
 import { logout } from '@/lib/AuthServices';
+import { RiUserFollowFill } from 'react-icons/ri';
 
 
 const Navber = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useAppDispatch();
+  const [isOpenBar, setIsOpenBar] = useState(false);
   const use = useAppSelector(useCurrentUser);
   const id = use?._id;
   const {data: userData, isLoading } = useGetSingleUserQuery(id);
@@ -27,6 +27,16 @@ const Navber = () => {
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+  const toggle = () => {
+    setIsOpenBar(!isOpenBar);
+  };
+
+  const closeDropdown = () => {
+    setIsOpenBar(false);
+  };
+  const close = () => {
+    setIsOpen(false);
   };
   // accessToken
   const handleLogout = async () => {
@@ -36,7 +46,6 @@ const Navber = () => {
 
    const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 
 
- 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
@@ -48,7 +57,6 @@ const Navber = () => {
     }
   }, []);
 
- 
   useEffect(() => {
     if (theme) {
       document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -56,17 +64,15 @@ const Navber = () => {
     }
   }, [theme]);
 
- 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
 
-
   return (
-    <div className="bg-white fixed  top-0 z-50 w-full rounded shadow-xl dark:bg-gray-900">
+    <div className="bg-white fixed top-0 z-50 w-full rounded shadow-xl dark:bg-gray-900">
     <div className=" font-semibold flex  items-center justify-between px-6 py-2 space-y-4 sm:space-y-0 sm:flex-row">
-    <div className='flex gap-8'>
+    <div className='flex gap-2 md:gap-4 lg:gap-8'>
    <div className=''>
    <Link href="/">
    <div className='flex'>
@@ -82,20 +88,93 @@ const Navber = () => {
    </div>
       </Link>
    </div>
-   <div className='ml-5 '>
-   <label className="input ml-5 flex items-center gap-2 bg-gray-100">
-       <input type="text" className="" placeholder="Search" />
-       <CiSearch />
-</label>
-   </div>
     </div>
-
+<div className='hidden md:flex gap-2 md:gap-4 lg:gap-8'>
+<Link href="/">
+      <div><IoHomeOutline className='w-12 h-6'/></div>
+      </Link>
+      <Link href="/about">
+      <div><BiNotepad className='w-12 h-6'/></div>
+      </Link>
+      <Link href="/contact">
+      <div><BiSolidContact className='w-12 h-6'/></div>
+      </Link>
+      <Link href="/profile/follow">
+      <div><RiUserFollowFill className='w-12 h-6'/></div>
+      </Link>
+      <Link href="/profile/update">
+      <div><MdFeed className='w-12 h-6'/></div>
+      </Link>
+</div>
       <div className="text-sm flex pr-6 text-gray-600 dark:text-gray-300">
+     <div>
+     <div className=" hidden">
+  {/* Dropdown Toggle Button */}
+  <motion.button
+    whileHover={{
+      scale: 1.2,
+      transition: { duration: 0.3 },
+    }}
+    onClick={toggle} // Toggle the dropdown visibility
+    className="relative"
+  >
+    <FaBars className="w-8 h-5 mt-4 dark:text-white" />
+  </motion.button>
+
+  {/* Dropdown Menu */}
+  {isOpenBar && (
+    <div
+      className="absolute z-20 py-2 mt-5 bg-white rounded-md shadow-xl dark:bg-gray-800"
+      style={{ right: "60px", width: "150px" }}
+    >
+      <div className="px-2 text-center">
+        <Link
+          href="/"
+          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={closeDropdown}
+        >
+          Home
+        </Link>
+        <Link
+          href="/profile/follow"
+          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={closeDropdown}
+        >
+          Follower
+        </Link>
+        <Link
+          href="/profile/update"
+          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={closeDropdown}
+        >
+          Feed
+        </Link>
+        <Link
+          href="/about"
+          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={closeDropdown}
+        >
+          About
+        </Link>
+        <Link
+          href="/contact"
+          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={closeDropdown}
+        >
+          Contact
+        </Link>
+      </div>
+    </div>
+  )}
+</div>
+
+
+     </div>
       <motion.button
   whileHover={{
     scale: 1.2,
     transition: { duration: 0.3 },
-  }} onClick={toggleTheme} className="mt-1 ">
+  }} onClick={toggleTheme} className="mt-1">
       {theme === 'light' ? (
           <>
             <IoIosMoon className="w-6 h-6 mx-1 dark:text-white" />
@@ -114,14 +193,14 @@ const Navber = () => {
      transition: { duration: 0.3 },
    }}>
       <Link href="/post/create">
-      <div><TfiWrite className='w-12 h-6'/></div>
+      <div><TfiWrite className='w-8 md:w-12 h-6'/></div>
       </Link>
      </motion.button>
    }
     {
       user ? ( 
     <>
-       <div className="relative">
+       <div className=" relative">
   <motion.button
     whileHover={{
       scale: 1.2,
@@ -140,15 +219,29 @@ const Navber = () => {
   {isOpen && (
     <div
       className="absolute z-20 right-5 py-2 mt-4 bg-white rounded-md shadow-xl dark:bg-gray-800"
-      style={{ right: '0px' }} 
+      style={{ right: '0px', width: '131px' }} 
+      onClick={close}
     >
-      <div className="px-2">
+      <div className="px-2 text-center">
         <Link
           href='/profile'
-          className="block my-4 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          className="block my-2 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+          onClick={close}
         >
-          Profile & Analitics
+          Profile 
         </Link>
+
+        {
+          user.role === 'admin' && (
+            <Link
+            href='/dashboard'
+            className="block my-2 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
+            onClick={close}
+          >
+            Dashboard
+          </Link>
+          )
+        }
 
         <motion.button
           whileHover={{
@@ -156,7 +249,7 @@ const Navber = () => {
             transition: { duration: 0.3 },
           }}
           onClick={handleLogout}
-          className="px-6 mx-2 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400"
+          className="px-3 md:px-6 mx-5 py-2  tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400"
         >
           LogOut
         </motion.button>
@@ -164,7 +257,6 @@ const Navber = () => {
     </div>
   )}
 </div>
-
     </>
       ) : (
 <Link href="/auth/login"><motion.button

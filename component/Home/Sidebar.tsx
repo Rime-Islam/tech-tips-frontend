@@ -2,28 +2,25 @@ import React from 'react';
 import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppSelector } from '@/redux/app/hook';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { div } from 'framer-motion/client';
 import { FcDatabase, FcDocument, FcEngineering, FcFaq, FcReadingEbook, FcSearch } from "react-icons/fc";
 import { FcHome } from "react-icons/fc";
 import { FcBearish } from "react-icons/fc";
 import { MdOutlineAccountCircle } from 'react-icons/md';
 import { FcVip } from "react-icons/fc";
-import { FcBookmark } from "react-icons/fc";
 import { TbPremiumRights } from 'react-icons/tb';
 
 
 
 const Sidebar = () => {
     const user = useAppSelector(useCurrentUser);
-    const id = user?._id;
+   
 
     return (
-     <div className=''>
-  <div className=" text-gray-400  rounded">
+     <div className='fixed'>
+  <div className=" text-gray-400 pt-5 rounded">
       {
         user?.role === 'admin' ? (
-          <div className=" px-2">
+          <div className=" px-2 hover:bg-gray-300">
           <div className="  mt-3 ">
             <Link
               className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
@@ -86,7 +83,7 @@ const Sidebar = () => {
           <div className="  mt-3 ">
             <Link
               className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"
-              href=""
+              href="/"
             >
              <FcHome className='w-6 h-6'/>
               <span className="ml-2 text-sm font-medium">Home</span>
@@ -101,7 +98,7 @@ const Sidebar = () => {
               <span className="ml-2 text-sm font-medium">Create Post</span>
             </Link>
           </div>
-          <div className="flex flex-col items-center w-full mt-2 ">
+          <div className="flex flex-col items-center w-full ">
          
             <Link
               className="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300"

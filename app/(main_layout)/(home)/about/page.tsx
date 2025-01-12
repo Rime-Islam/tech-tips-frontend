@@ -49,11 +49,10 @@ const page = () => {
         variants={variants}
         initial="hidden"
         animate="show"
-        className="mb-8">
-         
+        className="my-8 container mx-auto">
             <motion.div
             variants={item}
-      className="text-center mt-16 mb-10">
+      className="text-center pt-[8vh] mb-10 px-2">
                 <h1 className="hover:text-blue-500 text-3xl md:text-5xl font-semibold">GrootHub</h1>
                 <p className="text-lg mt-3">Transforming Ideas into Code, Together.</p>
                 <div className="mt-10">
@@ -61,7 +60,6 @@ const page = () => {
                     <p className="mt-3 text-lg">At Tech Tips & Tricks, our mission is to empower tech enthusiasts, entrepreneurs, and everyday users with accessible, actionable insights that enhance their understanding and use of technology. We strive to create a supportive community where knowledge is shared, and everyone can navigate the ever-evolving digital landscape with confidence and creativity. We envision a world where technology is not just a tool, but a catalyst for innovation and social change. By fostering a culture of continuous learning and collaboration, we aim to inspire individuals to embrace technology as a means to solve real-world challenges, drive positive change, and unlock their full potential. Together, we aspire to be the leading platform for tech tips and resources, bridging the gap between technology and its users.</p>
                 </div>
             </motion.div>
-
             {/* about us section 2 */}
             <motion.div
             variants={item} className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">

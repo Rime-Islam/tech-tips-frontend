@@ -21,15 +21,15 @@ const UserProfile = () => {
   const user = userData?.data;
   
     return (
-        <div className="flmt-10 h-auto mb-5">
+        <div className="flmt-10 h-auto mb-5 px-0 md:px-2">
 
 <div>
             <div><img className="w-full h-[40vh] " src="https://marketplace.canva.com/EAEmGBdkt5A/3/0/1600w/canva-blue-pink-photo-summer-facebook-cover-gy8LiIJTTGw.jpg" alt="Cover Photo"/></div>
-            <div className="mx-12 -mt-10 justify-between"> 
+            <div className=" lg:mx-12 -mt-10 justify-between"> 
                 <div className="flex items-center ">
                 <img
                     className="object-cover w-20 h-20 md:h-40 md:w-40 lg:h-56 lg:w-56 rounded-full"
-                    src={user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
+                    src={user?.profilePicture  || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
                     alt="Avatar"
                   />
                         <div className="bg-white p-5 rounded-lg">

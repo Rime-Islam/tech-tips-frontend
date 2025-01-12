@@ -194,7 +194,7 @@ if (isLoading) {return <Loader />};
         <motion.div
         variants={variants}
         initial="hidden"
-        animate="show"  id="post-content" className="min-h-[100vh] container mx-auto py-10">
+        animate="show"  id="post-content" className="min-h-[100vh] container mx-auto px-2 lg:px-0 py-10">
             {/*  title section  */}
           <motion.div
 variants={item1}>

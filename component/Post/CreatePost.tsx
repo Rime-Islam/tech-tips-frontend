@@ -66,7 +66,7 @@ const CreatePost = () => {
 
     return (
         <form onSubmit={handleCreatePost}>
-        <div className="">
+        <div className="px-2">
           <div className="pt-10 max-w-5xl mx-auto md:pt-10">
             <h1 className="text-xl md:text-4xl font-bold mb-3 hover:text-blue-500">Write A Post</h1>
             <p>Share your expertise and insights with the GrootHub.

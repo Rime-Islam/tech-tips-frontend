@@ -111,7 +111,7 @@ const page = ({ params }: { params: { id: string } }) => {
         <motion.div
         variants={item1}>
         <form onSubmit={handleCreatePost}>
-            <div className="pt-10 max-w-5xl mx-auto md:pt-10">
+            <div className="pt-10 px-2 max-w-5xl mx-auto md:pt-10">
               <h1 className="text-xl hover:text-blue-500 md:text-4xl font-bold mb-3">Edit Your Post</h1>
             <div className="flex gap-3 mb-5 mt-8">
             <div className="shadow flex-1 mt-2 bg-white dark:bg-gray-800 appearance-none border rounded h-10 text-white dark:text-gray-700">  
