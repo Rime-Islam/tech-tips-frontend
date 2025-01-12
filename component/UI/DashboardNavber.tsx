@@ -26,7 +26,7 @@ const DashboardNavber = () => {
         };
       
     return (
-        <div className="bg-white  fixed top-0 z-50 w-full rounded dark:bg-gray-900">
+        <div className="fixed top-0 z-50 w-full rounded bg-white dark:bg-gray-900">
 <div className="flex justify-between container mx-auto">
 <div>
 <div className="flex justify-center mt-2 sm:justify-start">

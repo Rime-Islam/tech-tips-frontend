@@ -27,7 +27,7 @@ const page = () => {
         const userData =  { status: status} ;
        try {
         const res = await updateUser({ userId, userData }).unwrap();
-       console.log(res)
+      
         if (res?.success) {
             toast.success(res?.message);
           }
@@ -99,7 +99,7 @@ const page = () => {
         variants={variants}
         initial="hidden"
         animate="show">
-                 <div  className="text-2xl mt-5 hover:text-blue-500 text-center font-semibold mb-4 text-[#70AABD] md:mb-8">User Management</div>
+                 <div  className="text-2xl my-[8vh] hover:text-blue-500 text-center font-semibold mb-4 text-[#70AABD] md:mb-8">User Management</div>
                  <motion.div
          variants={item1} className="flex justify-center">
         <div className="flex mt-5 gap-5 md:gap-8 ">
