@@ -11,6 +11,8 @@ import Loader from '../UI/Loader';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { filteredPost, filterPosts, setFilters, setPosts } from '@/redux/app/feature/api/post/postSlice';
 import { motion } from 'framer-motion';
+import { div } from 'framer-motion/client';
+import Category from './Category';
 
 
 const Card = () => {
@@ -22,7 +24,7 @@ const Card = () => {
     const premium = userData?.data?.premium;
     const filterPost = useAppSelector(filteredPost);
     const dispatch = useAppDispatch();
-    const category: string[] = ["Software Engineer", "Web Development", "Cybersecurity", "App Design", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
+    // const category: string[] = ["Software Engineer", "Web Development", "Cybersecurity", "DevOps", "Machine Learning", "Blockchain", "UI/UX Design"];
     
     useEffect(() => {
         if (data) {
@@ -30,39 +32,52 @@ const Card = () => {
         }
     }, [data, dispatch]);
 
-    const handleCategory = (category: string) => {
-        dispatch(setFilters({category}))
-        dispatch(filterPosts());
-    };
+    // const handleCategory = (category: string) => {
+    //     dispatch(setFilters({category}))
+    //     dispatch(filterPosts());
+    // };
     
     if (isLoading) {return <Loader />};
     return (
         <div className='my-5 '>
   {/* categories tab  */}
-  <div className='hidden lg:flex flex-wrap '>
-      {
-        category?.length && category?.map((item: string) => (
-          <div key={item} className='mx-2'>
-          <motion.div
-  onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 lg:text-sm  bg-gray-300 dark:bg-gray-900 rounded-lg select-none ">
-            {item}
-          </motion.div>
-        </div>
-        ))
-      }
-        </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-5">
       {
         filterPost?.length ? (filterPost?.map((post: IPost) => (
-          <div key={post?._id} className="flex flex-col justify-between bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-full">
+          <div key={post?._id} className="flex flex-col justify-between bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-lg h-[50vh]">
           {/* Image Section */}
-          <div className=''>
-         
-              <Link href={`/post/${post?._id}`}>
-                <img className="w-full h-1/2" src={post?.images} alt="Article" />
+          <div className='h-[20vh]'>
+            {
+              post?.isPremium && !premium ? (
+             <div>
+             <div className="w-full h-56 flex flex-col items-center justify-center text-center p-6">
+  <h1 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+    Unlock Premium Content
+  </h1>
+  <p className="text-gray-600 dark:text-white mb-4">
+    Groothub empowers you to create premium blogs and monetize your expertise. 
+  </p>
+  <p className="text-gray-600 dark:text-white mb-6">
+    Become a premium user to access exclusive content and take your experience to the next level.
+  </p>
+  <Link
+    href="/profile/payment"
+    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+  >
+    Become a Premium User
+  </Link>
+</div>
+
+                
+                </div>
+              ): (
+                <Link href={`/post/${post?._id}`}>
+                <img className="w-full h-full" src={post?.images} alt="Article" />
               </Link>
-            
+              )
+            }
           </div>
         
           {/* Content Section */}

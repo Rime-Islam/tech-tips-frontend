@@ -6,10 +6,13 @@ import { FcApproval } from "react-icons/fc";
 import { motion } from "framer-motion";
 import { useAppSelector } from "@/redux/app/hook";
 import { useCurrentUser } from "@/redux/app/feature/api/auth/authSlice";
+import Category from "./Category";
 
 
-
-const RightSidebar = () => {
+interface RightSidebarProps {
+  handleCategory: (category: string) => void;
+}
+const RightSidebar: React.FC<RightSidebarProps> = ({ handleCategory }) => {
   const currentUser = useAppSelector(useCurrentUser);
   const id = currentUser?._id;
 
@@ -35,6 +38,9 @@ const RightSidebar = () => {
 
     return (
         <div className="mt-10 fixed">
+           <Category handleCategory={handleCategory}/>
+           
+           {/* follow section  */}
             <div className="lg:text-lg font-semibold px-4">Who To Follow</div>
             <div className="pt-4 px-4">
             {

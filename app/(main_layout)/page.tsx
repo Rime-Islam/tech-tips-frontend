@@ -3,8 +3,29 @@ import Sidebar from "@/component/Home/Sidebar";
 import PostContent from "@/component/Home/PostContent";
 import RightSidebar from "@/component/Home/RightSidebar";
 import { motion  } from "framer-motion"
+import { useGetAllPostsQuery } from "@/redux/app/feature/api/post/postApi";
+import { useAppDispatch, useAppSelector } from "@/redux/app/hook";
+import { filteredPost, filterPosts, setFilters, setPosts } from "@/redux/app/feature/api/post/postSlice";
+import { useEffect } from "react";
 
 export default function Home() {
+    const { data, isLoading } = useGetAllPostsQuery(undefined);
+    const posts = data?.data;
+    const filterPost = useAppSelector(filteredPost);
+    const dispatch = useAppDispatch();
+  
+    useEffect(() => {
+      if (data) {
+        dispatch(setPosts(posts));
+      }
+    }, [data, dispatch]);
+  
+    const handleCategory = (category: string) => {
+      dispatch(setFilters({ category }));
+      dispatch(filterPosts());
+    };
+  
+
 
   const variants = {
     hidden: { opacity: 0 },
@@ -70,7 +91,7 @@ const item3 = {
    <PostContent />
    </motion.div>
     <motion.div  variants={item3} className="sm:hidden md:flex bg-white dark:bg-gray-900 min-h-[100vh] md:w-40 xl:w-56">
-    <RightSidebar />
+    <RightSidebar handleCategory={handleCategory}/>
     </motion.div>
 
     </motion.div>
