@@ -19,7 +19,7 @@ const baseQuery = fetchBaseQuery({
 const BaseQueryToken: BaseQueryFn<FetchArgs, BaseQueryApi, DefinitionType> = async (args, api, extraOptions): Promise<any> => {
     try {
       const result = await baseQuery(args, api, extraOptions);
-console.log(result)
+
       if (result.error) {
         if (result.error.status === 401) {
           toast.error("Your session has expired. Please log in again.");

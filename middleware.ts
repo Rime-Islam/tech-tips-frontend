@@ -16,7 +16,6 @@ export async function middleware(req: NextRequest) {
 
     const userToken = await getCurrentUser();
     const user = userToken?.user;
-console.log(user )
 
     if (!user) {
         if (pathname.startsWith("/auth")) {
@@ -50,9 +49,7 @@ console.log(user )
     // Matcher for middleware to include the home route and protected routes
     export const config = {
       matcher: [
-        "/",
-        "/profile/:path*",
-        "/auth/:path*",
-        "/dashboard/:path*",
+        "/user/:path*",
+        "/admin/:path*",
       ],
     };

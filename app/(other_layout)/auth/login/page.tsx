@@ -11,206 +11,135 @@ import { setUser } from '@/redux/app/feature/api/auth/authSlice';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<IUser>();
-  const route = useRouter();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<IUser>();
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const [loginUser, {isLoading}] = useLoginUserMutation()
- 
-  const onSubmit: SubmitHandler<IUser> = async(data) => { 
-        try {
-          const res = await loginUser(data).unwrap();
-       
-          if (res?.success) {
-            toast.success(res?.message);
-           
-            const userData = res?.data?.user;
-            const token = res?.data?.token;
-            
-            dispatch(setUser({ userData, token }));
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
-            route.push("/")
-          }
-        } catch ( error: any ) {
-          toast.error(error?.data?.message)
-        }
-  };
-  const handleUser = async() => { 
-        try {
-          const data = {
-            email: "rimeislam672@gmail.com",
-            password: '123'
-          }
-          const res = await loginUser(data).unwrap();
-       
-          if (res?.success) {
-            toast.success(res?.message);
-           
-            const userData = res?.data?.user;
-            const token = res?.data?.token;
-            dispatch(setUser({ userData, token }));
-
-            route.push("/")
-          }
-        } catch ( error: any ) {
-          toast.error(error?.data?.message)
-        }
-  };
-  const handleAdmin = async() => { 
-        try {
-          const data = {
-            email: "kal@gmail.com",
-            password: '123'
-          }
-          const res = await loginUser(data).unwrap();
-       
-          if (res?.success) {
-            toast.success(res?.message);
-           
-            const userData = res?.data?.user;
-            const token = res?.data?.token;
-            console.log(token)
-            dispatch(setUser({ userData, token }));
-
-            route.push("/")
-          }
-        } catch ( error: any ) {
-          toast.error(error?.data?.message)
-        }
+  const onSubmit: SubmitHandler<IUser> = async (data) => {
+    try {
+      const res = await loginUser(data).unwrap();
+      if (res?.success) {
+        toast.success(res?.message || "Login successful!");
+        const userData = res?.data?.user;
+        const token = res?.data?.token;
+        dispatch(setUser({ userData, token }));
+        router.push("/");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Login failed. Please try again.");
+    }
   };
 
-    // frammer motion animation 
-    const variants = {
-      hidden: { opacity: 0 },
-      show: {
-          opacity: 1,
-          transition: {
-              staggerChildren: 0.3
-          },
-      },
-  };
-  
-  const item1 = {
-      hidden: {
-          opacity: 0,
-          x: -40,
-      },
-      show: {
-          opacity: 1,
-          x: 0,
-          transition: {
-              duration: 2,
-          },
-      },
-  };
-  const item2 = {
-      hidden: {
-          opacity: 0,
-          x: 40,
-      },
-      show: {
-          opacity: 1,
-          x: 0,
-          transition: {
-              duration: 2,
-          },
-      },
+  const handleQuickLogin = (email: string, pass: string) => {
+    setValue('email', email);
+    setValue('password', pass);
+    toast.info(`Form filled with ${email.split('@')[0]}'s credentials. Click Sign In to proceed.`);
   };
 
+  const variants = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.1 }
+    },
+  };
 
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0 },
+  };
 
-    return (
-         <motion.div
-         variants={variants}
-         initial="hidden"
-         animate="show" className=" mt-[25vh] max-w-sm mx-auto overflow-hidden  rounded-lg shadow-xl ">
-        <motion.div
-        variants={item2} className="px-6 py-4">
-          <div className="flex justify-center mx-auto">
-            <Image
-              className="w-28"
-              src="https://i.ibb.co.com/FBBRt37/Google-Photos-Logo-2015.png"
-              alt="logo"
-              width={64} 
-              height={64} 
-              priority 
-            />
-          </div>
-          <h3 className="mt-3 text-xl font-medium text-center text-gray-600 dark:text-gray-200">
-            Welcome Back
-          </h3>
-          <p className="mt-1 text-center hover:text-blue-500 text-gray-500 dark:text-gray-400">
-            Login to GrootHub
-          </p>
-          <div className=' flex justify-center gap-5 my-8'>
-            <button onClick={handleUser} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">User Login</button>
-            <button onClick={handleAdmin} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Admin Login</button>
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-           
-           <motion.div
-        variants={item1} className="w-full mt-4">
-              <input
-                className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-white placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
-                type="email"
-                placeholder="Email Address"
-                aria-label="Email Address"
-                {...register("email", { required: "Email is required" })}
-                required
-                />
-                {errors.email && (
-                  <p className="text-red-600">{errors.email.message}</p>
-                )}
-            </motion.div>
-            <motion.div
-        variants={item2} className="w-full mt-4">
-              <input
-                className="block w-full px-4 py-2 mt-2 text-gray-700 dark:text-white placeholder-gray-500 bg-white border rounded-lg dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring focus:ring-blue-300"
-                type="password"
-                placeholder="Password"
-                aria-label="Password"
-                {...register("password", { required: "Password is required" })}
-                required
-                />
-                {errors.password && (
-                  <p className="text-red-600">{errors.password.message}</p>
-                )}
-            </motion.div>
-          
-            <div className="flex items-center justify-between mt-4">
-              <Link href="/auth/forget-password"
-                className="text-sm text-gray-600 dark:text-gray-200 hover:text-gray-500"
-              >
-                Forget Password?
-              </Link>
-              <motion.button
-  initial={{ opacity: 0.6 }}
-  whileHover={{
-    scale: 1.1,
-    transition: { duration: 0.5 },
-  }}
-  whileTap={{ scale: 1.1 }}
-  whileInView={{ opacity: 1 }} className="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-              {isLoading ? "Signing.." : "Sign In" }
-              </motion.button>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background/50 py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="show"
+        className="max-w-md w-full glass rounded-3xl p-8 shadow-2xl border border-white/10"
+      >
+        <motion.div variants={item} className="text-center mb-10">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center transform rotate-12 shadow-lg shadow-primary/20">
+              <span className="text-white font-black text-2xl">T</span>
             </div>
-          </form>
+          </div>
+          <h2 className="text-3xl font-black font-outfit tracking-tight">Welcome Back</h2>
+          <p className="text-muted-foreground mt-2">Sign in to your TechTips account</p>
         </motion.div>
-        <motion.div
-        variants={item1} className="flex items-center justify-center py-4 text-center bg-gray-50 dark:bg-gray-700">
-          <span className="text-sm text-gray-600 dark:text-gray-200">
-            Don't have an account?
-          </span>
-          <Link href="/auth/register"
-            className="mx-2 text-sm font-bold text-blue-500 dark:text-blue-400 hover:underline"
+
+        <motion.div variants={item} className="flex gap-4 mb-8">
+          <button
+            onClick={() => handleQuickLogin("rimeislam672@gmail.com", "123")}
+            className="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-xl bg-secondary hover:bg-primary hover:text-white transition-all duration-300 border border-white/5"
           >
-            Register
-          </Link>
+            User Login
+          </button>
+          <button
+            onClick={() => handleQuickLogin("kal@gmail.com", "123")}
+            className="flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-xl bg-secondary hover:bg-primary hover:text-white transition-all duration-300 border border-white/5"
+          >
+            Admin Login
+          </button>
         </motion.div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <motion.div variants={item}>
+            <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 ml-1">
+              Email Address
+            </label>
+            <input
+              className="w-full px-4 py-3 rounded-2xl bg-secondary/50 border border-white/10 focus:border-primary focus:ring-0 transition-all outline-none"
+              type="email"
+              placeholder="name@example.com"
+              {...register("email", { required: "Email is required" })}
+            />
+            {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email.message}</p>}
+          </motion.div>
+
+          <motion.div variants={item}>
+            <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 ml-1">
+              Password
+            </label>
+            <input
+              className="w-full px-4 py-3 rounded-2xl bg-secondary/50 border border-white/10 focus:border-primary focus:ring-0 transition-all outline-none"
+              type="password"
+              placeholder="••••••••"
+              {...register("password", { required: "Password is required" })}
+            />
+            {errors.password && <p className="text-red-500 text-xs mt-1 ml-1">{errors.password.message}</p>}
+          </motion.div>
+
+          <motion.div variants={item} className="flex items-center justify-between">
+            <Link href="/auth/forget-password" title="Coming soon!" className="text-sm font-semibold text-primary hover:underline underline-offset-4 decoration-2 transition-all">
+              Forgot password?
+            </Link>
+          </motion.div>
+
+          <motion.button
+            variants={item}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={isLoading}
+            className="w-full py-4 rounded-2xl bg-primary text-white font-black text-lg shadow-xl shadow-primary/25 hover:shadow-primary/40 transition-all flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : "Sign In"}
+          </motion.button>
+        </form>
+
+        <motion.p variants={item} className="mt-8 text-center text-sm text-muted-foreground">
+          Don't have an account?{" "}
+          <Link href="/auth/register" className="font-bold text-foreground hover:text-primary transition-colors">
+            Register Now
+          </Link>
+        </motion.p>
       </motion.div>
-      
-    );
+    </div>
+  );
 };
 
 export default Login;

@@ -2,275 +2,230 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { TfiWrite } from "react-icons/tfi";
-import { IoIosMoon } from "react-icons/io";
-import { MdFeed, MdSunny } from "react-icons/md";
-import { useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
+import { HiOutlinePencilAlt, HiOutlineHome, HiOutlineInformationCircle, HiOutlineMail, HiOutlineUserGroup, HiOutlineMenuAlt3, HiOutlineX, HiOutlineLogout } from "react-icons/hi";
+import { IoMoon, IoSunny } from "react-icons/io5";
+import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
-import { IoHomeOutline } from "react-icons/io5";
-import { BiNotepad } from "react-icons/bi";
-import { BiSolidContact } from "react-icons/bi";
-import { FaBars } from "react-icons/fa";
-import { motion } from 'framer-motion';
-import { logout } from '@/lib/AuthServices';
-import { RiUserFollowFill } from 'react-icons/ri';
+import { motion, AnimatePresence } from 'framer-motion';
 
+const Navbar = () => {
+    const [scrolled, setScrolled] = useState(false);
+    const [isOpenBar, setIsOpenBar] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const authUser = useAppSelector(useCurrentUser);
+    const id = authUser?._id;
+    const dispatch = useAppDispatch();
+    const { data: userData } = useGetSingleUserQuery(id, { skip: !id });
+    const user = userData?.data;
 
-const Navber = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpenBar, setIsOpenBar] = useState(false);
-  const use = useAppSelector(useCurrentUser);
-  const id = use?._id;
-  const {data: userData, isLoading } = useGetSingleUserQuery(id);
-  const user = userData?.data;
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-  const toggle = () => {
-    setIsOpenBar(!isOpenBar);
-  };
+    const handleLogout = () => {
+        dispatch(logout());
+        window.location.reload();
+    };
 
-  const closeDropdown = () => {
-    setIsOpenBar(false);
-  };
-  const close = () => {
-    setIsOpen(false);
-  };
-  // accessToken
-  const handleLogout = async () => {
-    await logout();;
-   window.location.reload();
-  };
+    const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
 
-   const [theme, setTheme] = useState<'light' | 'dark' | null>(null); 
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setTheme(savedTheme as 'light' | 'dark'); 
-    } else {
-  
-      const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(userPrefersDark ? 'dark' : 'light');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (theme) {
-      document.documentElement.classList.toggle('dark', theme === 'dark');
-      localStorage.setItem('theme', theme);
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-
-  return (
-    <div className="bg-white fixed top-0 z-50 w-full rounded shadow-xl dark:bg-gray-900">
-    <div className="container mx-auto font-semibold flex items-center justify-between py-2 space-y-4 sm:space-y-0 sm:flex-row">
-    <div className='flex gap-2 md:gap-4 lg:gap-8'>
-   <div className=''>
-   <Link href="/">
-   <div className='flex'>
-   <Image
-    className="w-16"
-    src="https://i.ibb.co/FBBRt37/Google-Photos-Logo-2015.png"
-    alt="logo"
-    width={64} 
-    height={64} 
-    priority 
-  />
-              <p className='mt-2'>GrootHub</p>
-   </div>
-      </Link>
-   </div>
-    </div>
-<div className='hidden md:flex gap-2 md:gap-4 lg:gap-8'>
-<Link href="/">
-      <div><IoHomeOutline className='w-12 h-6'/></div>
-      </Link>
-      <Link href="/about">
-      <div><BiNotepad className='w-12 h-6'/></div>
-      </Link>
-      <Link href="/contact">
-      <div><BiSolidContact className='w-12 h-6'/></div>
-      </Link>
-      <Link href="/profile/follow">
-      <div><RiUserFollowFill className='w-12 h-6'/></div>
-      </Link>
-      <Link href="/profile/update">
-      <div><MdFeed className='w-12 h-6'/></div>
-      </Link>
-</div>
-      <div className="text-sm flex pr-6 text-gray-600 dark:text-gray-300">
-     <div>
-     <div className=" hidden">
-  {/* Dropdown Toggle Button */}
-  <motion.button
-    whileHover={{
-      scale: 1.2,
-      transition: { duration: 0.3 },
-    }}
-    onClick={toggle} // Toggle the dropdown visibility
-    className="relative"
-  >
-    <FaBars className="w-8 h-5 mt-4 dark:text-white" />
-  </motion.button>
-
-  {/* Dropdown Menu */}
-  {isOpenBar && (
-    <div
-      className="absolute z-20 py-2 mt-5 bg-white rounded-md shadow-xl dark:bg-gray-800"
-      style={{ right: "60px", width: "150px" }}
-    >
-      <div className="px-2 text-center">
-        <Link
-          href="/"
-          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={closeDropdown}
-        >
-          Home
-        </Link>
-        <Link
-          href="/profile/follow"
-          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={closeDropdown}
-        >
-          Follower
-        </Link>
-        <Link
-          href="/profile/update"
-          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={closeDropdown}
-        >
-          Feed
-        </Link>
-        <Link
-          href="/about"
-          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={closeDropdown}
-        >
-          About
-        </Link>
-        <Link
-          href="/contact"
-          className="block rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={closeDropdown}
-        >
-          Contact
-        </Link>
-      </div>
-    </div>
-  )}
-</div>
-     </div>
-      <motion.button
-  whileHover={{
-    scale: 1.2,
-    transition: { duration: 0.3 },
-  }} onClick={toggleTheme} className="mt-1">
-      {theme === 'light' ? (
-          <>
-            <IoIosMoon className="w-6 h-6 mx-1 dark:text-white" />
-           
-          </>
-        ) : (
-          <>
-            <MdSunny className="w-6 h-6 mx-1 dark:text-white" />
-          </>
-        )}
-      </motion.button>
-  
-   <motion.button
-   whileHover={{
-     scale: 1.2,
-     transition: { duration: 0.3 },
-   }}>
-      <Link href="/post/create">
-      <div><TfiWrite className='w-8 md:w-12 h-6'/></div>
-      </Link>
-     </motion.button>
-    {
-      user ? ( 
-    <>
-       <div className=" relative">
-  <motion.button
-    whileHover={{
-      scale: 1.2,
-      transition: { duration: 0.3 },
-    }}
-    onClick={toggleDropdown}
-    className="z-10 rounded-md"
-  >
-    <img
-      className="w-10 h-10 mt-1 rounded-full"
-      src={user?.profilePicture || "https://i.ibb.co.com/544PSXp/blank-profile-picture-973460-960-720.webp"}
-      alt="logo"
-    />
-  </motion.button>
-
-  {isOpen && (
-    <div
-      className="absolute z-20 right-5 py-2 mt-4 bg-white rounded-md shadow-xl dark:bg-gray-800"
-      style={{ right: '0px', width: '131px' }} 
-      onClick={close}
-    >
-      <div className="px-2 text-center">
-        <Link
-          href='/profile'
-          className="block my-2 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-          onClick={close}
-        >
-          Profile 
-        </Link>
-
-        {
-          user.role === 'admin' && (
-            <Link
-            href='/dashboard'
-            className="block my-2 rounded hover:bg-gray-400 py-2 font-medium text-gray-600 hover:text-black capitalize transition-colors duration-300 transform dark:text-gray-300"
-            onClick={close}
-          >
-            Dashboard
-          </Link>
-          )
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme as 'light' | 'dark');
+        } else {
+            const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(userPrefersDark ? 'dark' : 'light');
         }
+    }, []);
 
-        <motion.button
-          whileHover={{
-            scale: 1.2,
-            transition: { duration: 0.3 },
-          }}
-          onClick={handleLogout}
-          className="px-3 md:px-6 mx-5 py-2  tracking-wide text-white transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400"
+    useEffect(() => {
+        if (theme) {
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+            localStorage.setItem('theme', theme);
+        }
+    }, [theme]);
+
+    const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+
+    const navLinks = [
+        { name: 'Home', href: '/', icon: HiOutlineHome },
+        { name: 'About', href: '/about', icon: HiOutlineInformationCircle },
+        { name: 'Contact', href: '/contact', icon: HiOutlineMail },
+        { name: 'Community', href: '/profile/follow', icon: HiOutlineUserGroup },
+    ];
+
+    return (
+        <nav
+            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+                scrolled ? 'py-3' : 'py-5'
+            }`}
         >
-          LogOut
-        </motion.button>
-      </div>
-    </div>
-  )}
-</div>
-    </>
-      ) : (
-<Link href="/auth/login"><motion.button
-  whileHover={{
-    scale: 1.2,
-    transition: { duration: 0.3 },
-  }} className="px-4 mt-2 mx-2 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 ">Log in</motion.button></Link>
-      )
-    }
-      </div>
-     
-    </div>
-  </div>
-  );
+            <div className="container mx-auto px-4">
+                <div className={`glass rounded-2xl border border-white/10 px-6 py-2 flex items-center justify-between transition-all duration-300 ${
+                    scrolled ? 'shadow-lg bg-white/80 dark:bg-slate-900/80' : 'bg-white/40 dark:bg-slate-900/40'
+                }`}>
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-primary/20">
+                            <span className="text-white font-black text-xl">T</span>
+                        </div>
+                        <span className="text-xl font-black font-outfit tracking-tighter hidden sm:block">
+                            Tech<span className="text-primary">Tips</span>
+                        </span>
+                    </Link>
+
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center gap-1">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className="px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-3">
+                        {/* Theme Toggle */}
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={toggleTheme}
+                            className="w-10 h-10 rounded-xl bg-secondary/50 flex items-center justify-center text-xl hover:bg-secondary transition-colors"
+                        >
+                            {theme === 'dark' ? <IoSunny className="text-yellow-400" /> : <IoMoon className="text-slate-700" />}
+                        </motion.button>
+
+                        <div className="h-6 w-px bg-white/10 hidden sm:block mx-1" />
+
+                        {authUser ? (
+                            <div className="relative">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                    className="flex items-center gap-2 p-1 rounded-full group"
+                                >
+                                    <div className="relative">
+                                        <img
+                                            className="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary transition-all"
+                                            src={user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
+                                            alt="Profile"
+                                        />
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900" />
+                                    </div>
+                                </motion.button>
+
+                                <AnimatePresence>
+                                    {isMenuOpen && (
+                                        <>
+                                            <div className="fixed inset-0 z-10" onClick={() => setIsMenuOpen(false)} />
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                className="absolute right-0 mt-3 w-56 glass rounded-2xl border border-white/10 shadow-2xl z-20 overflow-hidden"
+                                            >
+                                                <div className="p-4 border-b border-white/10 bg-primary/5">
+                                                    <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Signed in as</p>
+                                                    <p className="font-bold truncate">{user?.name || authUser?.email}</p>
+                                                </div>
+                                                <div className="p-2">
+                                                    <Link
+                                                        href="/profile"
+                                                        className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+                                                        onClick={() => setIsMenuOpen(false)}
+                                                    >
+                                                        Profile Overview
+                                                    </Link>
+                                                    {authUser?.role === 'admin' && (
+                                                        <Link
+                                                            href="/dashboard"
+                                                            className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
+                                                            onClick={() => setIsMenuOpen(false)}
+                                                        >
+                                                            Admin Dashboard
+                                                        </Link>
+                                                    )}
+                                                    <button
+                                                        onClick={handleLogout}
+                                                        className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-500/10 transition-colors"
+                                                    >
+                                                        <HiOutlineLogout className="text-lg" />
+                                                        Sign Out
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        </>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        ) : (
+                            <Link href="/auth/login">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="px-5 py-2 rounded-xl bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+                                >
+                                    Login
+                                </motion.button>
+                            </Link>
+                        )}
+
+                        {/* Mobile Menu Toggle */}
+                        <button
+                            className="md:hidden w-10 h-10 rounded-xl flex items-center justify-center text-2xl"
+                            onClick={() => setIsOpenBar(!isOpenBar)}
+                        >
+                            {isOpenBar ? <HiOutlineX /> : <HiOutlineMenuAlt3 />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Navigation Menu */}
+            <AnimatePresence>
+                {isOpenBar && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="md:hidden glass border-b border-white/10 overflow-hidden"
+                    >
+                        <div className="container mx-auto px-6 py-8 space-y-4">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className="flex items-center gap-4 text-xl font-bold group"
+                                    onClick={() => setIsOpenBar(false)}
+                                >
+                                    <link.icon className="text-primary group-hover:scale-110 transition-transform" />
+                                    {link.name}
+                                </Link>
+                            ))}
+                            <div className="pt-4 border-t border-white/10">
+                                <Link
+                                    href="/post/create"
+                                    className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-primary text-white font-bold"
+                                    onClick={() => setIsOpenBar(false)}
+                                >
+                                    <HiOutlinePencilAlt />
+                                    Write an Insight
+                                </Link>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
 };
 
-export default Navber;
-  
-
-
+export default Navbar;

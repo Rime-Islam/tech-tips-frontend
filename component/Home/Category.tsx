@@ -1,40 +1,40 @@
-import { motion } from "framer-motion";
+"use client"
+import React from 'react';
 
-interface CategoryCardProps {
-    handleCategory: (category: string) => void;
-  }
-const Category:React.FC<CategoryCardProps> = ({ handleCategory }) => {
-    const categories: string[] = [
-        "Software Engineer",
-        "Web Development",
-        "Cybersecurity",
-        "DevOps",
-        "Machine Learning",
-        "Blockchain",
-        "UI/UX Design",
-      ];
+interface CategoryProps {
+  handleCategory: (category: string) => void;
+}
 
-    return (
-        <div className="mb-8">
-            <h1 className="lg:text-lg font-semibold px-4">Filter</h1>
-  <div className=''>
-      {
-        categories?.length && categories?.map((item: string) => (
-          <div key={item} className='mx-2  '>
-          <motion.button
-                            whileHover={{
-                              scale: 1.1,
-                              transition: { duration: 0.5 },
-                            }}
-  onClick={() => handleCategory(item)} className="px-2 mt-2 py-1 text-sm bg-gray-800 dark:bg-gray-300 rounded-lg">
-            {item}
-          </motion.button>
-        </div>
-        ))
-      }
-        </div>
-        </div>
-    )
+const categories = [
+  "Software Engineering",
+  "Web Development",
+  "Cybersecurity",
+  "DevOps",
+  "Machine Learning",
+  "Blockchain",
+  "UI/UX Design"
+];
+
+const Category: React.FC<CategoryProps> = ({ handleCategory }) => {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {categories.map((category) => (
+        <button
+          key={category}
+          onClick={() => handleCategory(category)}
+          className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-secondary/50 text-secondary-foreground hover:bg-primary hover:text-white transition-all duration-300 border border-white/5"
+        >
+          {category}
+        </button>
+      ))}
+      <button
+        onClick={() => handleCategory("")}
+        className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 border border-primary/20"
+      >
+        All Topics
+      </button>
+    </div>
+  );
 };
 
 export default Category;

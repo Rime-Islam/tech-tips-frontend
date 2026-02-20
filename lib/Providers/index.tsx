@@ -17,7 +17,7 @@ export function Providers({ children }: ProvidersProps) {
 
     return (
         <NextUIProvider navigate={router.push}>
-            <Toaster position="bottom-right" />
+            <Toaster position="bottom-right" theme="system" richColors expand={true} />
             <PersistGate loading={null} persistor={persistor}>
                 <Provider store={store}>
                     {children}
