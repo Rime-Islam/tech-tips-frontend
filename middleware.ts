@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 const roleBasedAccess: { [key: string]: string[] } = {
     "/profile": ["admin", "user"],
     "/admin": ["admin"],
+    "/dashboard": ["admin"],
+    "/post/create": ["admin", "user"],
+    "/post/edit": ["admin", "user"],
 };
 
 export async function middleware(req: NextRequest) {
@@ -51,5 +54,12 @@ export async function middleware(req: NextRequest) {
       matcher: [
         "/user/:path*",
         "/admin/:path*",
+        "/admin",
+        "/profile/:path*",
+        "/profile",
+        "/dashboard/:path*",
+        "/dashboard",
+        "/post/create",
+        "/post/edit/:path*",
       ],
     };

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { HiOutlinePencilAlt, HiOutlineHome, HiOutlineInformationCircle, HiOutlineMail, HiOutlineUserGroup, HiOutlineMenuAlt3, HiOutlineX, HiOutlineLogout } from "react-icons/hi";
 import { IoMoon, IoSunny } from "react-icons/io5";
-import { logout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
+import { logout as serverLogout } from '@/lib/AuthServices';
+import { logout as reduxLogout, useCurrentUser } from '@/redux/app/feature/api/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/app/hook';
 import { useGetSingleUserQuery } from '@/redux/app/feature/api/user/useApi';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,8 +26,9 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleLogout = () => {
-        dispatch(logout());
+    const handleLogout = async () => {
+        dispatch(reduxLogout());
+        await serverLogout();
         window.location.reload();
     };
 
@@ -60,14 +62,14 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300  ${
-                scrolled ? 'py-0' : 'py-5'
+            className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-white/10 ${
+                scrolled 
+                ? 'bg-white dark:bg-slate-900 shadow-xl py-2' 
+                : 'bg-white/100 dark:bg-slate-900 py-4'
             }`}
         >
-            <div className="container mx-auto  px-3">
-                <div className={`glass rounded-2xl border border-white/10 px-6 py-2 flex items-center justify-between transition-all duration-300 ${
-                    scrolled ? 'shadow-lg bg-white/80 dark:bg-slate-900/80' : 'bg-white/40 dark:bg-slate-900/40'
-                }`}>
+            <div className="container mx-auto px-4 md:px-6">
+                <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
                         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300 shadow-lg shadow-primary/20">
@@ -84,7 +86,7 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary/10 hover:text-primary transition-all duration-300"
+                                className="px-4 py-2 rounded-xl text-sm font-bold hover:bg-primary/10 hover:text-primary transition-all duration-300"
                             >
                                 {link.name}
                             </Link>
@@ -98,7 +100,7 @@ const Navbar = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={toggleTheme}
-                            className="w-10 h-10 rounded-xl bg-secondary/50 flex items-center justify-center text-xl hover:bg-secondary transition-colors"
+                            className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-xl hover:bg-secondary/80 transition-colors border border-white/5"
                         >
                             {theme === 'dark' ? <IoSunny className="text-yellow-400" /> : <IoMoon className="text-slate-700" />}
                         </motion.button>
@@ -114,11 +116,11 @@ const Navbar = () => {
                                 >
                                     <div className="relative">
                                         <img
-                                            className="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary transition-all"
+                                            className="w-9 h-9 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary transition-all shadow-md"
                                             src={user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
                                             alt="Profile"
                                         />
-                                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-900" />
+                                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-slate-800" />
                                     </div>
                                 </motion.button>
 
@@ -127,37 +129,66 @@ const Navbar = () => {
                                         <>
                                             <div className="fixed inset-0 z-10" onClick={() => setIsMenuOpen(false)} />
                                             <motion.div
-                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                initial={{ opacity: 0, y: 10, scale: 0.98 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                className="absolute right-0 mt-3 w-56 glass rounded-2xl border border-white/10 shadow-2xl z-20 overflow-hidden"
+                                                exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                                                className="absolute right-0 mt-4 w-64 bg-white dark:bg-slate-900 rounded-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] z-50 overflow-hidden"
                                             >
-                                                <div className="p-4 border-b border-white/10 bg-primary/5">
-                                                    <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Signed in as</p>
-                                                    <p className="font-bold truncate">{user?.name || authUser?.email}</p>
+                                                {/* User Info Section */}
+                                                <div className="p-5 bg-secondary/30 border-b border-white/5">
+                                                    <div className="flex items-center gap-3">
+                                                        <img
+                                                            className="w-10 h-10 rounded-lg object-cover ring-1 ring-white/10"
+                                                            src={user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
+                                                            alt="Profile"
+                                                        />
+                                                        <div className="min-w-0">
+                                                            <p className="font-black text-sm truncate">{user?.name || 'Developer'}</p>
+                                                            <p className="text-[10px] font-bold text-primary uppercase tracking-widest mt-0.5">
+                                                                {authUser?.role || 'Member'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="p-2">
+
+                                                {/* Navigation Section - Removing horizontal spacing */}
+                                                <div className="py-2">
                                                     <Link
                                                         href="/profile"
-                                                        className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
                                                         onClick={() => setIsMenuOpen(false)}
+                                                        className="flex items-center gap-3 px-5 py-3 text-sm font-bold hover:bg-primary/5 hover:text-primary transition-all group"
                                                     >
-                                                        Profile Overview
+                                                        <HiOutlineUserGroup className="text-lg opacity-50 group-hover:opacity-100" />
+                                                        Overview
                                                     </Link>
+
+                                                    <Link
+                                                        href="/profile/mypost"
+                                                        onClick={() => setIsMenuOpen(false)}
+                                                        className="flex items-center gap-3 px-5 py-3 text-sm font-bold hover:bg-orange-500/5 hover:text-orange-500 transition-all group"
+                                                    >
+                                                        <HiOutlinePencilAlt className="text-lg opacity-50 group-hover:opacity-100 text-orange-500" />
+                                                        My Articles
+                                                    </Link>
+
                                                     {authUser?.role === 'admin' && (
                                                         <Link
                                                             href="/dashboard"
-                                                            className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors"
                                                             onClick={() => setIsMenuOpen(false)}
+                                                            className="flex items-center gap-3 px-5 py-3 text-sm font-bold hover:bg-indigo-500/5 hover:text-indigo-500 transition-all group"
                                                         >
-                                                            Admin Dashboard
+                                                            <HiOutlineMenuAlt3 className="text-lg opacity-50 group-hover:opacity-100 rotate-90 text-indigo-500" />
+                                                            Admin Panel
                                                         </Link>
                                                     )}
+
+                                                    <div className="my-1 border-t border-white/5" />
+
                                                     <button
                                                         onClick={handleLogout}
-                                                        className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-500/10 transition-colors"
+                                                        className="flex items-center gap-3 w-full px-5 py-3 text-sm font-bold text-red-500 hover:bg-red-500/5 transition-all group"
                                                     >
-                                                        <HiOutlineLogout className="text-lg" />
+                                                        <HiOutlineLogout className="text-lg opacity-50 group-hover:opacity-100" />
                                                         Sign Out
                                                     </button>
                                                 </div>
