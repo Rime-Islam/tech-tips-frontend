@@ -3,7 +3,7 @@ import { BaseQueryApi, BaseQueryFn, createApi, DefinitionType, FetchArgs, fetchB
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://tech-backend-three.vercel.app/api/", 
+  baseUrl: "http://localhost:5000/api/", 
   credentials: 'include',
 
   prepareHeaders: (headers, { getState}) => {

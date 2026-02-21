@@ -7,7 +7,7 @@ import Card from './Card';
 const PostContent = () => {
  
 return (
-      <div className="mx-2 bg-red-200">
+      <div className="mx-2">
       <Card />
     </div>
     

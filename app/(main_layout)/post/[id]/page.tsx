@@ -1,409 +1,360 @@
 "use client"
-import React from 'react';
-import Loader from "@/component/UI/Loader";
-import { useCreateCommentMutation, useDeleteCommentMutation, useGetSinglePostQuery, useUpdateCommentMutation, useUpvotePostMutation } from "@/redux/app/feature/api/post/postApi";
-import Link from "next/link";
-import { useState } from "react";
-import { FaComment } from "react-icons/fa6";
-import { FcApproval, FcLike, FcLikePlaceholder } from "react-icons/fc";
-import { FaShareAlt } from "react-icons/fa";
-import { BsBookmarkCheckFill } from 'react-icons/bs';
-import HtmlContent from '@/component/UI/html/htmlContent';
-import { toast } from 'sonner';
-import { AiFillEdit } from 'react-icons/ai';
-import { RiDeleteBack2Fill } from 'react-icons/ri';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2';
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
-import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+
+import { 
+    useCreateCommentMutation, 
+    useDeleteCommentMutation, 
+    useGetSinglePostQuery, 
+    useUpdateCommentMutation, 
+    useUpvotePostMutation 
+} from "@/redux/app/feature/api/post/postApi";
+
+import Loader from "@/component/UI/Loader";
+import HtmlContent from '@/component/UI/html/htmlContent';
 import SharePost from '@/component/Post/SharePost';
 
+import { 
+    HiOutlineThumbUp, 
+    HiThumbUp, 
+    HiOutlineAnnotation, 
+    HiOutlineShare, 
+    HiOutlineDownload,
+    HiOutlineCalendar,
+    HiOutlineTag,
+    HiOutlinePencilAlt,
+    HiOutlineTrash
+} from "react-icons/hi";
+import { FcApproval } from "react-icons/fc";
 
-
-const page = ({ params }: { params: { id: string} }) => {
+const PostDetailsPage = ({ params }: { params: { id: string } }) => {
     const { id } = params;
-    const [open, setOpen] = useState(false);
-    const [react, setReact] = useState<'like' | 'dislike' | null>(null); 
-    const [isOpen, setIsOpen] = useState(false); 
-    const [comment, setComment] = useState(''); 
+    const [isShareOpen, setIsShareOpen] = useState(false);
+    const [comment, setComment] = useState('');
+    const [editCommentId, setEditCommentId] = useState<string | null>(null);
+    const [editCommentText, setEditCommentText] = useState<string>('');
+
     const { data, isLoading } = useGetSinglePostQuery(id);
     const post = data?.data;
-    const comments = post?.comments;
-    
+    const comments = post?.comments || [];
+
     const [upvotePost] = useUpvotePostMutation();
     const [createComment] = useCreateCommentMutation();
     const [updateComment] = useUpdateCommentMutation();
     const [deleteComment] = useDeleteCommentMutation();
 
-    const [editCommentId, setEditCommentId] = useState<string | null>(null);
-    const [editCommentText, setEditCommentText] = useState<string>('');
-
-    const toggleReact = async() => {
-          const res = await upvotePost({postId: post._id}).unwrap();
-    if (res?.success) {
-      toast.success(res?.message);
-      setReact((prevreact) => (prevreact === 'like' ? 'dislike' : 'like'));
-    } else {
-      toast.error(res?.message);
-    }
-    };
-
-    const toggleModal = () => {
-        setIsOpen(!isOpen);
-    };
-    
-    const handleComment = async(e: React.FormEvent) => {
-         e.preventDefault();
-      
-        if (comment) {
-          const res = await createComment({postId: post?._id, commentText: comment}).unwrap();
-          if (res.success) {
-            toast.success(res?.message);
-          }
+    const handleUpvote = async () => {
+        try {
+            const res = await upvotePost({ postId: post._id }).unwrap();
+            if (res?.success) toast.success(res?.message);
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Failed to upvote");
         }
     };
 
-    const handleDelete = async (id: any) => {
-      Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+    const handleCommentSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!comment.trim()) return;
+        try {
+            const res = await createComment({ postId: post?._id, commentText: comment }).unwrap();
+            if (res.success) {
+                toast.success(res?.message);
+                setComment('');
+            }
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Failed to add comment");
+        }
+    };
+
+    const handleDeleteComment = async (comentId: string) => {
+        const result = await Swal.fire({
+            title: "Delete Comment?",
+            text: "This action cannot be undone.",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
+            confirmButtonColor: "#EF4444",
             confirmButtonText: "Yes, delete it!"
-          }).then( async (result) => {
-            if (result.isConfirmed) {
-              const res = await deleteComment({ postId: post?._id, comentId: id }).unwrap();
-    
-               if (res?.success) {
-                Swal.fire({
-                  title: "Deleted!",
-                  text: "Your file has been deleted.",
-                  icon: "success"
-                });
-               } else {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text:  "An Error occured"
-                });
-               }
-             
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await deleteComment({ postId: post?._id, comentId }).unwrap();
+                if (res?.success) Swal.fire("Deleted!", "Your comment has been removed.", "success");
+            } catch (error) {
+                Swal.fire("Error", "Failed to delete comment", "error");
             }
-          });
-    };
-
-    const handleEdit = (id: string, currentText: string) => {
-        setEditCommentId(id);
-        setEditCommentText(currentText);
-    };
-
-    const handleUpdate = async ( e: React.FormEvent) => {
-      e.preventDefault();
-
-      if (editCommentText) {
-      try {
-        const res = await updateComment({ postId: post?._id, commentId: editCommentId, commentText: editCommentText }).unwrap();
-        if (res.success) {
-          toast.success(res?.message);
-          setEditCommentId(null);
         }
-      } catch (error: any) {
-        toast.error(error?.data?.message);
-      }
-      }
+    };
+
+    const handleUpdateComment = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editCommentText.trim()) return;
+        try {
+            const res = await updateComment({ 
+                postId: post?._id, 
+                commentId: editCommentId, 
+                commentText: editCommentText 
+            }).unwrap();
+            if (res.success) {
+                toast.success(res?.message);
+                setEditCommentId(null);
+            }
+        } catch (error: any) {
+            toast.error(error?.data?.message);
+        }
     };
 
     const generatePDF = async () => {
-      const postContent = document.getElementById('post-content'); 
-    
-      if (postContent) {
-        const pdf = new jsPDF("p", "mm", "a4"); 
-        const canvas = await html2canvas(postContent, { useCORS: true, scale: 2 }); 
-        const imgData = canvas.toDataURL("image/png");
-        
-        const padding = 10;
-    
-        const imgWidth = 210 - padding * 2; 
-        const pageHeight = 295 - padding * 2; 
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
-        
-        let position = padding;
-    
-        // Add first page with padding
-        pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-    
-        // Add more pages if content exceeds one page
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight + padding;
-          pdf.addPage();
-          pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
+        const postContent = document.getElementById('post-main-content');
+        if (!postContent) return toast.error("Content not found");
+
+        const btn = document.getElementById('download-btn');
+        if (btn) btn.style.display = 'none';
+
+        try {
+            const pdf = new jsPDF("p", "mm", "a4");
+            const canvas = await html2canvas(postContent, { useCORS: true, scale: 2 });
+            const imgData = canvas.toDataURL("image/png");
+            
+            const padding = 10;
+            const imgWidth = 210 - padding * 2;
+            const pageHeight = 295 - padding * 2;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            
+            let heightLeft = imgHeight;
+            let position = padding;
+
+            pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight + padding;
+                pdf.addPage();
+                pdf.addImage(imgData, "PNG", padding, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save(`${post?.title}.pdf`);
+        } catch (error) {
+            toast.error("Failed to generate PDF");
+        } finally {
+            if (btn) btn.style.display = 'block';
         }
-    
-        pdf.save(`${post?.title}.pdf`); // Save the PDF with the post's title
-      } else {
-        toast.error("Post content not found!");
-      }
     };
 
-    // frammer motion animation 
-    const variants = {
-      hidden: { opacity: 0 },
-      show: {
-          opacity: 1,
-          transition: {
-              staggerChildren: 0.3
-          },
-      },
-  };
-  
-  const item1 = {
-      hidden: {
-          opacity: 0,
-          x: 40,
-      },
-      show: {
-          opacity: 1,
-          x: 0,
-          transition: {
-              duration: 2,
-          },
-      },
-  };
-  const item2 = {
-      hidden: {
-          opacity: 0,
-          x: 40,
-      },
-      show: {
-          opacity: 1,
-          x: 0,
-          transition: {
-              duration: 2,
-              delay: 1
-          },
-      },
-  };
-    
-if (isLoading) {return <Loader />};
+    if (isLoading) return <Loader />;
+
     return (
-        <motion.div
-        variants={variants}
-        initial="hidden"
-        animate="show"  id="post-content" className="min-h-[100vh] container mx-auto px-2 lg:px-0 py-10">
-            {/*  title section  */}
-          <motion.div
-variants={item1}>
-          <h1 className="text-3xl my-6 font-bold hover:text-blue-500">{post?.title}</h1>
+        <div className="min-h-screen bg-transparent pt-24 pb-12">
+            <div className="container mx-auto px-4 max-w-5xl">
+                <article id="post-main-content">
+                    {/* Category & Header */}
+                    <div className="mb-8">
+                        <Link href={`/`} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6 hover:bg-primary/20 transition-colors">
+                            <HiOutlineTag />
+                            {post?.category}
+                        </Link>
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight mb-8 leading-[1.1]">
+                            {post?.title}
+                        </h1>
 
-{/*  avatar section  */}
- <div className="flex items-center">
-     <motion.button
-initial={{ opacity: 0.6 }}
-whileHover={{
-scale: 1.1,
-transition: { duration: 1 },
-}}
-whileTap={{ scale: 0.9 }}
-whileInView={{ opacity: 1 }}><img className="object-cover w-10 h-10 rounded-full"
-src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
-alt="Avatar"/>
-</motion.button> {post?.user?.isVerified &&  <div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>}
-      <div>
-        <div className="ml-5">
-        <div>
-    <Link
-        href={`/profile/${post?.user?._id}`}
-        className=" font-semibold text-gray-900 hover:underline dark:text-gray-200"
-        tabIndex={0}
-        role="link">
-        {post?.user?.name}
-      </Link>
-    </div>
-      <div className="dark:text-gray-400 text-gray-600">Published at: { new Date(post?.createdAt).toLocaleString('en-US', {
-        weekday: "long",
-        year: "numeric",
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      })}</div>
-        </div>
-      </div>
-    </div>
+                        {/* Author & Meta Bar */}
+                        <div className="glass rounded-2xl p-4 border border-white/10 flex flex-wrap items-center justify-between gap-6">
+                            <div className="flex items-center gap-4">
+                                <Link href={`/profile/${post?.user?._id}`} className="relative group">
+                                    <img 
+                                        src={post?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"} 
+                                        alt={post?.user?.name}
+                                        className="w-12 h-12 rounded-xl object-cover ring-2 ring-primary/20 group-hover:ring-primary transition-all"
+                                    />
+                                    {post?.user?.isVerified && (
+                                        <div className="absolute -top-1 -right-1">
+                                            <FcApproval className="text-lg" />
+                                        </div>
+                                    )}
+                                </Link>
+                                <div>
+                                    <Link href={`/profile/${post?.user?._id}`} className="font-bold hover:text-primary transition-colors block text-sm md:text-base">
+                                        {post?.user?.name}
+                                    </Link>
+                                    <div className="flex items-center gap-3 text-xs text-muted-foreground font-medium">
+                                        <span className="flex items-center gap-1">
+                                            <HiOutlineCalendar />
+                                            {new Date(post?.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                                        </span>
+                                        <span className="w-1 h-1 rounded-full bg-muted-foreground/30 hidden sm:block" />
+                                        <span className="hidden sm:block">5 min read</span>
+                                    </div>
+                                </div>
+                            </div>
 
-<div className="mt-5 px-5 flex gap-16">
-       {/*  like section  */}
-    <div> 
-     <button onClick={toggleReact} className="mt-1 flex gap-2">
-      {react === 'like' ? (
-        <>
-            <FcLike className="w-6 h-6 " />
-        </>
-        ) : (
-        <>
-        <FcLikePlaceholder className="w-6 h-6  " />
-        </>)}<span>{post?.upvotesCount}</span></button> </div>
-{/* comment section  */}
-        <div>
-<div className="flex mt-2"> 
-<button onClick={toggleModal}>
-    <FaComment className='w-5 h-5 '/>  </button>
-    <span className=' px-2'>{post?.comments?.length }</span>
-    
-    {/* comment modal  */}
-    {isOpen && (
-<div
-className="fixed lg:top-0  "
-aria-labelledby="modal-title"
-role="dialog"
-aria-modal="true"
->
-<div className="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-<span
-  className="hidden sm:inline-block sm:align-middle sm:h-screen"
-  aria-hidden="true"
->
-  &#8203;
-</span>
+                            <div className="flex items-center gap-2">
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={handleUpvote}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-white transition-all font-bold text-sm"
+                                >
+                                    <HiThumbUp className="text-lg" />
+                                    <span>{post?.upvotesCount}</span>
+                                </motion.button>
 
-<div className="relative inline-block p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl sm:max-w-sm rounded-xl dark:bg-gray-900 sm:my-8 sm:w-full sm:p-6">
-  <div>
-      {
-        comments?.length ? (comments?.map((item: any) => (
-          <div key={item?._id} className="flex items-center my-2">
-          <img className="object-cover w-10 h-10 rounded-full"
-            src={item?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"}
-            alt="Avatar"/>
-          {
-            item?.user?.premium && (<div className='mb-10 -ml-3'><FcApproval className='-mb-3'/></div>)
-          }
-          <div>
-            <div className="ml-3">
-            <div>
-       
-        </div>
-       <div className='text-sm'>
-       <div className='flex gap-3 '>
-          <div>
-            {
-              item?.user?.name
-            }
-          </div>
-       <div className="dark:text-gray-400 text-gray-600">{ new Date(post?.createdAt).toLocaleString('en-US', {
-            year: "numeric",
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          })}</div>
-            <div className='md:ml-5 flex gap-3'>
-<div><button  onClick={() => handleEdit(item?._id, item?.comment)}> <AiFillEdit className='w-4 h-4 text-amber-600'/></button></div>
-<div className='mb-2'> <button onClick={() => handleDelete(item?._id)}> <RiDeleteBack2Fill className='w-4 h-4 text-red-600'/></button></div>
-</div>
-       </div>
-          <div>
-          {editCommentId === item._id ? (
-          <form onSubmit={handleUpdate} className='flex gap-2'>
-            <input
-              type="text"
-              value={editCommentText}
-              onChange={(e) => setEditCommentText(e.target.value)}
-              className="block h-6 text-black px-1 text-sm border rounded-md"
-            />
-            <button type="submit" className="text-sm bg-blue-600 text-white rounded-md px-2 py-1">
-              Save
-            </button>
-            <button onClick={() => setEditCommentId(null)} className="text-sm bg-red-600 text-white rounded-md px-2 py-1">
-              Cancel
-            </button>
-          </form>
-        ): (item?.comment)}
-           
-          </div>
-       </div>
+                                <div className="h-8 w-px bg-white/10 mx-1" />
+
+                                <div className="relative">
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        onClick={() => setIsShareOpen(!isShareOpen)}
+                                        className="p-2 rounded-xl bg-secondary/50 hover:bg-secondary text-xl transition-colors"
+                                    >
+                                        <HiOutlineShare />
+                                    </motion.button>
+                                    <SharePost open={isShareOpen} setOpen={setIsShareOpen} />
+                                </div>
+
+                                <motion.button
+                                    id="download-btn"
+                                    whileHover={{ scale: 1.05 }}
+                                    onClick={generatePDF}
+                                    className="p-2 rounded-xl bg-secondary/50 hover:bg-secondary text-xl transition-colors"
+                                    title="Download PDF"
+                                >
+                                    <HiOutlineDownload />
+                                </motion.button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Featured Image */}
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-12 rounded-3xl overflow-hidden glass border border-white/10 aspect-video shadow-2xl"
+                    >
+                        <img 
+                            src={post?.images} 
+                            alt="Post cover" 
+                            className="w-full h-full object-cover"
+                        />
+                    </motion.div>
+
+                    {/* Content */}
+                    <div className="prose prose-lg dark:prose-invert max-w-none mb-20 px-2 lg:px-0">
+                        <HtmlContent content={post?.description} />
+                    </div>
+                </article>
+
+                {/* Comments Section */}
+                <div className="border-t border-white/10 pt-16">
+                    <div className="flex items-center gap-3 mb-10">
+                        <HiOutlineAnnotation className="text-3xl text-primary" />
+                        <h2 className="text-3xl font-black font-outfit">Discussion ({comments.length})</h2>
+                    </div>
+
+                    <form onSubmit={handleCommentSubmit} className="mb-12">
+                        <div className="glass p-6 rounded-3xl border border-white/10 relative group focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                            <textarea
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                placeholder="What are your thoughts on this?"
+                                rows={3}
+                                className="w-full bg-transparent outline-none resize-none text-lg placeholder:text-muted-foreground/50 border-none p-0 focus:ring-0"
+                            />
+                            <div className="flex justify-end mt-4">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-8 py-3 rounded-2xl bg-primary text-white font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+                                >
+                                    Post Comment
+                                </motion.button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div className="space-y-6">
+                        <AnimatePresence>
+                            {comments.map((item: any) => (
+                                <motion.div
+                                    key={item._id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="glass p-6 rounded-3xl border border-white/10 flex gap-4 group"
+                                >
+                                    <Link href={`/profile/${item?.user?._id}`} className="flex-shrink-0">
+                                        <img 
+                                            src={item?.user?.profilePicture || "https://i.ibb.co/544PSXp/blank-profile-picture-973460-960-720.webp"} 
+                                            alt={item?.user?.name}
+                                            className="w-10 h-10 rounded-xl object-cover ring-2 ring-primary/5 group-hover:ring-primary/20 transition-all"
+                                        />
+                                    </Link>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <div className="flex items-center gap-2">
+                                                <Link href={`/profile/${item?.user?._id}`} className="font-bold text-sm tracking-tight hover:text-primary transition-colors">
+                                                    {item?.user?.name}
+                                                </Link>
+                                                {item?.user?.premium && <FcApproval className="text-sm" />}
+                                                <span className="w-1 h-1 rounded-full bg-muted-foreground/30" />
+                                                <span className="text-xs text-muted-foreground">{new Date(item?.createdAt).toLocaleDateString()}</span>
+                                            </div>
+
+                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button 
+                                                    onClick={() => {
+                                                        setEditCommentId(item._id);
+                                                        setEditCommentText(item.comment);
+                                                    }}
+                                                    className="p-1.5 rounded-lg hover:bg-amber-500/10 text-amber-500 transition-colors"
+                                                >
+                                                    <HiOutlinePencilAlt />
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleDeleteComment(item._id)}
+                                                    className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-500 transition-colors"
+                                                >
+                                                    <HiOutlineTrash />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {editCommentId === item._id ? (
+                                            <form onSubmit={handleUpdateComment} className="mt-2 text-right">
+                                                <textarea
+                                                    value={editCommentText}
+                                                    onChange={(e) => setEditCommentText(e.target.value)}
+                                                    className="w-full glass p-4 rounded-xl border border-primary/30 outline-none resize-none text-sm mb-2 h-24"
+                                                />
+                                                <div className="flex gap-2 justify-end">
+                                                    <button type="submit" className="px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-bold transition-all hover:shadow-lg ">Save Changes</button>
+                                                    <button onClick={() => setEditCommentId(null)} className="px-4 py-1.5 rounded-lg bg-secondary text-muted-foreground text-xs font-bold">Cancel</button>
+                                                </div>
+                                            </form>
+                                        ) : (
+                                            <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                                                {item?.comment}
+                                            </p>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                        {comments.length === 0 && (
+                            <div className="text-center py-20 glass rounded-[2.5rem] border border-dashed border-white/10">
+                                <p className="text-muted-foreground italic">No discussion yet. Be the first to share your thoughts!</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-        ))) : (
-          <span>No comments available</span>
-        )
-      }
-  </div>
-
-<form onSubmit={handleComment} className='pt-5'>
-<div className="flex items-center justify-between w-full mt-5 gap-x-2">
-<input
-      id="comment"
-      type="text"
-      value={comment}
-      onChange={(e) => setComment(e.target.value)}
-      className="flex-1 block h-10 px-4 text-sm text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
-    />
-
-  </div>
-
-  <div className="mt-4 sm:flex sm:items-center sm:justify-between sm:mt-6 sm:-mx-2">
-    <button
-      onClick={toggleModal}
-      className="px-4 sm:mx-2 w-full py-2.5 text-sm font-medium dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
-    >
-      Cancel
-    </button>
-
-    <button type='submit' className="px-4 sm:mx-2 w-full py-2.5 mt-3 sm:mt-0 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-      Confirm
-    </button>
-    </div>
-  
-</form>
-</div>
-</div>
-</div>
-)}
-    
-    </div></div>  
-
-{/* share section  */}
-<div className='mt-1'>
-    <SharePost open={open} setOpen={setOpen} />
-</div>
-
-{/* save section  */}
-{/* <div className='mt-2'>
- <button><BsBookmarkCheckFill className='w-5 h-5 '/></button>
-</div> */}
-
-</div>
-          </motion.div>
-            
-            <motion.div
-variants={item2} className='max-w-5xl rounded-sm my-8'>
-               <div className='mb-5'>
-               <span className='text-xl font-semibold text-gray-900 dark:text-gray-300 '>Category : </span> {post?.category}
-               </div>
-                <img className='w-full object-cover' src={post?.images} alt="post image" />
-            </motion.div>
-          
-            <HtmlContent content={post?.description}/>
-          
-            <motion.button
-  initial={{ opacity: 0.6 }}
-  whileHover={{
-    scale: 1.1,
-    transition: { duration: 0.5 },
-  }}
-  whileTap={{ scale: 1.2 }}
-  whileInView={{ opacity: 1 }} type="button" onClick={generatePDF} className="mt-8 px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">Download PDF</motion.button>
-        </motion.div>
-    )
+    );
 };
 
-export default page;
-
+export default PostDetailsPage;
